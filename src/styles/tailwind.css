@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+    background-color: #1a1008;
+    color: #2a1f14;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .book-shell {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: #f4ecd8;
+    background-image:
+      radial-gradient(ellipse at center, transparent 65%, rgba(80, 50, 20, 0.18) 100%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.65 0 0 0 0 0.55 0 0 0 0 0.40 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    box-shadow: inset 0 0 120px rgba(80, 50, 20, 0.12);
+  }
+
+  .book-page {
+    margin: 0 auto;
+    max-width: 48rem;
+    padding: 3rem 2rem;
+    text-indent: 2em;
+    line-height: 2;
+    font-size: 1.125rem;
+    color: #2a1f14;
+  }
+
+  .chapter-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.75rem;
+    letter-spacing: 0.2em;
+    text-indent: 0;
+    color: #1a1008;
+    margin-bottom: 1.5rem;
+  }
+
+  .quotation {
+    text-align: center;
+    font-style: italic;
+    margin: 1.5rem auto;
+    max-width: 36rem;
+    text-indent: 0;
+    color: #5a4220;
+    font-size: 1rem;
+    line-height: 1.8;
+    border-top: 1px solid #5a4220;
+    border-bottom: 1px solid #5a4220;
+    padding: 1rem 0;
+  }
+
+  .choice-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem 0;
+    text-indent: 0;
+    color: #2a1f14;
+    border-left: 2px solid transparent;
+  }
+
+  .choice-item:hover {
+    color: #1a1008;
+    border-left-color: #7a5a30;
+    background: rgba(90, 66, 32, 0.06);
+  }
+
+  .narration {
+    font-style: italic;
+    margin: 1rem 0;
+    padding-left: 1rem;
+    text-indent: 0;
+    color: #5a4635;
+    border-left: 2px solid #7a5a30;
+    font-size: 1rem;
+  }
+
+  .date-badge {
+    display: inline-block;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    text-indent: 0;
+    color: #1a1008;
+    background: rgba(90, 66, 32, 0.08);
+    border: 1px solid #5a4220;
+  }
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

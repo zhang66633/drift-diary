@@ -1,0 +1,135 @@
+import type { FlagValue } from './state';
+
+// 场景
+export interface Scene {
+  id: string;
+  chapter: number;
+  beat: string;
+  date?: string;
+  text: (string | ConditionalText)[];
+  quotation?: string;
+  senses?: SenseTag[];
+  illustration?: IllustrationSpec;
+  choices?: Choice[];
+  multiChoice?: MultiChoice;
+  narration?: NarrationSpec;
+  dream?: DreamSpec;
+  ending?: EndingSpec;
+  providenceHook?: ProvidenceHook;
+  onEnter?: Consequence[];
+  chapterStart?: boolean;
+  chapterEnd?: boolean;
+}
+
+export interface Choice {
+  id: string;
+  text: string;
+  isCanon?: boolean;
+  condition?: Condition;
+  requirement?: Condition;
+  requireFailText?: string;
+  consequences: Consequence[];
+  nextScene?: string;
+  narration?: NarrationSpec;
+  death?: DeathSpec;
+}
+
+export interface MultiChoice {
+  id: string;
+  prompt: string;
+  minSelect?: number;
+  maxSelect?: number;
+  options: MultiChoiceOption[];
+  confirmText: string;
+  nextScene: string;
+  narration?: NarrationSpec;
+}
+
+export interface MultiChoiceOption {
+  id: string;
+  text: string;
+  consequences: Consequence[];
+  condition?: Condition;
+}
+
+export interface DeathSpec {
+  text: string;
+  reviveScene?: string;
+}
+
+export interface Consequence {
+  type: ConsequenceType;
+  target?: string;
+  value?: number | string | boolean | string[];
+  operation?: 'set' | 'add' | 'push' | 'remove';
+  condition?: Condition;
+}
+
+export type ConsequenceType =
+  | 'state' | 'resource' | 'skill' | 'flag'
+  | 'time' | 'companion' | 'providence' | 'event';
+
+export interface Condition {
+  and?: Condition[];
+  or?: Condition[];
+  type?: 'flag' | 'state' | 'resource' | 'skill' | 'providence';
+  target?: string;
+  operator?: 'eq' | 'neq' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'not_in';
+  value?: FlagValue | number;
+}
+
+export interface ConditionalText {
+  segments: TextSegment[];
+}
+export interface TextSegment {
+  text: string;
+  condition?: Condition;
+}
+
+export interface SenseTag {
+  sense: '视' | '听' | '触' | '嗅' | '温';
+  text: string;
+}
+
+export interface NarrationSpec {
+  text: string | ConditionalText;
+  trigger: 'on_choice' | 'on_enter' | 'on_exit';
+  condition?: Condition;
+}
+
+export interface DreamSpec {
+  text: string | ConditionalText;
+  trigger: 'on_choice' | 'on_enter';
+}
+
+export interface EndingSpec {
+  title: string;
+  text: string;
+  buttonText?: string;
+}
+
+export interface ProvidenceHook {
+  lowThreshold?: number;
+  highThreshold?: number;
+  effects: Consequence[];
+}
+
+export interface IllustrationSpec {
+  prompt: string;
+  alt: string;
+  size: IllustrationSize;
+  position: 'top' | 'inline' | 'fullpage';
+  cached?: string;
+}
+
+export type IllustrationSize =
+  | 'square_hd' | 'square' | 'portrait_4_3' | 'portrait_16_9'
+  | 'landscape_4_3' | 'landscape_16_9';
+
+// 章节数据
+export interface Chapter {
+  chapter: number;
+  title: string;
+  quotation: string;
+  scenes: Scene[];
+}
