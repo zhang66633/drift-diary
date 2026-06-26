@@ -1094,6 +1094,18 @@
       "beat": "2.15 荒岛（Demo 终）",
       "date": "1659-09-30",
       "chapterEnd": true,
+      "onEnter": [
+        {"type": "resource", "target": "钱", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "食物", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "水", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "火药", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "弹药", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "工具", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "蜡", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "绳", "value": 0, "operation": "set"},
+        {"type": "resource", "target": "装备", "value": 0, "operation": "set"},
+        {"type": "flag", "target": "在岛上", "value": true}
+      ],
       "text": [
         "我醒来的时候，躺在一片陌生的海滩上。嘴里全是沙子的涩，舌头干得像一张旧纸。",
         "海浪拍着礁石，发出沉闷的轰鸣声。海风里带着咸腥和不知名的花草气息，混在一起，陌生得让人发慌。太阳很毒，晒得我裸露的皮肤起了一层水泡，又疼又痒。盐渍渗进嘴唇的伤口，刺痛得我不敢张嘴。",
