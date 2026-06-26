@@ -157,7 +157,7 @@
           "text": "见势不妙，劝船长投降",
           "isCanon": true,
           "consequences": [
-            {"type": "state", "target": "勇气", "value": -10, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
             {"type": "flag", "target": "战斗", "value": "降"}
           ],
           "narration": {
@@ -206,7 +206,7 @@
           "text": "把所有能拿的东西都带上：食物、水、酒、蜡、绳、工具、火药、枪",
           "isCanon": true,
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 10, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "resource", "target": "食物", "value": 3, "operation": "add"},
             {"type": "resource", "target": "水", "value": 3, "operation": "add"},
             {"type": "resource", "target": "酒", "value": 1, "operation": "add"},
@@ -227,7 +227,6 @@
           "id": "逃_食",
           "text": "只带必需品：食物、水、一把枪、一点火药",
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "resource", "target": "食物", "value": 2, "operation": "add"},
             {"type": "resource", "target": "水", "value": 2, "operation": "add"},
             {"type": "resource", "target": "火药", "value": 1, "operation": "add"},
@@ -319,8 +318,8 @@
           "id": "推_杀",
           "text": "直接用枪托砸向他的后脑勺",
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 15, "operation": "add"},
-            {"type": "state", "target": "良心", "value": -10, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
+            {"type": "state", "target": "良心", "value": -20, "operation": "add"},
             {"type": "flag", "target": "摩尔人", "value": "杀"},
             {"type": "companion", "target": "苏里", "value": true, "operation": "set"}
           ],

@@ -36,7 +36,6 @@
           "text": "据理力争，说中间阶层太过安稳无趣",
           "consequences": [
             {"type": "state", "target": "良心", "value": -5, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "flag", "target": "父训", "value": "辩"}
           ],
           "narration": {
@@ -91,7 +90,7 @@
           "text": "表面应承，暗中开始筹备盘缠",
           "consequences": [
             {"type": "state", "target": "良心", "value": -10, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
+            {"type": "skill", "target": "贸易", "value": 1, "operation": "add"},
             {"type": "flag", "target": "母亲反应", "value": "暗谋"}
           ],
           "narration": {
@@ -105,7 +104,7 @@
           "text": "不求母亲，直接去找朋友搭船",
           "consequences": [
             {"type": "state", "target": "良心", "value": -5, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 10, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "flag", "target": "母亲反应", "value": "求友"},
             {"type": "flag", "target": "搭船途径", "value": "朋友"}
           ],
@@ -213,7 +212,6 @@
           "id": "出海_硬撑",
           "text": "硬撑着不祈祷，不愿承认自己怕了",
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "state", "target": "士气", "value": -10, "operation": "add"},
             {"type": "providence", "value": -5, "operation": "add"},
             {"type": "flag", "target": "风暴誓言", "value": "硬撑"}
@@ -228,7 +226,6 @@
           "id": "出海_求水手",
           "text": "踉跄着去找老水手问情况",
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "skill", "target": "航海", "value": 1, "operation": "add"},
             {"type": "flag", "target": "风暴誓言", "value": "请教"}
           ],
@@ -439,7 +436,6 @@
           "consequences": [
             {"type": "state", "target": "良心", "value": -10, "operation": "add"},
             {"type": "providence", "value": -10, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "flag", "target": "岸上抉择", "value": "继续"}
           ],
           "narration": {
@@ -453,7 +449,7 @@
           "text": "被风暴激起了好胜心，偏要航海证明自己",
           "consequences": [
             {"type": "state", "target": "良心", "value": -15, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 15, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "providence", "value": -20, "operation": "add"},
             {"type": "flag", "target": "岸上抉择", "value": "偏执"}
           ],
