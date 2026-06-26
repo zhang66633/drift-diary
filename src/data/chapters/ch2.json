@@ -206,7 +206,6 @@
           "text": "把所有能拿的东西都带上：食物、水、酒、蜡、绳、工具、火药、枪",
           "isCanon": true,
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "resource", "target": "食物", "value": 3, "operation": "add"},
             {"type": "resource", "target": "水", "value": 3, "operation": "add"},
             {"type": "resource", "target": "酒", "value": 1, "operation": "add"},
@@ -304,7 +303,6 @@
           "isCanon": true,
           "condition": {"type": "flag", "target": "物资", "operator": "neq", "value": "全"},
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 10, "operation": "add"},
             {"type": "flag", "target": "摩尔人", "value": "推"},
             {"type": "companion", "target": "苏里", "value": true, "operation": "set"}
           ],
@@ -318,7 +316,6 @@
           "id": "推_杀",
           "text": "直接用枪托砸向他的后脑勺",
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "state", "target": "良心", "value": -20, "operation": "add"},
             {"type": "flag", "target": "摩尔人", "value": "杀"},
             {"type": "companion", "target": "苏里", "value": true, "operation": "set"}
@@ -345,7 +342,6 @@
           "text": "拿枪指着他，逼他发誓不追，然后推下海",
           "condition": {"type": "flag", "target": "物资", "operator": "neq", "value": "全"},
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "flag", "target": "摩尔人", "value": "胁"},
             {"type": "companion", "target": "苏里", "value": true, "operation": "set"}
           ],
@@ -411,7 +407,6 @@
           "id": "漂_岸",
           "text": "冒险靠岸取水",
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "state", "target": "健康", "value": -5, "operation": "add"},
             {"type": "resource", "target": "水", "value": 2, "operation": "add"},
             {"type": "flag", "target": "漂泊", "value": "岸取"}
@@ -510,7 +505,6 @@
           "text": "先打断腿，再慢慢解决",
           "isCanon": true,
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "state", "target": "健康", "value": -5, "operation": "add"},
             {"type": "resource", "target": "食物", "value": 2, "operation": "add"},
             {"type": "resource", "target": "弹药", "value": -1, "operation": "add"},
@@ -685,7 +679,6 @@
           "text": "开枪示警，把豹子吓走",
           "isCanon": true,
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "resource", "target": "弹药", "value": -1, "operation": "add"},
             {"type": "flag", "target": "猎豹", "value": "吓走"}
           ],
@@ -700,6 +693,7 @@
           "text": "静观其变，不插手",
           "consequences": [
             {"type": "state", "target": "良心", "value": -5, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
             {"type": "flag", "target": "猎豹", "value": "旁观"}
           ],
           "narration": {
@@ -861,6 +855,7 @@
           "consequences": [
             {"type": "resource", "target": "钱", "value": 60, "operation": "add"},
             {"type": "state", "target": "良心", "value": -30, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": -10, "operation": "add"},
             {"type": "companion", "target": "苏里", "value": false, "operation": "remove"},
             {"type": "flag", "target": "苏里", "value": "卖"}
           ],
@@ -877,7 +872,7 @@
           "requireFailText": "士气不足",
           "consequences": [
             {"type": "state", "target": "良心", "value": 20, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 10, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "providence", "value": 10, "operation": "add"},
             {"type": "flag", "target": "苏里", "value": "留"},
             {"type": "resource", "target": "钱", "value": -20, "operation": "add"}
@@ -893,6 +888,7 @@
           "text": "和船长谈判：要他发誓给苏里自由，才肯送",
           "consequences": [
             {"type": "state", "target": "良心", "value": -10, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
             {"type": "resource", "target": "钱", "value": 60, "operation": "add"},
             {"type": "companion", "target": "苏里", "value": false, "operation": "remove"},
             {"type": "flag", "target": "苏里", "value": "谈"}
@@ -981,7 +977,6 @@
           "isCanon": true,
           "consequences": [
             {"type": "state", "target": "良心", "value": -20, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 10, "operation": "add"},
             {"type": "providence", "value": -20, "operation": "add"},
             {"type": "flag", "target": "远航决定", "value": "答应贩奴"},
             {"type": "resource", "target": "钱", "value": 50, "operation": "add"}
@@ -1012,7 +1007,6 @@
           "text": "不仅答应，自己也投钱入股",
           "consequences": [
             {"type": "state", "target": "良心", "value": -30, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "providence", "value": -30, "operation": "add"},
             {"type": "flag", "target": "远航决定", "value": "投钱贩奴"},
             {"type": "resource", "target": "钱", "value": 100, "operation": "add"}
@@ -1111,7 +1105,6 @@
           "text": "赶紧上救生艇",
           "isCanon": true,
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "flag", "target": "终局", "value": "艇"}
           ],
           "narration": {
@@ -1124,7 +1117,7 @@
           "id": "终_守",
           "text": "死守大船，不坐救生艇",
           "consequences": [
-            {"type": "state", "target": "勇气", "value": 10, "operation": "add"},
+            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "flag", "target": "终局", "value": "守"}
           ],
           "narration": {
