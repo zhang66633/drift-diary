@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StatusBar } from './StatusBar';
 import { TypedText } from './TypedText';
@@ -40,6 +40,23 @@ export function BookShell() {
     _providence: providence,
     _sceneMgr: sceneMgr,
   } = useGameStore();
+
+  // 打字完成后的淡入动画状态
+  const [contentVisible, setContentVisible] = useState(false);
+  const prevTypingRef = useRef(isTyping);
+
+  useEffect(() => {
+    // 当打字从 true 变成 false 时，触发淡入动画
+    if (prevTypingRef.current === true && isTyping === false) {
+      setContentVisible(true);
+    }
+    prevTypingRef.current = isTyping;
+  }, [isTyping]);
+
+  // 场景切换时重置动画状态
+  useEffect(() => {
+    setContentVisible(false);
+  }, [currentScene?.id]);
 
   const resolvedParagraphs = useMemo(() => {
     if (!currentScene) return [];
@@ -182,18 +199,32 @@ export function BookShell() {
           />
         )}
         {!hasBlockingEnterOverlay && !isTyping && (
-          <>
+          <div
+            style={{
+              opacity: contentVisible ? 1 : 0,
+              transform: contentVisible ? 'translateY(0)' : 'translateY(12px)',
+              transition: 'opacity 0.4s ease, transform 0.4s ease',
+            }}
+          >
             {resolvedParagraphs.map((p, i) => (
               <p key={i} className="mb-4">{p}</p>
             ))}
-            {visibleChoices.length > 0 && (
-              <ChoiceList
-                choices={visibleChoices}
-                onChoose={chooseChoice}
-                disabledIds={disabledChoiceIds}
-              />
-            )}
-          </>
+            <div
+              style={{
+                opacity: contentVisible ? 1 : 0,
+                transform: contentVisible ? 'translateY(0)' : 'translateY(16px)',
+                transition: 'opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s',
+              }}
+            >
+              {visibleChoices.length > 0 && (
+                <ChoiceList
+                  choices={visibleChoices}
+                  onChoose={chooseChoice}
+                  disabledIds={disabledChoiceIds}
+                />
+              )}
+            </div>
+          </div>
         )}
       </div>
 
