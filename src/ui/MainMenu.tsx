@@ -64,8 +64,7 @@ export function MainMenu() {
               borderBottom: '1px solid rgba(122, 90, 48, 0.35)',
             }}>
               <p className="italic text-center leading-relaxed" style={{ color: '#5a4220', textIndent: 0, fontSize: '0.95rem' }}>
-                "冥冥之中自有凌驾于一切之上的天意，<br />
-                催逼着我们去毁灭自己。"
+                "冥冥之中自有凌驾于一切之上的天意，催逼着我们去毁灭自己。"
               </p>
             </div>
           </div>
