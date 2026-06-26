@@ -8,6 +8,8 @@ import { SaveMenu, HistoryViewOverlay } from './Menus';
 import { GameMenu } from './GameMenu';
 import { SettingsPanel } from './SettingsPanel';
 import { Memoir } from './Memoir';
+import { checkConditionWithManagers, formatChineseDate } from '../utils/helpers';
+import type { Choice } from '../types/scene';
 
 export function BookShell() {
   const {
@@ -51,24 +53,12 @@ export function BookShell() {
     return consequence.resolveText(currentScene.quotation);
   }, [currentScene, consequence]);
 
+  const checkCond = (cond: Choice['condition'] | Choice['requirement']) =>
+    checkConditionWithManagers(cond, flagMgr, stateMgr, providence);
+
   const visibleChoices = useMemo(() => {
     if (!currentScene?.choices) return [];
-    return currentScene.choices.filter(c => {
-      if (!c.condition) return true;
-      return flagMgr.checkCondition(
-        c.condition,
-        () => stateMgr.getState() as unknown as Record<string, number>,
-        () => {
-          const r = stateMgr.getResources();
-          return {
-            钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药,
-            工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水,
-          };
-        },
-        () => stateMgr.getSkills() as unknown as Record<string, number>,
-        () => providence.getValue(),
-      );
-    });
+    return currentScene.choices.filter(c => checkCond(c.condition));
   }, [currentScene, flagMgr, stateMgr, providence]);
 
   const disabledChoiceIds = useMemo(() => {
@@ -76,20 +66,7 @@ export function BookShell() {
     if (!currentScene?.choices) return ids;
     for (const c of visibleChoices) {
       if (!c.requirement) continue;
-      const satisfied = flagMgr.checkCondition(
-        c.requirement,
-        () => stateMgr.getState() as unknown as Record<string, number>,
-        () => {
-          const r = stateMgr.getResources();
-          return {
-            钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药,
-            工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水,
-          };
-        },
-        () => stateMgr.getSkills() as unknown as Record<string, number>,
-        () => providence.getValue(),
-      );
-      if (!satisfied) ids.add(c.id);
+      if (!checkCond(c.requirement)) ids.add(c.id);
     }
     return ids;
   }, [visibleChoices, flagMgr, stateMgr, providence]);
@@ -140,14 +117,7 @@ export function BookShell() {
     );
   }
 
-  const formatDate = (iso?: string) => {
-    if (!iso) return null;
-    const [y, m, d] = iso.split('-').map(Number);
-    const cn = ['正','二','三','四','五','六','七','八','九','十','十一','十二'];
-    return `${y}年${cn[m-1]}月${d}日`;
-  };
-
-  const dateStr = formatDate(currentScene.date);
+  const dateStr = currentScene.date ? formatChineseDate(currentScene.date) : null;
 
   const hasBlockingEnterOverlay =
     (pendingNarration?.trigger === 'on_enter') ||
@@ -161,23 +131,65 @@ export function BookShell() {
       <StatusBar />
 
       <button
-        className="fixed top-4 right-4 z-30 flex flex-col items-center justify-center gap-[5px] transition-opacity hover:opacity-100"
+        className="fixed top-3 right-4 z-30 flex items-center justify-center transition-all duration-200 hover:opacity-100"
         onClick={() => showGameMenu ? closeGameMenu() : openGameMenu()}
         style={{
           color: '#7a5a30',
-          border: '1px solid #c4a87c',
-          background: 'rgba(244, 236, 216, 0.9)',
+          border: '1px solid rgba(122, 90, 48, 0.4)',
+          background: 'rgba(244, 236, 216, 0.92)',
           cursor: 'pointer',
-          opacity: showGameMenu ? 1 : 0.7,
-          width: '34px',
+          opacity: showGameMenu ? 1 : 0.65,
+          width: '36px',
           height: '32px',
           padding: 0,
+          borderRadius: '2px',
+          backdropFilter: 'blur(4px)',
         }}
         title="菜单"
+        onMouseEnter={e => {
+          e.currentTarget.style.opacity = '1';
+          e.currentTarget.style.borderColor = '#7a5a30';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.opacity = showGameMenu ? '1' : '0.65';
+          e.currentTarget.style.borderColor = 'rgba(122, 90, 48, 0.4)';
+        }}
       >
-        <span style={{ display: 'block', width: '14px', height: '1px', background: '#7a5a30' }} />
-        <span style={{ display: 'block', width: '14px', height: '1px', background: '#7a5a30' }} />
-        <span style={{ display: 'block', width: '14px', height: '1px', background: '#7a5a30' }} />
+        <div
+          className="flex flex-col items-center justify-center gap-[4px]"
+          style={{ width: '16px' }}
+        >
+          <span
+            style={{
+              display: 'block',
+              width: '100%',
+              height: '1px',
+              background: '#7a5a30',
+              transition: 'transform 0.2s ease',
+              transform: showGameMenu ? 'translateY(5px) rotate(45deg)' : 'none',
+            }}
+          />
+          <span
+            style={{
+              display: 'block',
+              width: '100%',
+              height: '1px',
+              background: '#7a5a30',
+              transition: 'opacity 0.2s ease',
+              opacity: showGameMenu ? 0 : 1,
+            }}
+          />
+          <span
+            style={{
+              display: 'block',
+              width: '100%',
+              height: '1px',
+              background: '#7a5a30',
+              transition: 'transform 0.2s ease',
+              transform: showGameMenu ? 'translateY(-5px) rotate(-45deg)' : 'none',
+            }}
+          />
+        </div>
       </button>
 
       <div className="book-page" style={{ opacity: hasBlockingEnterOverlay ? 0.15 : 1, transition: 'opacity 0.3s ease' }}>

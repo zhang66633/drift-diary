@@ -15,6 +15,31 @@
     background-color: #1a1008;
     color: #2a1f14;
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(122, 90, 48, 0.3);
+    color: #1a1008;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(122, 90, 48, 0.1);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(122, 90, 48, 0.4);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(122, 90, 48, 0.6);
   }
 }
 
@@ -26,6 +51,8 @@
     overflow: auto;
     background-color: #f4ecd8;
     background-image:
+      radial-gradient(ellipse at 30% 20%, rgba(255, 240, 200, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(180, 140, 80, 0.1) 0%, transparent 50%),
       radial-gradient(ellipse at center, transparent 65%, rgba(80, 50, 20, 0.18) 100%),
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.65 0 0 0 0 0.55 0 0 0 0 0.40 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     box-shadow: inset 0 0 120px rgba(80, 50, 20, 0.12);
@@ -36,70 +63,274 @@
     max-width: 48rem;
     padding: 3rem 2rem;
     text-indent: 2em;
-    line-height: 2;
+    line-height: 2.1;
     font-size: 1.125rem;
     color: #2a1f14;
+    letter-spacing: 0.02em;
   }
 
   .chapter-title {
     text-align: center;
     font-weight: 600;
     font-size: 1.75rem;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.25em;
     text-indent: 0;
     color: #1a1008;
     margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .chapter-title::before,
+  .chapter-title::after {
+    content: '❦';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+    color: #7a5a30;
+    opacity: 0.6;
+  }
+
+  .chapter-title::before {
+    left: 1rem;
+  }
+
+  .chapter-title::after {
+    right: 1rem;
   }
 
   .quotation {
     text-align: center;
     font-style: italic;
-    margin: 1.5rem auto;
+    margin: 2rem auto;
     max-width: 36rem;
     text-indent: 0;
     color: #5a4220;
     font-size: 1rem;
-    line-height: 1.8;
-    border-top: 1px solid #5a4220;
-    border-bottom: 1px solid #5a4220;
-    padding: 1rem 0;
+    line-height: 1.9;
+    border-top: 1px solid #7a5a30;
+    border-bottom: 1px solid #7a5a30;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+  }
+
+  .quotation::before {
+    content: '"';
+    position: absolute;
+    top: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    color: #7a5a30;
+    background: #f4ecd8;
+    padding: 0 1rem;
+    line-height: 1;
   }
 
   .choice-item {
     cursor: pointer;
-    transition: all 0.2s ease;
-    padding: 0.5rem 1rem;
-    margin: 0.25rem 0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.75rem 1.25rem;
+    margin: 0.5rem 0;
     text-indent: 0;
     color: #2a1f14;
-    border-left: 2px solid transparent;
+    border-left: 3px solid transparent;
+    border-radius: 0 4px 4px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .choice-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: rgba(122, 90, 48, 0.08);
+    transition: width 0.25s ease;
   }
 
   .choice-item:hover {
     color: #1a1008;
     border-left-color: #7a5a30;
-    background: rgba(90, 66, 32, 0.06);
+    transform: translateX(4px);
+  }
+
+  .choice-item:hover::before {
+    width: 100%;
+  }
+
+  .choice-item > * {
+    position: relative;
+    z-index: 1;
   }
 
   .narration {
     font-style: italic;
-    margin: 1rem 0;
-    padding-left: 1rem;
+    margin: 1.25rem 0;
+    padding-left: 1.25rem;
     text-indent: 0;
     color: #5a4635;
     border-left: 2px solid #7a5a30;
     font-size: 1rem;
+    line-height: 1.9;
   }
 
   .date-badge {
     display: inline-block;
     font-size: 0.875rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 0.25rem;
+    padding: 0.35rem 0.875rem;
+    border-radius: 2px;
     text-indent: 0;
-    color: #1a1008;
+    color: #3a2a15;
     background: rgba(90, 66, 32, 0.08);
-    border: 1px solid #5a4220;
+    border: 1px solid rgba(90, 66, 32, 0.3);
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+
+  .btn-primary {
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    border: 1px solid #7a5a30;
+    background: transparent;
+    color: #3a2a15;
+    padding: 0.625rem 1.5rem;
+    letter-spacing: 0.1em;
+  }
+
+  .btn-primary:hover {
+    background: rgba(122, 90, 48, 0.1);
+    border-color: #5a4220;
+    color: #1a1008;
+  }
+
+  .menu-button {
+    position: relative;
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    color: inherit;
+    border-left: 3px solid transparent;
+  }
+
+  .menu-button:hover {
+    background: rgba(122, 90, 48, 0.06);
+    border-left-color: #7a5a30;
+    padding-left: 1.75rem;
+  }
+
+  .menu-button-primary {
+    font-size: 1.125rem;
+    color: #1a1008;
+    font-weight: 500;
+  }
+
+  .menu-button-secondary {
+    font-size: 1rem;
+    color: #5a4635;
+  }
+
+  .overlay-panel {
+    background: #f4ecd8;
+    border: 1px solid #7a5a30;
+    box-shadow:
+      0 0 60px rgba(0, 0, 0, 0.5),
+      0 0 120px rgba(180, 140, 80, 0.1);
+    position: relative;
+  }
+
+  .overlay-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.65 0 0 0 0 0.55 0 0 0 0 0.40 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .overlay-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .divider-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    color: #7a5a30;
+    opacity: 0.6;
+  }
+
+  .divider-ornament::before,
+  .divider-ornament::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #7a5a30, transparent);
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+
+  .scale-in {
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -114,6 +345,24 @@
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes candleFlicker {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -121,5 +370,23 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .book-page {
+    padding: 2rem 1.25rem;
+    font-size: 1rem;
+    line-height: 2;
+  }
+
+  .chapter-title {
+    font-size: 1.375rem;
+    letter-spacing: 0.15em;
+  }
+
+  .chapter-title::before,
+  .chapter-title::after {
+    display: none;
   }
 }

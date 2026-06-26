@@ -4,6 +4,7 @@ import type { StateManager } from './StateManager';
 import type { FlagManager } from './FlagManager';
 import type { TimeManager } from './TimeManager';
 import type { ProvidenceEngine } from './ProvidenceEngine';
+import { getResourceMap } from '../utils/helpers';
 
 export type EventCallback = (eventName: string, value?: unknown) => void;
 
@@ -35,23 +36,19 @@ export class ConsequenceEngine {
     }
   }
 
+  private checkCondition(condition: Consequence['condition']): boolean {
+    if (!condition) return true;
+    return this.flagMgr.checkCondition(
+      condition,
+      () => this.stateMgr.getState() as unknown as Record<string, number>,
+      () => getResourceMap(this.stateMgr.getResources()),
+      () => this.stateMgr.getSkills() as unknown as Record<string, number>,
+      () => this.providence.getValue(),
+    );
+  }
+
   private executeOne(c: Consequence): void {
-    if (c.condition) {
-      const ok = this.flagMgr.checkCondition(
-        c.condition,
-        () => this.stateMgr.getState() as unknown as Record<string, number>,
-        () => {
-          const r = this.stateMgr.getResources();
-          return {
-            钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药,
-            工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水,
-          };
-        },
-        () => this.stateMgr.getSkills() as unknown as Record<string, number>,
-        () => this.providence.getValue(),
-      );
-      if (!ok) return;
-    }
+    if (!this.checkCondition(c.condition)) return;
 
     const val = c.value as number | undefined;
     const op = c.operation ?? 'set';
@@ -138,19 +135,6 @@ export class ConsequenceEngine {
   }
 
   private segmentSatisfied(seg: TextSegment): boolean {
-    if (!seg.condition) return true;
-    return this.flagMgr.checkCondition(
-      seg.condition,
-      () => this.stateMgr.getState() as unknown as Record<string, number>,
-      () => {
-        const r = this.stateMgr.getResources();
-        return {
-          钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药,
-          工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水,
-        };
-      },
-      () => this.stateMgr.getSkills() as unknown as Record<string, number>,
-      () => this.providence.getValue(),
-    );
+    return this.checkCondition(seg.condition);
   }
 }

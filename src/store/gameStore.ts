@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { GameState, SceneSnapshot } from '../types/state';
-import type { Scene, NarrationSpec, DreamSpec, DeathSpec, EndingSpec } from '../types/scene';
+import type { Scene, NarrationSpec, DreamSpec, DeathSpec, EndingSpec, Condition } from '../types/scene';
 import type { SaveSlot } from '../types/save';
 import { createInitialState } from '../types/state';
 import { StateManager } from '../engine/StateManager';
@@ -12,6 +12,7 @@ import { SceneManager } from '../engine/SceneManager';
 import { SaveManager, localStorageAdapter } from '../engine/SaveManager';
 import { validateChapter } from '../engine/schema';
 import { useSettings } from './settingsStore';
+import { getResourceMap } from '../utils/helpers';
 
 interface GameStore {
   // Internal managers (exposed for UI integration, prefixed with _)
@@ -154,6 +155,17 @@ export const useGameStore = create<GameStore>((set, get) => {
     });
   }
 
+  function checkCondition(condition: Condition | undefined): boolean {
+    if (!condition) return true;
+    return flagMgr.checkCondition(
+      condition,
+      () => stateMgr.getState() as unknown as Record<string, number>,
+      () => getResourceMap(stateMgr.getResources()),
+      () => stateMgr.getSkills() as unknown as Record<string, number>,
+      () => providence.getValue(),
+    );
+  }
+
   async function enterScene(sceneId: string): Promise<void> {
     await sceneMgr.ensureSceneLoaded(sceneId);
     const scene = sceneMgr.goToScene(sceneId);
@@ -185,19 +197,8 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     let pendingNarration: NarrationSpec | null = null;
     if (scene.narration?.trigger === 'on_enter') {
-      const narrationCond = scene.narration.condition;
       const narrationText = consequence.resolveText(scene.narration.text);
-      const narrationSatisfied = !narrationCond || flagMgr.checkCondition(
-        narrationCond,
-        () => stateMgr.getState() as unknown as Record<string, number>,
-        () => {
-          const r = stateMgr.getResources();
-          return { 钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药, 工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水 };
-        },
-        () => stateMgr.getSkills() as unknown as Record<string, number>,
-        () => providence.getValue(),
-      );
-      if (narrationSatisfied && narrationText) {
+      if (checkCondition(scene.narration.condition) && narrationText) {
         pendingNarration = { ...scene.narration, text: narrationText };
       }
     }
@@ -325,19 +326,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       const choice = scene.choices.find(c => c.id === choiceId);
       if (!choice) return;
 
-      if (choice.requirement) {
-        const reqSatisfied = flagMgr.checkCondition(
-          choice.requirement,
-          () => stateMgr.getState() as unknown as Record<string, number>,
-          () => {
-            const r = stateMgr.getResources();
-            return { 钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药, 工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水 };
-          },
-          () => stateMgr.getSkills() as unknown as Record<string, number>,
-          () => providence.getValue(),
-        );
-        if (!reqSatisfied) return;
-      }
+      if (!checkCondition(choice.requirement)) return;
 
       if (snapshots.length > 0) {
         const lastSnap = snapshots[snapshots.length - 1];
@@ -357,19 +346,8 @@ export const useGameStore = create<GameStore>((set, get) => {
       if (hookEffects) consequence.execute(hookEffects);
 
       if (choice.narration?.trigger === 'on_choice') {
-        const narrationCond = choice.narration.condition;
         const narrationText = consequence.resolveText(choice.narration.text);
-        const narrationSatisfied = !narrationCond || flagMgr.checkCondition(
-          narrationCond,
-          () => stateMgr.getState() as unknown as Record<string, number>,
-          () => {
-            const r = stateMgr.getResources();
-            return { 钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药, 工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水 };
-          },
-          () => stateMgr.getSkills() as unknown as Record<string, number>,
-          () => providence.getValue(),
-        );
-        if (narrationSatisfied && narrationText) {
+        if (checkCondition(choice.narration.condition) && narrationText) {
           set({ pendingChoiceNarration: { ...choice.narration, text: narrationText }, pendingNextScene: choice.nextScene ?? null });
         } else if (choice.nextScene) {
           await enterScene(choice.nextScene);
@@ -406,19 +384,8 @@ export const useGameStore = create<GameStore>((set, get) => {
       if (hookEffects) consequence.execute(hookEffects);
 
       if (mc.narration?.trigger === 'on_choice') {
-        const narrationCond = mc.narration.condition;
         const narrationText = consequence.resolveText(mc.narration.text);
-        const narrationSatisfied = !narrationCond || flagMgr.checkCondition(
-          narrationCond,
-          () => stateMgr.getState() as unknown as Record<string, number>,
-          () => {
-            const r = stateMgr.getResources();
-            return { 钱: r.钱, 食物: r.食物, 淡水: r.淡水, 火药: r.火药, 弹药: r.弹药, 工具: r.工具, 蜡: r.蜡, 绳: r.绳, 装备: r.装备, 墨水: r.墨水 };
-          },
-          () => stateMgr.getSkills() as unknown as Record<string, number>,
-          () => providence.getValue(),
-        );
-        if (narrationSatisfied && narrationText) {
+        if (checkCondition(mc.narration.condition) && narrationText) {
           set({ pendingChoiceNarration: { ...mc.narration, text: narrationText }, pendingNextScene: mc.nextScene });
         } else {
           await enterScene(mc.nextScene);
