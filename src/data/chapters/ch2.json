@@ -412,7 +412,7 @@
           "isCanon": true,
           "condition": {"and": [
             {"type": "skill", "target": "航海", "operator": "gte", "value": 1},
-            {"type": "resource", "target": "食物", "operator": "gte", "value": 2}
+            {"type": "flag", "target": "物资", "operator": "neq", "value": "轻"}
           ]},
           "consequences": [
             {"type": "state", "target": "士气", "value": -10, "operation": "add"},
@@ -431,7 +431,7 @@
           "text": "继续撑着，省着点用",
           "condition": {"and": [
             {"type": "skill", "target": "航海", "operator": "gte", "value": 1},
-            {"type": "resource", "target": "食物", "operator": "lte", "value": 1}
+            {"type": "flag", "target": "物资", "operator": "eq", "value": "轻"}
           ]},
           "consequences": [
             {"type": "state", "target": "士气", "value": -10, "operation": "add"},
@@ -541,16 +541,32 @@
         {
           "id": "狮_走",
           "text": "太危险了，不惊动它，悄悄走",
+          "condition": {"type": "flag", "target": "物资", "operator": "eq", "value": "全"},
           "consequences": [
             {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
             {"type": "state", "target": "士气", "value": -5, "operation": "add"},
             {"type": "flag", "target": "猎狮", "value": "不打"}
           ],
           "narration": {
-            "text": "我低声让苏里别出声，悄悄划过去。狮子被桨声惊醒，抬头看了我们一眼，又趴下了。我们大气不敢出，划了好远才松了口气。肚子还是饿着。",
+            "text": "我低声让苏里别出声，悄悄划过去。狮子被桨声惊醒，抬头看了我们一眼，又趴下了。我们大气不敢出，划了好远才松了口气。肚子还是饿着——但船舱里存粮还够，饿一顿不打紧。",
             "trigger": "on_choice"
           },
           "nextScene": "ch2_8_黑人"
+        },
+        {
+          "id": "狮_走_死",
+          "text": "太危险了，不惊动它，悄悄走",
+          "condition": {"type": "flag", "target": "物资", "operator": "neq", "value": "全"},
+          "consequences": [
+            {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
+            {"type": "state", "target": "士气", "value": -5, "operation": "add"},
+            {"type": "flag", "target": "猎狮", "value": "不打"}
+          ],
+          "narration": {
+            "text": "我低声让苏里别出声，悄悄划过去。狮子被桨声惊醒，抬头看了我们一眼，又趴下了。我们大气不敢出，划了好远才松了口气。但船舱里空空如也——最后一点吃的昨天就分完了。肚子绞痛，眼前开始发黑。苏里轻声说：「我们还能撑多久？」我没有回答。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch2_8_怯懦"
         }
       ]
     },
@@ -634,8 +650,8 @@
           "id": "黑_绕",
           "text": "绕开他们，不冒险接触",
           "condition": {"and": [
-            {"type": "flag", "target": "猎狮", "operator": "neq", "value": "不打"},
-            {"type": "resource", "target": "食物", "operator": "gte", "value": 3}
+            {"type": "flag", "target": "物资", "operator": "eq", "value": "全"},
+            {"type": "flag", "target": "猎狮", "operator": "neq", "value": "不打"}
           ]},
           "consequences": [
             {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
@@ -652,8 +668,8 @@
           "id": "黑_绕_死",
           "text": "绕开他们，不冒险接触",
           "condition": {"or": [
-            {"type": "flag", "target": "猎狮", "operator": "eq", "value": "不打"},
-            {"type": "resource", "target": "食物", "operator": "lte", "value": 2}
+            {"type": "flag", "target": "物资", "operator": "neq", "value": "全"},
+            {"type": "flag", "target": "猎狮", "operator": "eq", "value": "不打"}
           ]},
           "consequences": [
             {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
