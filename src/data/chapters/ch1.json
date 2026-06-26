@@ -104,7 +104,6 @@
           "text": "不求母亲，直接去找朋友搭船",
           "consequences": [
             {"type": "state", "target": "良心", "value": -5, "operation": "add"},
-            {"type": "state", "target": "勇气", "value": 5, "operation": "add"},
             {"type": "flag", "target": "母亲反应", "value": "求友"},
             {"type": "flag", "target": "搭船途径", "value": "朋友"}
           ],
