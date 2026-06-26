@@ -410,7 +410,7 @@
           "id": "漂_撑",
           "text": "继续撑着，省着点用",
           "isCanon": true,
-          "condition": {"type": "and", "conditions": [
+          "condition": {"and": [
             {"type": "skill", "target": "航海", "operator": "gte", "value": 1},
             {"type": "resource", "target": "食物", "operator": "gte", "value": 2}
           ]},
@@ -429,7 +429,7 @@
         {
           "id": "漂_撑_饿",
           "text": "继续撑着，省着点用",
-          "condition": {"type": "and", "conditions": [
+          "condition": {"and": [
             {"type": "skill", "target": "航海", "operator": "gte", "value": 1},
             {"type": "resource", "target": "食物", "operator": "lte", "value": 1}
           ]},
@@ -633,7 +633,7 @@
         {
           "id": "黑_绕",
           "text": "绕开他们，不冒险接触",
-          "condition": {"type": "and", "conditions": [
+          "condition": {"and": [
             {"type": "flag", "target": "猎狮", "operator": "neq", "value": "不打"},
             {"type": "resource", "target": "食物", "operator": "gte", "value": 3}
           ]},
@@ -651,7 +651,7 @@
         {
           "id": "黑_绕_死",
           "text": "绕开他们，不冒险接触",
-          "condition": {"type": "or", "conditions": [
+          "condition": {"or": [
             {"type": "flag", "target": "猎狮", "operator": "eq", "value": "不打"},
             {"type": "resource", "target": "食物", "operator": "lte", "value": 2}
           ]},
