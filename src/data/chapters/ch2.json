@@ -1182,6 +1182,7 @@
         {"type": "resource", "target": "蜡", "value": 0, "operation": "set"},
         {"type": "resource", "target": "绳", "value": 0, "operation": "set"},
         {"type": "resource", "target": "装备", "value": 0, "operation": "set"},
+        {"type": "companion", "target": "苏里", "value": false, "operation": "remove"},
         {"type": "flag", "target": "在岛上", "value": true}
       ],
       "text": [
