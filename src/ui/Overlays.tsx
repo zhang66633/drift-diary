@@ -10,12 +10,12 @@ export function NarrationOverlay({ text, onDismiss }: NarrationOverlayProps) {
   if (!text) return null;
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center p-8"
+      className="fixed inset-0 z-40 flex items-center justify-center p-4 sm:p-8"
       style={{ background: 'rgba(42, 31, 20, 0.7)' }}
       onClick={onDismiss}
     >
       <div
-        className="max-w-xl w-full p-8"
+        className="max-w-xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-8"
         onClick={e => e.stopPropagation()}
         style={{
           background: '#f4ecd8',
@@ -24,7 +24,7 @@ export function NarrationOverlay({ text, onDismiss }: NarrationOverlayProps) {
         }}
       >
         <p
-          className="italic text-lg leading-relaxed"
+          className="italic text-base sm:text-lg leading-relaxed"
           style={{ color: '#5a4635', textIndent: '2em', whiteSpace: 'pre-line' }}
         >
           {text}
@@ -52,19 +52,19 @@ export function DreamOverlay({ dream, resolvedDreamText, onDismiss }: DreamOverl
   const dreamText = resolvedDreamText ?? (typeof dream.text === 'string' ? dream.text : '');
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-8"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
       style={{ background: 'rgba(20, 10, 5, 0.85)' }}
       onClick={onDismiss}
     >
       <div
-        className="max-w-xl w-full p-8"
+        className="max-w-xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-8"
         onClick={e => e.stopPropagation()}
         style={{
           background: 'transparent',
         }}
       >
         <p
-          className="italic text-lg leading-relaxed text-center"
+          className="italic text-base sm:text-lg leading-relaxed text-center"
           style={{ color: '#9a8a7a', textIndent: 0, opacity: 0.9, whiteSpace: 'pre-line' }}
         >
           <span className="text-sm" style={{ color: '#7a5a30', textIndent: 0 }}>— 梦 —</span>
@@ -170,6 +170,13 @@ interface EndingOverlayProps {
 
 export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
   if (!ending) return null;
+
+  // Insert resolved lionText into the placeholder position
+  const lionPlaceholder = '想起那头没敢打的狮子';
+  const resolvedText = typeof ending.lionText === 'string' && ending.lionText
+    ? ending.text.replace(lionPlaceholder, ending.lionText)
+    : ending.text;
+
   return (
     <div
       className="fixed inset-0 z-50 overflow-y-auto"
@@ -200,7 +207,7 @@ export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
               className="italic leading-loose"
               style={{ color: '#a89a8a', textIndent: '2em', whiteSpace: 'pre-line', textAlign: 'justify' }}
             >
-              {ending.text}
+              {resolvedText}
             </p>
           </div>
           <button

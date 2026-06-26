@@ -209,7 +209,10 @@ export const useGameStore = create<GameStore>((set, get) => {
 
     let pendingEnding: EndingSpec | null = null;
     if (scene.ending) {
-      pendingEnding = scene.ending;
+      pendingEnding = {
+        ...scene.ending,
+        lionText: consequence.resolveText(scene.ending.lionText) as any,
+      };
     }
 
     if (wasSept1 && timeMgr.isSeptemberFirst() && !scene.chapterStart && !scene.dream) {
@@ -537,6 +540,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       timeMgr.reset(loaded.time);
       providence.setValue(loaded.state.天意);
       sceneMgr.reset();
+      sceneMgr.setHistory(loaded.history);
       snapshots = [...loaded.historySnapshots];
 
       timeMgr.setOnIsland(!!loaded.flags['在岛上']);

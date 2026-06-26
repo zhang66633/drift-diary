@@ -97,6 +97,10 @@ export class SceneManager {
     this.history = [];
   }
 
+  setHistory(history: string[]): void {
+    this.history = [...history];
+  }
+
   getHistory(): readonly string[] {
     return this.history;
   }
