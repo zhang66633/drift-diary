@@ -1,45 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
 import type { NarrationSpec, DreamSpec, DeathSpec, EndingSpec } from '../types/scene';
-
-// 将文本按段落拆分成多页
-function splitIntoPages(text: string, charsPerPage = 400): string[] {
-  // 按换行分割段落
-  const paragraphs = text.split('\n').filter(p => p.trim());
-  const pages: string[] = [];
-  let currentPage = '';
-  let currentLength = 0;
-
-  for (const para of paragraphs) {
-    if (currentLength + para.length > charsPerPage && currentPage) {
-      pages.push(currentPage.trim());
-      currentPage = para;
-      currentLength = para.length;
-    } else {
-      currentPage += '\n' + para;
-      currentLength += para.length;
-    }
-  }
-  if (currentPage.trim()) {
-    pages.push(currentPage.trim());
-  }
-
-  // 如果只有一页但太长，再按字符截断
-  if (pages.length === 1 && pages[0].length > charsPerPage * 1.5) {
-    const words = text.split('');
-    pages.length = 0;
-    currentPage = '';
-    for (const char of words) {
-      currentPage += char;
-      if (currentPage.length >= charsPerPage) {
-        pages.push(currentPage);
-        currentPage = '';
-      }
-    }
-    if (currentPage) pages.push(currentPage);
-  }
-
-  return pages.length > 0 ? pages : [text];
-}
 
 interface NarrationOverlayProps {
   narration: NarrationSpec | null;
@@ -48,79 +7,12 @@ interface NarrationOverlayProps {
 }
 
 export function NarrationOverlay({ text, onDismiss }: NarrationOverlayProps) {
-  const [pageIndex, setPageIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const timerRef = useRef<number | null>(null);
-
-  const pages = splitIntoPages(text);
-
-  // text 变化时重置 pageIndex
-  useEffect(() => {
-    setPageIndex(0);
-  }, [text]);
-
-  useEffect(() => {
-    // 组件挂载时触发动画
-    requestAnimationFrame(() => setIsVisible(true));
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  const handleNext = () => {
-    if (isTransitioning) return;
-    if (pageIndex < pages.length - 1) {
-      setIsTransitioning(true);
-      setIsVisible(false);
-      timerRef.current = window.setTimeout(() => {
-        setPageIndex(i => i + 1);
-        setIsVisible(true);
-        setIsTransitioning(false);
-      }, 250);
-    } else {
-      // 最后一页，关闭
-      setIsVisible(false);
-      timerRef.current = window.setTimeout(onDismiss, 300);
-    }
-  };
-
-  const handleBack = () => {
-    if (pageIndex > 0 && !isTransitioning) {
-      setIsTransitioning(true);
-      setIsVisible(false);
-      timerRef.current = window.setTimeout(() => {
-        setPageIndex(i => i - 1);
-        setIsVisible(true);
-        setIsTransitioning(false);
-      }, 250);
-    }
-  };
-
-  // 键盘支持：左键返回，Space/右键/Enter前进
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') handleBack();
-      else if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'Enter') handleNext();
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [pageIndex, isTransitioning]);
-
   if (!text) return null;
-
   return (
     <div
       className="fixed inset-0 z-40 flex items-center justify-center p-4 sm:p-8"
-      style={{
-        background: 'rgba(42, 31, 20, 0.7)',
-        opacity: isVisible ? 1 : 0,
-        transition: 'opacity 0.3s ease',
-      }}
-      onClick={handleNext}
+      style={{ background: 'rgba(42, 31, 20, 0.7)' }}
+      onClick={onDismiss}
     >
       <div
         className="max-w-xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-8"
@@ -129,61 +21,21 @@ export function NarrationOverlay({ text, onDismiss }: NarrationOverlayProps) {
           background: '#f4ecd8',
           boxShadow: '0 0 60px rgba(0,0,0,0.5)',
           border: '1px solid #7a5a30',
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(10px)',
-          transition: 'opacity 0.3s ease, transform 0.3s ease',
         }}
       >
         <p
           className="italic text-base sm:text-lg leading-relaxed"
           style={{ color: '#5a4635', textIndent: '2em', whiteSpace: 'pre-line' }}
         >
-          {pages[pageIndex]}
+          {text}
         </p>
-
-        {/* 分页指示 */}
-        {pages.length > 1 && (
-          <div className="flex items-center justify-between mt-6">
-            <span className="text-xs" style={{ color: '#a09080', textIndent: 0 }}>
-              {pageIndex + 1} / {pages.length}
-            </span>
-            <div
-              className="flex gap-1"
-              style={{ textIndent: 0 }}
-            >
-              {pages.map((_, i) => (
-                <span
-                  key={i}
-                  style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: '50%',
-                    background: i === pageIndex ? '#7a5a30' : '#c0b0a0',
-                    transition: 'background 0.2s',
-                  }}
-                />
-              ))}
-            </div>
-            <span
-              className="text-sm cursor-pointer select-none"
-              style={{ color: '#7a5a30', textIndent: 0 }}
-              onClick={handleNext}
-            >
-              {pageIndex < pages.length - 1 ? '▸ 继续' : '（关闭）'}
-            </span>
-          </div>
-        )}
-
-        {/* 只有一页时的关闭提示 */}
-        {pages.length === 1 && (
-          <p
-            className="text-right mt-6 text-sm cursor-pointer select-none"
-            style={{ color: '#7a5a30', textIndent: 0 }}
-            onClick={handleNext}
-          >
-            （继续 ▸）
-          </p>
-        )}
+        <p
+          className="text-right mt-6 text-sm cursor-pointer select-none"
+          style={{ color: '#7a5a30', textIndent: 0 }}
+          onClick={onDismiss}
+        >
+          （继续 ▸）
+        </p>
       </div>
     </div>
   );
@@ -196,22 +48,12 @@ interface DreamOverlayProps {
 }
 
 export function DreamOverlay({ dream, resolvedDreamText, onDismiss }: DreamOverlayProps) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    requestAnimationFrame(() => setIsVisible(true));
-  }, []);
-
   if (!dream) return null;
   const dreamText = resolvedDreamText ?? (typeof dream.text === 'string' ? dream.text : '');
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
-      style={{
-        background: 'rgba(20, 10, 5, 0.85)',
-        opacity: isVisible ? 1 : 0,
-        transition: 'opacity 0.4s ease',
-      }}
+      style={{ background: 'rgba(20, 10, 5, 0.85)' }}
       onClick={onDismiss}
     >
       <div
@@ -219,9 +61,6 @@ export function DreamOverlay({ dream, resolvedDreamText, onDismiss }: DreamOverl
         onClick={e => e.stopPropagation()}
         style={{
           background: 'transparent',
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(8px)',
-          transition: 'opacity 0.4s ease, transform 0.4s ease',
         }}
       >
         <p
