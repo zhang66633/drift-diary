@@ -209,6 +209,14 @@ export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
             >
               {resolvedText}
             </p>
+            {ending.moneyText && (
+              <p
+                className="italic leading-loose mt-4"
+                style={{ color: '#a89a8a', textIndent: '2em', whiteSpace: 'pre-line', textAlign: 'justify' }}
+              >
+                {ending.moneyText as string}
+              </p>
+            )}
           </div>
           <button
             className="px-8 py-3 text-base cursor-pointer select-none transition-all duration-200"

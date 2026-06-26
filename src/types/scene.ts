@@ -107,6 +107,7 @@ export interface EndingSpec {
   text: string;
   buttonText?: string;
   lionText?: string | ConditionalText;
+  moneyText?: string | ConditionalText;
 }
 
 export interface ProvidenceHook {

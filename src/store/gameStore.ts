@@ -212,6 +212,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       pendingEnding = {
         ...scene.ending,
         lionText: consequence.resolveText(scene.ending.lionText) as any,
+        moneyText: consequence.resolveText(scene.ending.moneyText) as any,
       };
     }
 
