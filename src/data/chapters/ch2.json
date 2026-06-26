@@ -808,6 +808,8 @@
         {
           "id": "苏_留",
           "text": "钱我不要，苏里跟我走，他是自由人",
+          "requirement": {"type": "state", "target": "士气", "operator": "gte", "value": 50},
+          "requireFailText": "士气不足",
           "consequences": [
             {"type": "state", "target": "良心", "value": 20, "operation": "add"},
             {"type": "state", "target": "勇气", "value": 10, "operation": "add"},
