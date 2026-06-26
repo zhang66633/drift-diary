@@ -25,21 +25,14 @@
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 0;
+    height: 0;
+    display: none;
   }
 
-  ::-webkit-scrollbar-track {
-    background: rgba(122, 90, 48, 0.1);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(122, 90, 48, 0.4);
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(122, 90, 48, 0.6);
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 

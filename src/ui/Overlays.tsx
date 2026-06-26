@@ -10,7 +10,7 @@ export function NarrationOverlay({ text, onDismiss }: NarrationOverlayProps) {
   if (!text) return null;
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center p-4 sm:p-8 fade-in"
+      className="fixed inset-0 z-40 flex items-center justify-center p-4 sm:p-8"
       role="dialog"
       aria-modal="true"
       aria-label="旁白"
@@ -18,7 +18,7 @@ export function NarrationOverlay({ text, onDismiss }: NarrationOverlayProps) {
       onClick={onDismiss}
     >
       <div
-        className="max-w-xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-8 scale-in overlay-panel"
+        className="max-w-xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-8 overlay-panel"
         onClick={e => e.stopPropagation()}
       >
         <div className="text-center mb-4" style={{ color: '#7a5a30', opacity: 0.6, textIndent: 0 }}>
@@ -53,7 +53,7 @@ export function DreamOverlay({ dream, resolvedDreamText, onDismiss }: DreamOverl
   const dreamText = resolvedDreamText ?? (typeof dream.text === 'string' ? dream.text : '');
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
       role="dialog"
       aria-modal="true"
       aria-label="梦境"
@@ -64,11 +64,10 @@ export function DreamOverlay({ dream, resolvedDreamText, onDismiss }: DreamOverl
       onClick={onDismiss}
     >
       <div
-        className="max-w-xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-10 scale-in"
+        className="max-w-xl w-full max-h-[80vh] overflow-y-auto p-6 sm:p-10"
         onClick={e => e.stopPropagation()}
         style={{
           background: 'transparent',
-          animation: 'fadeInUp 0.8s ease-out',
         }}
       >
         <div className="text-center mb-8" style={{ textIndent: 0 }}>
@@ -112,7 +111,7 @@ export function DeathOverlay({ death, onDismiss }: DeathOverlayProps) {
   if (!death) return null;
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-8 fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-8"
       role="dialog"
       aria-modal="true"
       aria-label="死亡结局"
@@ -120,7 +119,7 @@ export function DeathOverlay({ death, onDismiss }: DeathOverlayProps) {
       onClick={onDismiss}
     >
       <div
-        className="max-w-lg w-full p-8 sm:p-12 text-center scale-in"
+        className="max-w-lg w-full p-8 sm:p-12 text-center"
         onClick={e => e.stopPropagation()}
       >
         <div className="mb-8 text-center" style={{ textIndent: 0 }}>
@@ -161,7 +160,7 @@ export function ChapterTitleOverlay({ chapter, title, quotation, visible, onDism
   if (!visible) return null;
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center p-8 fade-in"
+      className="fixed inset-0 z-40 flex items-center justify-center p-8"
       role="dialog"
       aria-modal="true"
       aria-label={`第${chapter}章 ${title}`}
@@ -176,7 +175,7 @@ export function ChapterTitleOverlay({ chapter, title, quotation, visible, onDism
       onClick={onDismiss}
     >
       <div
-        className="max-w-xl w-full text-center scale-in"
+        className="max-w-xl w-full text-center"
         onClick={e => e.stopPropagation()}
       >
         <div className="mb-6 flex justify-center gap-3" style={{ color: '#7a5a30', opacity: 0.5 }}>
@@ -240,7 +239,7 @@ export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 overflow-y-auto fade-in"
+      className="fixed inset-0 z-50 overflow-y-auto"
       role="dialog"
       aria-modal="true"
       aria-label={ending.title || '结局'}
@@ -249,7 +248,7 @@ export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
     >
       <div className="flex items-center justify-center min-h-full p-8">
         <div
-          className="max-w-xl w-full py-8 text-center flex-shrink-0 scale-in"
+          className="max-w-xl w-full py-8 text-center flex-shrink-0"
           onClick={e => e.stopPropagation()}
         >
           <div className="mb-6 flex justify-center gap-3" style={{ color: '#7a6a5a', opacity: 0.5 }}>

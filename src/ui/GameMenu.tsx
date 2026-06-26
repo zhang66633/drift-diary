@@ -77,7 +77,7 @@ export function GameMenu({ onClose }: GameMenuProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 fade-in"
+      className="fixed inset-0 z-50"
       style={{ background: 'rgba(42, 31, 20, 0.25)' }}
       onClick={onClose}
     >
@@ -97,7 +97,6 @@ export function GameMenu({ onClose }: GameMenuProps) {
           border: '1px solid #7a5a30',
           boxShadow: '4px 6px 30px rgba(0,0,0,0.35), 0 0 20px rgba(122, 90, 48, 0.1)',
           zIndex: 51,
-          animation: 'fadeInDown 0.18s ease-out',
           transformOrigin: 'top right',
         }}
       >

@@ -144,7 +144,7 @@ export function SaveMenu({ mode }: SaveMenuProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-8 fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="save-menu-title"
@@ -152,7 +152,7 @@ export function SaveMenu({ mode }: SaveMenuProps) {
       onClick={handleClose}
     >
       <div
-        className="max-w-lg w-full max-h-[80vh] overflow-y-auto p-8 scale-in overlay-panel"
+        className="max-w-lg w-full max-h-[80vh] overflow-y-auto p-8 overlay-panel"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-8">
@@ -202,7 +202,7 @@ export function HistoryMenu() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-8 fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="history-menu-title"
@@ -210,7 +210,7 @@ export function HistoryMenu() {
       onClick={closeHistoryMenu}
     >
       <div
-        className="max-w-lg w-full max-h-[80vh] overflow-y-auto p-8 scale-in overlay-panel"
+        className="max-w-lg w-full max-h-[80vh] overflow-y-auto p-8 overlay-panel"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-8">
@@ -317,7 +317,7 @@ export function HistoryViewOverlay() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-8 fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="history-view-title"
@@ -325,7 +325,7 @@ export function HistoryViewOverlay() {
       onClick={closeHistory}
     >
       <div
-        className="max-w-2xl w-full max-h-[85vh] overflow-y-auto p-10 scale-in overlay-panel"
+        className="max-w-2xl w-full max-h-[85vh] overflow-y-auto p-10 overlay-panel"
         onClick={e => e.stopPropagation()}
       >
         <div className="mb-8 text-center">

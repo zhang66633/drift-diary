@@ -31,7 +31,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-8 fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-8"
       role="dialog"
       aria-modal="true"
       aria-labelledby="settings-title"
@@ -39,7 +39,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
       onClick={onClose}
     >
       <div
-        className="max-w-md w-full p-8 scale-in overlay-panel"
+        className="max-w-md w-full p-8 overlay-panel"
         onClick={e => e.stopPropagation()}
         style={{
           maxHeight: '85vh',
