@@ -191,39 +191,43 @@ export function BookShell() {
           <p className="quotation">{resolvedQuotation}</p>
         )}
 
-        {!hasBlockingEnterOverlay && isTyping && (
-          <TypedText
-            key={currentScene.id}
-            paragraphs={resolvedParagraphs}
-            onComplete={onTypingComplete}
-          />
-        )}
-        {!hasBlockingEnterOverlay && !isTyping && (
-          <div
-            style={{
-              opacity: contentVisible ? 1 : 0,
-              transform: contentVisible ? 'translateY(0)' : 'translateY(12px)',
-              transition: 'opacity 0.4s ease, transform 0.4s ease',
-            }}
-          >
-            {resolvedParagraphs.map((p, i) => (
-              <p key={i} className="mb-4">{p}</p>
-            ))}
-            <div
-              style={{
-                opacity: contentVisible ? 1 : 0,
-                transform: contentVisible ? 'translateY(0)' : 'translateY(16px)',
-                transition: 'opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s',
-              }}
-            >
-              {visibleChoices.length > 0 && (
-                <ChoiceList
-                  choices={visibleChoices}
-                  onChoose={chooseChoice}
-                  disabledIds={disabledChoiceIds}
-                />
-              )}
-            </div>
+        {!hasBlockingEnterOverlay && (
+          <div>
+            {isTyping && (
+              <TypedText
+                key={currentScene.id}
+                paragraphs={resolvedParagraphs}
+                onComplete={onTypingComplete}
+              />
+            )}
+            {!isTyping && (
+              <div
+                style={{
+                  opacity: contentVisible ? 1 : 0,
+                  transform: contentVisible ? 'translateY(0)' : 'translateY(6px)',
+                  transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
+                }}
+              >
+                {resolvedParagraphs.map((p, i) => (
+                  <p key={i} className="mb-4">{p}</p>
+                ))}
+                <div
+                  style={{
+                    opacity: contentVisible ? 1 : 0,
+                    transform: contentVisible ? 'translateY(0)' : 'translateY(8px)',
+                    transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s',
+                  }}
+                >
+                  {visibleChoices.length > 0 && (
+                    <ChoiceList
+                      choices={visibleChoices}
+                      onChoose={chooseChoice}
+                      disabledIds={disabledChoiceIds}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
