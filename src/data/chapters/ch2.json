@@ -410,7 +410,10 @@
           "id": "漂_撑",
           "text": "继续撑着，省着点用",
           "isCanon": true,
-          "condition": {"type": "skill", "target": "航海", "operator": "gte", "value": 1},
+          "condition": {"type": "and", "conditions": [
+            {"type": "skill", "target": "航海", "operator": "gte", "value": 1},
+            {"type": "resource", "target": "食物", "operator": "gte", "value": 2}
+          ]},
           "consequences": [
             {"type": "state", "target": "士气", "value": -10, "operation": "add"},
             {"type": "resource", "target": "水", "value": -1, "operation": "add"},
@@ -422,6 +425,25 @@
             "trigger": "on_choice"
           },
           "nextScene": "ch2_7_猎狮"
+        },
+        {
+          "id": "漂_撑_饿",
+          "text": "继续撑着，省着点用",
+          "condition": {"type": "and", "conditions": [
+            {"type": "skill", "target": "航海", "operator": "gte", "value": 1},
+            {"type": "resource", "target": "食物", "operator": "lte", "value": 1}
+          ]},
+          "consequences": [
+            {"type": "state", "target": "士气", "value": -10, "operation": "add"},
+            {"type": "resource", "target": "水", "value": -1, "operation": "add"},
+            {"type": "resource", "target": "食物", "value": -1, "operation": "add"},
+            {"type": "flag", "target": "漂泊", "value": "省用"}
+          ],
+          "narration": {
+            "text": "我搜遍舢板的每一个角落——只剩最后一点碎面包渣了。我把它分成两份，给了苏里一半。他嘴唇干裂出血，哭着说他快死了。我告诉他再撑几天，一定会看到船。但我心里清楚：这点东西，撑不了十二个时辰。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch2_6_饿死"
         },
         {
           "id": "漂_岸_迷",
@@ -460,6 +482,18 @@
       "ending": {
         "title": "沧海迷航",
         "text": "不知漂了多少天。\n\n水早就喝完了，最后一块面包也吃完了。苏里不再哭了——他躺在船底，嘴唇干裂，眼睛半闭着，偶尔喃喃地喊妈妈。\n\n我想告诉他对不起，是我害了他。我以为自己会驾船，以为凭着一腔孤勇就能逃出萨里。但我连基本的航海术都不懂——不会看星象，不会辨洋流，甚至不知道自己在往哪个方向走。\n\n阳光越来越刺眼，海面亮得像一片熔银。我开始出现幻觉，看见父亲站在赫尔港的码头上，朝我摇头。\n\n舢板随波逐流，越漂越远，远离了非洲海岸，远离了一切航线。\n\n没有人知道我们去了哪里。在约克郡，我的母亲大概还会在窗前坐着，等她那个不听话的小儿子回家。\n\n她等不到了。\n\n一六五四年九月。我把自己交给了大海。漂得很远很远……",
+        "buttonText": "合上书本"
+      }
+    },
+    {
+      "id": "ch2_6_饿死",
+      "chapter": 2,
+      "beat": "2.6c 饥饿而死（结局）",
+      "date": "1654-09-03",
+      "text": [],
+      "ending": {
+        "title": "坐失良机",
+        "text": "我们把最后一点面包渣分了。\n\n之后两天，什么都没有了。苏里躺在船底，连哭的力气都没有了，只是偶尔睁开眼看看我，又闭上。我想钓鱼，但鱼钩早在逃跑时丢了；我用衬衫做网捞海藻，捞上来的只有咸水和泡沫。\n\n第三天，我开始出现幻觉。我看见父亲在赫尔港的厨房里切面包，母亲端着热汤从灶台边转过身来——\"克鲁索，吃饭了。\"我伸出手，指尖只碰到滚烫的船舷木板。\n\n第四天，苏里的呼吸越来越轻。我把最后一口水留给他，他不喝，只是看着我。我明白那个眼神——他在问我：我们是自由了吗？\n\n第五天清晨，海上起了雾。浓得像世界的边缘。苏里没有醒来。\n\n我把他放进海里。雾把我的哭声闷住了，海面平静得像什么都没发生过。\n\n我躺在空荡荡的舢板里，看着灰白的天空。\n\n父亲说过——\"中流砥柱的生活才是最好的。\"如果我当初听了他的话。如果我从萨里逃走时多带些吃的。如果我敢去打那头狮子。\n\n但已经没有如果了。大海是公平的。它惩罚鲁莽的人，也惩罚准备不足的人。",
         "buttonText": "合上书本"
       }
     },
@@ -584,16 +618,32 @@
           "nextScene": "ch2_9_猎豹"
         },
         {
+          "id": "黑_语",
+          "text": "用当地土语和他们搭话，以礼相求",
+          "condition": {"type": "skill", "target": "语言", "operator": "gte", "value": 1},
+          "consequences": [
+            {"type": "flag", "target": "黑人", "value": "交流"}
+          ],
+          "narration": {
+            "text": "我记起在几内亚船上跟老商人学的几句部落土语。我结结巴巴地朝岸上喊，把手里的空水罐举高给他们看——表示我们缺水，不是来攻击的。几个黑人愣了一下，然后笑了。他们招手让我们上岸，给我们拿来了粮食和水。原来他们在这条海岸线上见过不少像我们这样的落难水手，早就习惯了。言语通了，他们就只是人——善良的、愿意分享的人。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch2_9_猎豹"
+        },
+        {
           "id": "黑_绕",
           "text": "绕开他们，不冒险接触",
-          "condition": {"type": "flag", "target": "猎狮", "operator": "neq", "value": "不打"},
+          "condition": {"type": "and", "conditions": [
+            {"type": "flag", "target": "猎狮", "operator": "neq", "value": "不打"},
+            {"type": "resource", "target": "食物", "operator": "gte", "value": 3}
+          ]},
           "consequences": [
             {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
             {"type": "resource", "target": "水", "value": -1, "operation": "add"},
             {"type": "flag", "target": "黑人", "value": "绕开"}
           ],
           "narration": {
-            "text": "我不敢冒险，绕了个大弯从远海走了。水又少了一罐。好在之前打的狮肉干还能撑几天，我只能盼着快点遇到下一艘船或者下一片可以靠岸的陆地。",
+            "text": "我不敢冒险，绕了个大弯从远海走了。水又少了一罐。好在舢板里的存粮还算充足，狮肉干和干粮还能撑好几天。我只能盼着快点遇到下一艘船或者下一片可以靠岸的陆地。",
             "trigger": "on_choice"
           },
           "nextScene": "ch2_10_葡船"
@@ -601,7 +651,10 @@
         {
           "id": "黑_绕_死",
           "text": "绕开他们，不冒险接触",
-          "condition": {"type": "flag", "target": "猎狮", "operator": "eq", "value": "不打"},
+          "condition": {"type": "or", "conditions": [
+            {"type": "flag", "target": "猎狮", "operator": "eq", "value": "不打"},
+            {"type": "resource", "target": "食物", "operator": "lte", "value": 2}
+          ]},
           "consequences": [
             {"type": "state", "target": "勇气", "value": -5, "operation": "add"},
             {"type": "flag", "target": "黑人", "value": "绕开"}
