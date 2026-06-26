@@ -1,11 +1,10 @@
 // 玩家状态轴
 export interface PlayerState {
   良心: number;      // 0-100
-  天意: number;      // 0-100，隐藏数值（UI 不显示）
+  天意: number;      // 0-100，隐藏数值，合并原"信念"含义
   勇气: number;      // 0-100
   士气: number;      // 0-100
   健康: number;      // 0-100
-  信念: number;      // 0-100
 }
 
 // 资源轴
@@ -70,7 +69,7 @@ export interface SceneSnapshot {
 // 初始状态
 export function createInitialState(): GameState {
   return {
-    state: { 良心: 50, 天意: 50, 勇气: 50, 士气: 50, 健康: 100, 信念: 30 },
+    state: { 良心: 50, 天意: 50, 勇气: 50, 士气: 50, 健康: 100 },
     resources: {
       钱: 0, 食物: 0, 淡水: 0, 火药: 0, 弹药: 0,
       工具: 0, 蜡: 0, 绳: 0, 装备: 0, 墨水: 0, 同伴: [],

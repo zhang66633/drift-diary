@@ -113,7 +113,9 @@ export interface EndingSpec {
 export interface ProvidenceHook {
   lowThreshold?: number;
   highThreshold?: number;
-  effects: Consequence[];
+  effects?: Consequence[];
+  lowEffects?: Consequence[];
+  highEffects?: Consequence[];
 }
 
 export interface IllustrationSpec {

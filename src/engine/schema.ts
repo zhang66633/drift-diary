@@ -61,7 +61,9 @@ const SenseTagSchema = z.object({
 const ProvidenceHookSchema = z.object({
   lowThreshold: z.number().optional(),
   highThreshold: z.number().optional(),
-  effects: z.array(ConsequenceSchema),
+  effects: z.array(ConsequenceSchema).optional(),
+  lowEffects: z.array(ConsequenceSchema).optional(),
+  highEffects: z.array(ConsequenceSchema).optional(),
 });
 
 const IllustrationSpecSchema = z.object({

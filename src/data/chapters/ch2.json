@@ -21,7 +21,7 @@
           "isCanon": true,
           "consequences": [
             {"type": "skill", "target": "航海", "value": 2, "operation": "add"},
-            {"type": "state", "target": "信念", "value": 5, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 5, "operation": "add"},
             {"type": "flag", "target": "学了什么", "value": "航海"}
           ],
           "narration": {
@@ -315,6 +315,8 @@
         {
           "id": "推_杀",
           "text": "直接用枪托砸向他的后脑勺",
+          "requirement": {"type": "state", "target": "良心", "operator": "lte", "value": 70},
+          "requireFailText": "良心不安",
           "consequences": [
             {"type": "state", "target": "良心", "value": -20, "operation": "add"},
             {"type": "flag", "target": "摩尔人", "value": "杀"},
@@ -358,6 +360,16 @@
       "chapter": 2,
       "beat": "2.6 海上漂泊",
       "date": "1654-08-27",
+      "providenceHook": {
+        "lowThreshold": 35,
+        "highThreshold": 65,
+        "lowEffects": [
+          {"type": "state", "target": "士气", "value": -15, "operation": "add"}
+        ],
+        "highEffects": [
+          {"type": "state", "target": "士气", "value": 8, "operation": "add"}
+        ]
+      },
       "text": [
         "我和苏里在海上漂了十天。",
         "太阳像一块烧红的烙铁悬在头顶，晒得裸露的皮肤起了水泡，一碰到咸水就刺疼。海风里全是腥味，吹得嘴唇干裂出一道道血口子。我们沿着海岸向南行驶，不敢靠岸太近——摩尔人的村落随时可能有人追来。白天酷热，夜里海风又冷得像刀子，淡水一点点变少，面包干得像石头。",
@@ -621,6 +633,8 @@
         {
           "id": "黑_偷",
           "text": "不上岸，趁他们不注意拿东西就走",
+          "requirement": {"type": "state", "target": "良心", "operator": "lte", "value": 45},
+          "requireFailText": "良心有愧",
           "consequences": [
             {"type": "state", "target": "良心", "value": -10, "operation": "add"},
             {"type": "resource", "target": "食物", "value": 2, "operation": "add"},
@@ -766,6 +780,16 @@
       "chapter": 2,
       "beat": "2.10 葡萄牙船长搭救",
       "date": "1654-09-08",
+      "providenceHook": {
+        "lowThreshold": 35,
+        "highThreshold": 65,
+        "lowEffects": [
+          {"type": "state", "target": "士气", "value": -10, "operation": "add"}
+        ],
+        "highEffects": [
+          {"type": "resource", "target": "钱", "value": 5, "operation": "add"}
+        ]
+      },
       "text": [
         "大约又走了十天，苏里突然指着远处喊：「船！有帆船！」我眯起眼睛看——那是一艘挂着葡萄牙旗的大船，正往巴西方向驶去。我拼命挥手、鸣枪，终于被他们看见了。",
         "大船上放下小艇来接我们。艇上有个苏格兰水手，用英语朝我喊话——我差点哭出来。船长是个花白胡子的老人，脸上沟壑纵横，眼神却温和得像午后的阳光。听完我的遭遇后，他摘下帽子在胸前画了个十字，说：「全能的上帝指引我遇见你，年轻人。」",
@@ -778,7 +802,7 @@
           "consequences": [
             {"type": "resource", "target": "钱", "value": -50, "operation": "add"},
             {"type": "state", "target": "天意", "value": 10, "operation": "add"},
-            {"type": "state", "target": "信念", "value": 5, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 5, "operation": "add"},
             {"type": "flag", "target": "报船长", "value": "是"}
           ],
           "narration": {
@@ -884,7 +908,7 @@
           "text": "提出日后加倍偿还",
           "consequences": [
             {"type": "state", "target": "天意", "value": 5, "operation": "add"},
-            {"type": "state", "target": "信念", "value": 5, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 5, "operation": "add"},
             {"type": "flag", "target": "报船长", "value": "诺"}
           ],
           "narration": {
@@ -909,6 +933,8 @@
           "id": "苏_卖",
           "text": "收下六十比索，把苏里交给船长",
           "isCanon": true,
+          "requirement": {"type": "state", "target": "良心", "operator": "lte", "value": 50},
+          "requireFailText": "良心不安",
           "consequences": [
             {"type": "resource", "target": "钱", "value": 60, "operation": "add"},
             {"type": "state", "target": "良心", "value": -30, "operation": "add"},
@@ -1037,7 +1063,7 @@
           "text": "拒绝，老老实实种甘蔗",
           "consequences": [
             {"type": "state", "target": "良心", "value": 10, "operation": "add"},
-            {"type": "state", "target": "信念", "value": 5, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 5, "operation": "add"},
             {"type": "resource", "target": "钱", "value": 20, "operation": "add"},
             {"type": "flag", "target": "远航决定", "value": "拒绝"}
           ],
@@ -1108,6 +1134,13 @@
       "chapter": 2,
       "beat": "2.14 致命远航",
       "date": "1659-09-01",
+      "providenceHook": {
+        "lowThreshold": 35,
+        "lowEffects": [
+          {"type": "state", "target": "健康", "value": -10, "operation": "add"},
+          {"type": "state", "target": "士气", "value": -10, "operation": "add"}
+        ]
+      },
       "dream": {
         "text": {
           "segments": [
@@ -1175,7 +1208,7 @@
           "id": "终_祷",
           "text": "跪在甲板上祈祷忏悔",
           "consequences": [
-            {"type": "state", "target": "信念", "value": 20, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 20, "operation": "add"},
             {"type": "state", "target": "良心", "value": 20, "operation": "add"},
             {"type": "providence", "value": 10, "operation": "add"},
             {"type": "flag", "target": "终局", "value": "悔"}

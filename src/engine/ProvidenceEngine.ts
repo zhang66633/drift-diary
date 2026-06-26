@@ -28,10 +28,10 @@ export class ProvidenceEngine {
   checkHook(hook: ProvidenceHook | undefined): Consequence[] | null {
     if (!hook) return null;
     if (hook.lowThreshold !== undefined && this.value <= hook.lowThreshold) {
-      return hook.effects;
+      return hook.lowEffects ?? hook.effects ?? null;
     }
     if (hook.highThreshold !== undefined && this.value >= hook.highThreshold) {
-      return hook.effects;
+      return hook.highEffects ?? hook.effects ?? null;
     }
     return null;
   }

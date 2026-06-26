@@ -22,7 +22,7 @@
           "isCanon": true,
           "consequences": [
             {"type": "state", "target": "良心", "value": 10, "operation": "add"},
-            {"type": "state", "target": "信念", "value": 5, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 5, "operation": "add"},
             {"type": "flag", "target": "父训", "value": "听"}
           ],
           "narration": {
@@ -197,7 +197,7 @@
           "isCanon": true,
           "consequences": [
             {"type": "state", "target": "良心", "value": 10, "operation": "add"},
-            {"type": "state", "target": "信念", "value": 10, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 10, "operation": "add"},
             {"type": "providence", "value": 5, "operation": "add"},
             {"type": "flag", "target": "风暴誓言", "value": "祈祷发誓"}
           ],
@@ -281,7 +281,7 @@
           "id": "砍桅_求",
           "text": "跪在甲板上向天呼救",
           "consequences": [
-            {"type": "state", "target": "信念", "value": 15, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 15, "operation": "add"},
             {"type": "state", "target": "良心", "value": 5, "operation": "add"},
             {"type": "providence", "value": 5, "operation": "add"},
             {"type": "flag", "target": "砍桅行动", "value": "祈祷"}
@@ -339,7 +339,7 @@
           "id": "抽水_祷",
           "text": "边抽水边祈祷，反复发誓悔改",
           "consequences": [
-            {"type": "state", "target": "信念", "value": 15, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 15, "operation": "add"},
             {"type": "state", "target": "良心", "value": 10, "operation": "add"},
             {"type": "state", "target": "健康", "value": -10, "operation": "add"},
             {"type": "providence", "value": 10, "operation": "add"},
@@ -418,7 +418,7 @@
           "text": "听船长的话，回家",
           "consequences": [
             {"type": "state", "target": "良心", "value": 20, "operation": "add"},
-            {"type": "state", "target": "信念", "value": 10, "operation": "add"},
+            {"type": "state", "target": "天意", "value": 10, "operation": "add"},
             {"type": "providence", "value": 10, "operation": "add"},
             {"type": "flag", "target": "岸上抉择", "value": "回家"}
           ],

@@ -1,6 +1,6 @@
 import type { PlayerState, Resources, Skills, Companion, SkillId } from '../types/state';
 
-const STATE_KEYS: (keyof PlayerState)[] = ['良心', '天意', '勇气', '士气', '健康', '信念'];
+const STATE_KEYS: (keyof PlayerState)[] = ['良心', '天意', '勇气', '士气', '健康'];
 const RESOURCE_KEYS = [
   '钱', '食物', '淡水', '火药', '弹药', '工具', '蜡', '绳', '装备', '墨水',
 ] as const;

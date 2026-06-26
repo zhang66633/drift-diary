@@ -184,7 +184,6 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
             </span>
             <span>良心:{state.良心}</span>
             <span>天意:{providence}</span>
-            <span>信念:{state.信念}</span>
             <span>航海:{skills.航海}</span>
             <span style={{ fontSize: '0.65rem' }}>
               场景:{sceneId}
