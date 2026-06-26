@@ -163,6 +163,9 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="memoir-title"
       style={{
         background: 'linear-gradient(135deg, #2a1f10 0%, #1a1208 100%)',
       }}
@@ -176,7 +179,7 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
         }}
         onClick={e => e.stopPropagation()}
       >
-        <h2 style={{ color: '#e8d5a3', fontFamily: 'serif', fontSize: '18px', letterSpacing: '0.15em', fontWeight: 'bold' }}>
+        <h2 id="memoir-title" style={{ color: '#e8d5a3', fontFamily: 'serif', fontSize: '18px', letterSpacing: '0.15em', fontWeight: 'bold' }}>
           ◈ 航 程 回 顾 ◈
         </h2>
         <button

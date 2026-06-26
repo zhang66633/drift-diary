@@ -23,13 +23,15 @@ export function StatusBar() {
     symbol,
     value,
     tooltip,
+    label,
   }: {
     symbol: string;
     value: string | number;
     tooltip: string;
+    label: string;
   }) => (
     <Tooltip text={tooltip} position="bottom">
-      <span style={{ cursor: 'default' }}>
+      <span style={{ cursor: 'default' }} aria-label={`${label}：${value}`}>
         <span style={{ marginRight: '3px', color: '#7a5a30' }}>{symbol}</span>
         {value}
       </span>
@@ -47,22 +49,23 @@ export function StatusBar() {
         backdropFilter: 'blur(4px)',
       }}
     >
-      <div className="max-w-3xl mx-auto flex flex-wrap items-center gap-x-4 gap-y-1">
-        <StatusItem symbol="§" value={formatDate(time.date)} tooltip="故事日期" />
-        <StatusItem symbol="†" value={state.健康} tooltip="健康：体力与性命，归零则亡" />
-        <StatusItem symbol="※" value={state.士气} tooltip="士气：精神状态，过低则心志动摇" />
-        <StatusItem symbol="‡" value={state.勇气} tooltip="勇气：面对险境的胆色" />
+      <div className="max-w-3xl mx-auto flex flex-wrap items-center gap-x-4 gap-y-1" role="status" aria-label="游戏状态栏">
+        <StatusItem symbol="§" value={formatDate(time.date)} tooltip="故事日期" label="故事日期" />
+        <StatusItem symbol="†" value={state.健康} tooltip="健康：体力与性命，归零则亡" label="健康" />
+        <StatusItem symbol="※" value={state.士气} tooltip="士气：精神状态，过低则心志动摇" label="士气" />
+        <StatusItem symbol="‡" value={state.勇气} tooltip="勇气：面对险境的胆色" label="勇气" />
 
         {resources.同伴.length > 0 && (
           <StatusItem
             symbol="¶"
             value={resources.同伴.map(c => c.name).join('、')}
             tooltip="同伴：同行之人"
+            label="同伴"
           />
         )}
 
         {resources.钱 > 0 && (
-          <StatusItem symbol="£" value={resources.钱} tooltip="钱币：身上的英镑" />
+          <StatusItem symbol="£" value={resources.钱} tooltip="钱币：身上的英镑" label="钱币" />
         )}
 
         {isDebug && (

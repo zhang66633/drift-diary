@@ -145,6 +145,9 @@ export function SaveMenu({ mode }: SaveMenuProps) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="save-menu-title"
       style={{ background: 'rgba(42, 31, 20, 0.75)' }}
       onClick={handleClose}
     >
@@ -158,7 +161,7 @@ export function SaveMenu({ mode }: SaveMenuProps) {
         }}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
+          <h2 id="save-menu-title" className="text-xl font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
             {mode === 'save' ? '保存进度' : '读取进度'}
           </h2>
           <button
@@ -193,6 +196,9 @@ export function HistoryMenu() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="history-menu-title"
       style={{ background: 'rgba(42, 31, 20, 0.75)' }}
       onClick={closeHistoryMenu}
     >
@@ -206,7 +212,7 @@ export function HistoryMenu() {
         }}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
+          <h2 id="history-menu-title" className="text-xl font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
             历程回顾
           </h2>
           <button
@@ -283,6 +289,9 @@ export function HistoryViewOverlay() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="history-view-title"
       style={{ background: 'rgba(42, 31, 20, 0.85)' }}
       onClick={closeHistory}
     >
@@ -299,7 +308,7 @@ export function HistoryViewOverlay() {
           <p className="text-sm" style={{ color: '#7a5a30', textIndent: 0 }}>
             — 回顾 —
           </p>
-          <h3 className="text-lg mt-2 font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
+          <h3 id="history-view-title" className="text-lg mt-2 font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
             {historyView.title || historyView.sceneId}
           </h3>
           {historyView.date && (

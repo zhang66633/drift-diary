@@ -32,6 +32,9 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-title"
       style={{ background: 'rgba(42, 31, 20, 0.75)' }}
       onClick={onClose}
     >
@@ -47,7 +50,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         }}
       >
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-xl font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
+          <h2 id="settings-title" className="text-xl font-bold" style={{ color: '#3a2a15', textIndent: 0 }}>
             设置
           </h2>
           <button
@@ -121,9 +124,22 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         </Section>
 
         <Section title="调试模式">
-          <label className="flex items-center gap-3 mt-2 cursor-pointer" style={{ textIndent: 0 }}>
+          <label className="flex items-center gap-3 cursor-pointer" style={{ textIndent: 0 }}>
+            <span className="text-sm" style={{ color: '#3a2a15' }}>
+              显示场景ID和调试信息
+            </span>
             <div
+              role="switch"
+              aria-checked={debugMode}
+              aria-label="调试模式"
+              tabIndex={0}
               onClick={() => setDebugMode(!debugMode)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setDebugMode(!debugMode);
+                }
+              }}
               style={{
                 width: '40px',
                 height: '22px',
@@ -146,9 +162,6 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
                 transition: 'left 0.2s',
               }} />
             </div>
-            <span className="text-sm" style={{ color: '#3a2a15' }}>
-              显示场景ID和调试信息
-            </span>
           </label>
         </Section>
       </div>

@@ -11,6 +11,9 @@ export function NarrationOverlay({ text, onDismiss }: NarrationOverlayProps) {
   return (
     <div
       className="fixed inset-0 z-40 flex items-center justify-center p-4 sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-label="旁白"
       style={{ background: 'rgba(42, 31, 20, 0.7)' }}
       onClick={onDismiss}
     >
@@ -53,6 +56,9 @@ export function DreamOverlay({ dream, resolvedDreamText, onDismiss }: DreamOverl
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-label="梦境"
       style={{ background: 'rgba(20, 10, 5, 0.85)' }}
       onClick={onDismiss}
     >
@@ -94,6 +100,9 @@ export function DeathOverlay({ death, onDismiss }: DeathOverlayProps) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-label="死亡结局"
       style={{ background: 'rgba(10, 5, 0, 0.92)' }}
       onClick={onDismiss}
     >
@@ -132,6 +141,9 @@ export function ChapterTitleOverlay({ chapter, title, quotation, visible, onDism
   return (
     <div
       className="fixed inset-0 z-40 flex items-center justify-center p-8"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`第${chapter}章 ${title}`}
       style={{ background: '#f4ecd8' }}
       onClick={onDismiss}
     >
@@ -180,6 +192,9 @@ export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
   return (
     <div
       className="fixed inset-0 z-50 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label={ending.title || '结局'}
       style={{ background: 'rgba(8, 4, 0, 0.95)' }}
       onClick={onDismiss}
     >

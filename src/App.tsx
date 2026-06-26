@@ -3,6 +3,7 @@ import { useGameStore } from './store/gameStore';
 import { MainMenu } from './ui/MainMenu';
 import { BookShell } from './ui/BookShell';
 import { SaveMenu } from './ui/Menus';
+import { ErrorBoundary } from './ui/ErrorBoundary';
 
 declare global {
   interface Window {
@@ -15,13 +16,14 @@ export default function App() {
   const showLoadMenu = useGameStore(s => s.showLoadMenu);
   const initialized = useGameStore(s => s.initialized);
   const init = useGameStore(s => s.init);
+  const isDebugMode = useGameStore(s => s.isDebugMode);
 
   useEffect(() => {
     init();
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && isDebugMode) {
       window.__gameStore = useGameStore;
     }
-  }, [init]);
+  }, [init, isDebugMode]);
 
   if (!initialized) {
     return (
@@ -32,9 +34,9 @@ export default function App() {
   }
 
   return (
-    <>
+    <ErrorBoundary>
       {showMainMenu ? <MainMenu /> : <BookShell />}
       {showLoadMenu && <SaveMenu mode="load" />}
-    </>
+    </ErrorBoundary>
   );
 }

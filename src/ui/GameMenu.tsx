@@ -15,6 +15,7 @@ function MenuItem({ icon, label, onClick, danger }: MenuItemProps) {
   return (
     <button
       onClick={onClick}
+      role="menuitem"
       className="w-full py-3 px-4 text-left transition-all flex items-center gap-3"
       style={{
         color: danger ? '#8a4030' : '#3a2a15',
@@ -68,6 +69,8 @@ export function GameMenu({ onClose }: GameMenuProps) {
       onClick={onClose}
     >
       <div
+        role="menu"
+        aria-label="游戏菜单"
         onClick={e => e.stopPropagation()}
         style={{
           position: 'absolute',
