@@ -128,69 +128,10 @@ export function BookShell() {
 
   return (
     <div className="book-shell">
-      <StatusBar />
-
-      <button
-        className="fixed top-3 right-4 z-30 flex items-center justify-center transition-all duration-200 hover:opacity-100"
-        onClick={() => showGameMenu ? closeGameMenu() : openGameMenu()}
-        style={{
-          color: '#7a5a30',
-          border: '1px solid rgba(122, 90, 48, 0.4)',
-          background: 'rgba(244, 236, 216, 0.92)',
-          cursor: 'pointer',
-          opacity: showGameMenu ? 1 : 0.65,
-          width: '36px',
-          height: '32px',
-          padding: 0,
-          borderRadius: '2px',
-          backdropFilter: 'blur(4px)',
-        }}
-        title="菜单"
-        onMouseEnter={e => {
-          e.currentTarget.style.opacity = '1';
-          e.currentTarget.style.borderColor = '#7a5a30';
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.opacity = showGameMenu ? '1' : '0.65';
-          e.currentTarget.style.borderColor = 'rgba(122, 90, 48, 0.4)';
-        }}
-      >
-        <div
-          className="flex flex-col items-center justify-center gap-[4px]"
-          style={{ width: '16px' }}
-        >
-          <span
-            style={{
-              display: 'block',
-              width: '100%',
-              height: '1px',
-              background: '#7a5a30',
-              transition: 'transform 0.2s ease',
-              transform: showGameMenu ? 'translateY(5px) rotate(45deg)' : 'none',
-            }}
-          />
-          <span
-            style={{
-              display: 'block',
-              width: '100%',
-              height: '1px',
-              background: '#7a5a30',
-              transition: 'opacity 0.2s ease',
-              opacity: showGameMenu ? 0 : 1,
-            }}
-          />
-          <span
-            style={{
-              display: 'block',
-              width: '100%',
-              height: '1px',
-              background: '#7a5a30',
-              transition: 'transform 0.2s ease',
-              transform: showGameMenu ? 'translateY(-5px) rotate(-45deg)' : 'none',
-            }}
-          />
-        </div>
-      </button>
+      <StatusBar
+        showGameMenu={showGameMenu}
+        onToggleMenu={() => showGameMenu ? closeGameMenu() : openGameMenu()}
+      />
 
       <div className="book-page" style={{ opacity: hasBlockingEnterOverlay ? 0.15 : 1, transition: 'opacity 0.3s ease' }}>
         {dateStr && !chapterTitleVisible && (
@@ -215,9 +156,8 @@ export function BookShell() {
             {!isTyping && (
               <div
                 style={{
-                  opacity: contentVisible ? 1 : 0,
                   transform: contentVisible ? 'translateY(0)' : 'translateY(6px)',
-                  transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
+                  transition: 'transform 0.6s ease-out',
                 }}
               >
                 {resolvedParagraphs.map((p, i) => (
@@ -225,9 +165,8 @@ export function BookShell() {
                 ))}
                 <div
                   style={{
-                    opacity: contentVisible ? 1 : 0,
                     transform: contentVisible ? 'translateY(0)' : 'translateY(8px)',
-                    transition: 'opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s',
+                    transition: 'transform 0.6s ease-out 0.15s',
                   }}
                 >
                   {visibleChoices.length > 0 && (

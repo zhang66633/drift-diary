@@ -2,7 +2,12 @@ import { useGameStore } from '../store/gameStore';
 import { Tooltip } from './Tooltip';
 import { formatChineseDate } from '../utils/helpers';
 
-export function StatusBar() {
+interface StatusBarProps {
+  showGameMenu?: boolean;
+  onToggleMenu?: () => void;
+}
+
+export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
   const { isDebug, state, resources, skills, providence, flags, time, sceneId } = useGameStore(s => ({
     isDebug: s.isDebugMode,
     state: s.gameState.state,
@@ -70,65 +75,131 @@ export function StatusBar() {
       }}
     >
       <div
-        className="max-w-3xl mx-auto flex flex-wrap items-center gap-x-3 gap-y-1"
+        className="max-w-3xl mx-auto flex items-center gap-x-3"
         role="status"
         aria-label="游戏状态栏"
       >
-        <StatusItem symbol="§" value={formatChineseDate(time.date)} tooltip="故事日期" label="故事日期" />
-        <Separator />
-        <StatusItem symbol="†" value={state.健康} tooltip="健康：体力与性命，归零则亡" label="健康" />
-        <Separator />
-        <StatusItem symbol="※" value={state.士气} tooltip="士气：精神状态，过低则心志动摇" label="士气" />
-        <Separator />
-        <StatusItem symbol="‡" value={state.勇气} tooltip="勇气：面对险境的胆色" label="勇气" />
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 flex-1 min-w-0">
+          <StatusItem symbol="§" value={formatChineseDate(time.date)} tooltip="故事日期" label="故事日期" />
+          <Separator />
+          <StatusItem symbol="†" value={state.健康} tooltip="健康：体力与性命，归零则亡" label="健康" />
+          <Separator />
+          <StatusItem symbol="※" value={state.士气} tooltip="士气：精神状态，过低则心志动摇" label="士气" />
+          <Separator />
+          <StatusItem symbol="‡" value={state.勇气} tooltip="勇气：面对险境的胆色" label="勇气" />
 
-        {resources.同伴.length > 0 && (
-          <>
-            <Separator />
-            <StatusItem
-              symbol="¶"
-              value={resources.同伴.map(c => c.name).join('、')}
-              tooltip="同伴：同行之人"
-              label="同伴"
-            />
-          </>
-        )}
+          {resources.同伴.length > 0 && (
+            <>
+              <Separator />
+              <StatusItem
+                symbol="¶"
+                value={resources.同伴.map(c => c.name).join('、')}
+                tooltip="同伴：同行之人"
+                label="同伴"
+              />
+            </>
+          )}
 
-        {resources.钱 > 0 && (
-          <>
-            <Separator />
-            <StatusItem symbol="£" value={resources.钱} tooltip="钱币：身上的英镑" label="钱币" />
-          </>
-        )}
+          {resources.钱 > 0 && (
+            <>
+              <Separator />
+              <StatusItem symbol="£" value={resources.钱} tooltip="钱币：身上的英镑" label="钱币" />
+            </>
+          )}
+        </div>
 
-        {isDebug && (
-          <div className="w-full mt-1 pt-1 border-t" style={{ borderColor: 'rgba(122, 90, 48, 0.2)' }}>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        {onToggleMenu && (
+          <button
+            className="flex-shrink-0 flex items-center justify-center transition-all duration-200"
+            onClick={onToggleMenu}
+            style={{
+              color: '#7a5a30',
+              border: '1px solid rgba(122, 90, 48, 0.4)',
+              background: 'rgba(244, 236, 216, 0.92)',
+              cursor: 'pointer',
+              opacity: showGameMenu ? 1 : 0.65,
+              width: '32px',
+              height: '28px',
+              padding: 0,
+              borderRadius: '2px',
+            }}
+            title="菜单"
+            aria-label={showGameMenu ? '关闭菜单' : '打开菜单'}
+            onMouseEnter={e => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.borderColor = '#7a5a30';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.opacity = showGameMenu ? '1' : '0.65';
+              e.currentTarget.style.borderColor = 'rgba(122, 90, 48, 0.4)';
+            }}
+          >
+            <div
+              className="flex flex-col items-center justify-center gap-[3px]"
+              style={{ width: '14px' }}
+            >
               <span
-                className="px-2 py-0.5 text-[0.65rem] font-bold"
-                style={{ background: '#5a4220', color: '#f4ecd8', borderRadius: '2px' }}
-              >
-                DEBUG
-              </span>
-              <span>良心:{state.良心}</span>
-              <span>天意:{providence}</span>
-              <span>信念:{state.信念}</span>
-              <span>航海:{skills.航海}</span>
-              <span style={{ fontSize: '0.65rem' }}>
-                场景:{sceneId}
-              </span>
-              {Object.keys(flags).length > 0 && (
-                <span
-                  className="w-full text-[0.6rem]"
-                  style={{ color: '#7a5a30', textIndent: 0, lineHeight: 1.6 }}
-                >
-                  flags: {Object.entries(flags).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(', ')}
-                </span>
-              )}
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: '1px',
+                  background: '#7a5a30',
+                  transition: 'transform 0.2s ease',
+                  transform: showGameMenu ? 'translateY(4px) rotate(45deg)' : 'none',
+                }}
+              />
+              <span
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: '1px',
+                  background: '#7a5a30',
+                  transition: 'opacity 0.2s ease',
+                  opacity: showGameMenu ? 0 : 1,
+                }}
+              />
+              <span
+                style={{
+                  display: 'block',
+                  width: '100%',
+                  height: '1px',
+                  background: '#7a5a30',
+                  transition: 'transform 0.2s ease',
+                  transform: showGameMenu ? 'translateY(-4px) rotate(-45deg)' : 'none',
+                }}
+              />
             </div>
-          </div>
+          </button>
         )}
       </div>
+
+      {isDebug && (
+        <div className="max-w-3xl mx-auto mt-1 pt-1 border-t" style={{ borderColor: 'rgba(122, 90, 48, 0.2)' }}>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span
+              className="px-2 py-0.5 text-[0.65rem] font-bold"
+              style={{ background: '#5a4220', color: '#f4ecd8', borderRadius: '2px' }}
+            >
+              DEBUG
+            </span>
+            <span>良心:{state.良心}</span>
+            <span>天意:{providence}</span>
+            <span>信念:{state.信念}</span>
+            <span>航海:{skills.航海}</span>
+            <span style={{ fontSize: '0.65rem' }}>
+              场景:{sceneId}
+            </span>
+            {Object.keys(flags).length > 0 && (
+              <span
+                className="w-full text-[0.6rem]"
+                style={{ color: '#7a5a30', textIndent: 0, lineHeight: 1.6 }}
+              >
+                flags: {Object.entries(flags).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(', ')}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

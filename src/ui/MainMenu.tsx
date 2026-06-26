@@ -44,10 +44,10 @@ export function MainMenu() {
             </div>
 
             <h1
-              className="text-4xl sm:text-5xl font-semibold mb-5"
+              className="text-3xl sm:text-5xl font-semibold mb-5 whitespace-nowrap"
               style={{
                 color: '#1a1008',
-                letterSpacing: '0.35em',
+                letterSpacing: '0.15em',
                 textIndent: 0,
                 textShadow: '0 2px 4px rgba(0,0,0,0.05)',
               }}
@@ -59,14 +59,14 @@ export function MainMenu() {
               —— 文 字 冒 险 ——
             </p>
 
-            <div className="my-10 mx-auto max-w-sm relative">
-              <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-[#7a5a30] to-transparent opacity-40" />
-              <div className="relative z-10 px-6 py-5">
-                <p className="italic text-center leading-relaxed" style={{ color: '#5a4220', textIndent: 0, fontSize: '0.95rem' }}>
-                  "冥冥之中自有凌驾于一切之上的天意，<br />
-                  催逼着我们去毁灭自己。"
-                </p>
-              </div>
+            <div className="my-10 mx-auto max-w-sm px-6 py-5" style={{
+              borderTop: '1px solid rgba(122, 90, 48, 0.35)',
+              borderBottom: '1px solid rgba(122, 90, 48, 0.35)',
+            }}>
+              <p className="italic text-center leading-relaxed" style={{ color: '#5a4220', textIndent: 0, fontSize: '0.95rem' }}>
+                "冥冥之中自有凌驾于一切之上的天意，<br />
+                催逼着我们去毁灭自己。"
+              </p>
             </div>
           </div>
 

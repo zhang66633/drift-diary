@@ -203,13 +203,13 @@ export function ChapterTitleOverlay({ chapter, title, quotation, visible, onDism
           {title}
         </h2>
 
-        <div className="relative mx-auto max-w-md">
-          <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-[#7a5a30] to-transparent opacity-40" />
-          <div className="relative z-10 px-8 py-6">
-            <p className="italic text-center leading-relaxed" style={{ color: '#5a4220', textIndent: 0 }}>
-              "{quotation}"
-            </p>
-          </div>
+        <div className="mx-auto max-w-md px-8 py-6" style={{
+          borderTop: '1px solid rgba(122, 90, 48, 0.35)',
+          borderBottom: '1px solid rgba(122, 90, 48, 0.35)',
+        }}>
+          <p className="italic text-center leading-relaxed" style={{ color: '#5a4220', textIndent: 0 }}>
+            "{quotation}"
+          </p>
         </div>
 
         <p
