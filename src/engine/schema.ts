@@ -118,6 +118,10 @@ export const SceneSchema = z.object({
   quotation: z.string().optional(),
   senses: z.array(SenseTagSchema).optional(),
   illustration: IllustrationSpecSchema.optional(),
+  audio: z.object({
+    ambient: z.string().optional(),
+    sfx: z.string().optional(),
+  }).optional(),
   choices: z.array(ChoiceSchema).optional(),
   multiChoice: MultiChoiceSchema.optional(),
   narration: NarrationSpecSchema.optional(),

@@ -9,6 +9,7 @@ import { TimeManager } from '../engine/TimeManager';
 import { ProvidenceEngine } from '../engine/ProvidenceEngine';
 import { ConsequenceEngine, type EventCallback } from '../engine/ConsequenceEngine';
 import { SceneManager } from '../engine/SceneManager';
+import { AudioManager } from '../engine/AudioManager';
 import { SaveManager, localStorageAdapter } from '../engine/SaveManager';
 import { validateChapter } from '../engine/schema';
 import { useSettings } from './settingsStore';
@@ -23,6 +24,7 @@ interface GameStore {
   _consequence: ConsequenceEngine;
   _sceneMgr: SceneManager;
   _saveMgr: SaveManager;
+  _audio: AudioManager;
 
   // UI-facing state
   currentScene: Scene | null;
@@ -127,7 +129,8 @@ export const useGameStore = create<GameStore>((set, get) => {
   const stateMgr = new StateManager(initial.state, initial.resources, initial.skills);
   const flagMgr = new FlagManager(initial.flags);
   const timeMgr = new TimeManager(initial.time);
-  const providence = new ProvidenceEngine(initial.state.天意);
+  const providence = new ProvidenceEngine(stateMgr);
+  const audio = new AudioManager();
   const sceneMgr = new SceneManager();
   const saveMgr = new SaveManager(localStorageAdapter);
 
@@ -180,6 +183,13 @@ export const useGameStore = create<GameStore>((set, get) => {
     const wasSept1 = timeMgr.isSeptemberFirst();
 
     consequence.execute(scene.onEnter);
+
+    // 环境音切换
+    const ambientKey = scene.audio?.ambient ?? 'waves';
+    audio.playAmbient(ambientKey);
+    if (scene.audio?.sfx) {
+      audio.playSfx(scene.audio.sfx);
+    }
 
     const hookEffects = providence.checkHook(scene.providenceHook);
     if (hookEffects) consequence.execute(hookEffects);
@@ -254,6 +264,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     _consequence: consequence,
     _sceneMgr: sceneMgr,
     _saveMgr: saveMgr,
+    _audio: audio,
     currentScene: null,
     pendingNarration: null,
     pendingDream: null,
@@ -296,7 +307,19 @@ export const useGameStore = create<GameStore>((set, get) => {
       set({ initialized: true, showMainMenu: true, isDebugMode: useSettings.getState().debugMode });
       useSettings.subscribe(settings => {
         set({ isDebugMode: settings.debugMode });
+        audio.setMasterVolume(settings.volume);
+        audio.setSfxVolume(settings.sfxVolume);
       });
+      // 首次用户点击时初始化 AudioContext
+      const initAudio = () => {
+        audio.init();
+        audio.setMasterVolume(useSettings.getState().volume);
+        audio.setSfxVolume(useSettings.getState().sfxVolume);
+        window.removeEventListener('click', initAudio);
+        window.removeEventListener('keydown', initAudio);
+      };
+      window.addEventListener('click', initAudio);
+      window.addEventListener('keydown', initAudio);
       refreshState();
     },
 
@@ -305,7 +328,6 @@ export const useGameStore = create<GameStore>((set, get) => {
       stateMgr.reset(fresh.state, fresh.resources, fresh.skills);
       flagMgr.reset(fresh.flags);
       timeMgr.reset(fresh.time);
-      providence.setValue(fresh.state.天意);
       sceneMgr.reset();
       snapshots = [];
 
@@ -327,6 +349,8 @@ export const useGameStore = create<GameStore>((set, get) => {
       if (!choice) return;
 
       if (!checkCondition(choice.requirement)) return;
+
+      audio.playSfx('choice');
 
       if (snapshots.length > 0) {
         const lastSnap = snapshots[snapshots.length - 1];
@@ -506,7 +530,6 @@ export const useGameStore = create<GameStore>((set, get) => {
       stateMgr.reset(loaded.state, loaded.resources, loaded.skills);
       flagMgr.reset(loaded.flags);
       timeMgr.reset(loaded.time);
-      providence.setValue(loaded.state.天意);
       sceneMgr.reset();
       sceneMgr.setHistory(loaded.history);
       snapshots = [...loaded.historySnapshots];

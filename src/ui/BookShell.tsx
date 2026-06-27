@@ -126,6 +126,9 @@ export function BookShell() {
     !!pendingDeath ||
     !!pendingEnding;
 
+  const illustration = currentScene?.illustration;
+  const showIllustration = !!illustration?.cached && !hasBlockingEnterOverlay && !isTyping;
+
   return (
     <div className="book-shell">
       <StatusBar
@@ -133,7 +136,22 @@ export function BookShell() {
         onToggleMenu={() => showGameMenu ? closeGameMenu() : openGameMenu()}
       />
 
-      <div className="book-page" style={{ opacity: hasBlockingEnterOverlay ? 0.15 : 1, transition: 'opacity 0.3s ease' }}>
+      {/* Fullpage illustration: immersive background */}
+      {showIllustration && illustration?.position === 'fullpage' && (
+        <div className="illustration-fullpage" aria-hidden="true">
+          <img
+            src={`data:image/png;base64,${illustration.cached}`}
+            alt={illustration.alt}
+            className="illustration-fullpage-img"
+          />
+          <div className="illustration-fullpage-overlay" />
+        </div>
+      )}
+
+      <div
+        className={`book-page${showIllustration && illustration?.position === 'fullpage' ? ' book-page-fullpage' : ''}`}
+        style={{ opacity: hasBlockingEnterOverlay ? 0.15 : 1, transition: 'opacity 0.3s ease' }}
+      >
         {dateStr && !chapterTitleVisible && (
           <div className="mb-6">
             <span className="date-badge">{dateStr}</span>
@@ -142,6 +160,23 @@ export function BookShell() {
 
         {resolvedQuotation && !chapterTitleVisible && !hasBlockingEnterOverlay && (
           <p className="quotation">{resolvedQuotation}</p>
+        )}
+
+        {/* Top/inline illustration */}
+        {showIllustration && illustration?.position !== 'fullpage' && (
+          <div
+            className={`illustration-container illustration-${illustration?.position}`}
+            style={{
+              transform: contentVisible ? 'translateY(0)' : 'translateY(6px)',
+              transition: 'transform 0.6s ease-out',
+            }}
+          >
+            <img
+              src={`data:image/png;base64,${illustration!.cached}`}
+              alt={illustration!.alt}
+              className={`illustration-img illustration-img-${illustration?.position}`}
+            />
+          </div>
         )}
 
         {!hasBlockingEnterOverlay && (

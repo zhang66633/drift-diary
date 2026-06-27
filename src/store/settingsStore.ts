@@ -13,12 +13,14 @@ interface SettingsState {
   textSpeed: TextSpeed;
   debugMode: boolean;
   volume: number;
+  sfxVolume: number;
 }
 
 interface SettingsStore extends SettingsState {
   setTextSpeed: (speed: TextSpeed) => void;
   setDebugMode: (on: boolean) => void;
   setVolume: (v: number) => void;
+  setSfxVolume: (v: number) => void;
   getTypingIntervalMs: () => number;
   toggleDebug: () => void;
 }
@@ -34,6 +36,7 @@ function loadSettings(): SettingsState {
         textSpeed: parsed.textSpeed ?? 'normal',
         debugMode: parsed.debugMode ?? false,
         volume: parsed.volume ?? 80,
+        sfxVolume: parsed.sfxVolume ?? 80,
       };
     }
   } catch { /* ignore */ }
@@ -41,6 +44,7 @@ function loadSettings(): SettingsState {
     textSpeed: 'normal',
     debugMode: false,
     volume: 80,
+    sfxVolume: 80,
   };
 }
 
@@ -65,6 +69,11 @@ export const useSettings = create<SettingsStore>((set, get) => ({
 
   setVolume(v) {
     set({ volume: Math.max(0, Math.min(100, v)) });
+    persist({ ...get() });
+  },
+
+  setSfxVolume(v) {
+    set({ sfxVolume: Math.max(0, Math.min(100, v)) });
     persist({ ...get() });
   },
 

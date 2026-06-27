@@ -8,9 +8,11 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate-illustrations": "tsx scripts/generate-illustrations.ts"
   },
   "dependencies": {
+    "@volcengine/ark-runtime": "^1.0.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "zod": "^3.23.8",
@@ -26,6 +28,7 @@
     "playwright": "^1.61.1",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
+    "tsx": "^4.22.4",
     "typescript": "^5.6.2",
     "vite": "^5.4.8",
     "vitest": "^2.1.2"

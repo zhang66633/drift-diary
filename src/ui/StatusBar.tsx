@@ -8,12 +8,11 @@ interface StatusBarProps {
 }
 
 export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
-  const { isDebug, state, resources, skills, providence, flags, time, sceneId } = useGameStore(s => ({
+  const { isDebug, state, resources, skills, flags, time, sceneId } = useGameStore(s => ({
     isDebug: s.isDebugMode,
     state: s.gameState.state,
     resources: s.gameState.resources,
     skills: s.gameState.skills,
-    providence: s._providence.getValue(),
     flags: s.gameState.flags,
     time: s.gameState.time,
     sceneId: s.gameState.currentSceneId,
@@ -198,7 +197,6 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
             </span>
             <span>良心:{state.良心}</span>
             <span>天意:{state.天意}</span>
-            <span>天命:{providence}</span>
             <span>航海:{skills.航海}</span>
             <span style={{ fontSize: '0.65rem' }}>
               场景:{sceneId}

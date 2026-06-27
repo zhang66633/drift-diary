@@ -1,5 +1,10 @@
 import type { FlagValue } from './state';
 
+export interface AudioSpec {
+  ambient?: string;   // 环境音文件名（不含扩展名），对应 public/audio/ambient/
+  sfx?: string;       // 进入场景时触发的一次性音效，对应 public/audio/sfx/
+}
+
 // 场景
 export interface Scene {
   id: string;
@@ -10,6 +15,7 @@ export interface Scene {
   quotation?: string;
   senses?: SenseTag[];
   illustration?: IllustrationSpec;
+  audio?: AudioSpec;
   choices?: Choice[];
   multiChoice?: MultiChoice;
   narration?: NarrationSpec;

@@ -1,4 +1,5 @@
 import { useSettings, type TextSpeed } from '../store/settingsStore';
+import { useGameStore } from '../store/gameStore';
 
 interface SettingsPanelProps {
   onClose: () => void;
@@ -16,10 +17,13 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
     textSpeed,
     debugMode,
     volume,
+    sfxVolume,
     setTextSpeed,
     setDebugMode,
     setVolume,
+    setSfxVolume,
   } = useSettings();
+  const _audio = useGameStore(s => s._audio);
 
   return (
     <div
@@ -85,22 +89,42 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
           </div>
         </Section>
 
-        <Section title="音量">
+        <Section title="主音量">
           <div className="flex items-center gap-3 mt-3" style={{ textIndent: 0 }}>
             <input
               type="range"
               min={0}
               max={100}
               value={volume}
-              onChange={e => setVolume(parseInt(e.target.value, 10))}
+              onChange={e => {
+                const v = parseInt(e.target.value, 10);
+                setVolume(v);
+                _audio.setMasterVolume(v);
+              }}
               className="flex-1"
               style={{ accentColor: '#7a5a30' }}
             />
             <span className="text-sm w-12 text-right font-mono" style={{ color: '#5a4635' }}>{volume}</span>
           </div>
-          <p className="text-xs italic mt-2" style={{ color: '#a08868', textIndent: 0 }}>
-            音量控制预留，音频功能开发中
-          </p>
+        </Section>
+
+        <Section title="音效音量">
+          <div className="flex items-center gap-3 mt-3" style={{ textIndent: 0 }}>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={sfxVolume}
+              onChange={e => {
+                const v = parseInt(e.target.value, 10);
+                setSfxVolume(v);
+                _audio.setSfxVolume(v);
+              }}
+              className="flex-1"
+              style={{ accentColor: '#7a5a30' }}
+            />
+            <span className="text-sm w-12 text-right font-mono" style={{ color: '#5a4635' }}>{sfxVolume}</span>
+          </div>
         </Section>
 
         <Section title="调试模式">

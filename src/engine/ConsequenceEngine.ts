@@ -64,8 +64,8 @@ export class ConsequenceEngine {
           const w = Math.abs(c.scaleByProvidence.worst);
           const b = Math.abs(c.scaleByProvidence.best);
           const sign = c.scaleByProvidence.worst >= 0 ? 1 : -1;
-          // 线性插值：天意越高，效果越接近 best
-          const raw = b + (w - b) * (1 - tianYi / 100);
+          // 凸曲线插值：天意越高，效果越接近 best（中高段天意提前受益）
+          const raw = b + (w - b) * Math.pow(1 - tianYi / 100, 1.5);
           // 向上取整到 5 的倍数（压线感：惩罚/奖励都偏重）
           const rounded = Math.ceil(raw / 5) * 5;
           finalVal = rounded * sign;
