@@ -96,7 +96,8 @@
         }
       ],
       "audio": {
-        "ambient": "silence"
+        "ambient": "silence",
+        "bgm": "tense"
       },
       "illustration": {
         "prompt": "A dark 17th century English merchants study, an elderly stern father sitting at an oak desk, pointing disapprovingly at his young son standing before him, oil painting style, dramatic chiaroscuro lighting, tension and disappointment in the air, Rembrandt influence",
@@ -197,7 +198,8 @@
         }
       ],
       "audio": {
-        "ambient": "silence"
+        "ambient": "silence",
+        "bgm": "tense"
       }
     },
     {
@@ -327,7 +329,8 @@
         }
       ],
       "audio": {
-        "ambient": "harbor"
+        "ambient": "harbor",
+        "bgm": "harbor"
       }
     },
     {
@@ -420,7 +423,10 @@
           },
           "nextScene": "ch1_5_风暴"
         }
-      ]
+      ],
+      "audio": {
+        "bgm": "ship"
+      }
     },
     {
       "id": "ch1_5_风暴",
@@ -526,7 +532,8 @@
         }
       ],
       "audio": {
-        "ambient": "storm"
+        "ambient": "storm",
+        "bgm": "storm"
       },
       "illustration": {
         "prompt": "A massive wooden sailing ship in a violent storm at sea, towering waves crashing over the deck, sailors desperately cutting the mast with axes, dark storm clouds, lightning in the distance, dramatic and terrifying atmosphere, Dutch Golden Age maritime painting style, Willem van de Velde influence",
@@ -656,7 +663,8 @@
         }
       ],
       "audio": {
-        "ambient": "ship_creak"
+        "ambient": "ship_creak",
+        "bgm": "storm"
       }
     },
     {
@@ -723,7 +731,8 @@
         }
       ],
       "audio": {
-        "ambient": "storm"
+        "ambient": "storm",
+        "bgm": "storm"
       }
     },
     {
@@ -834,6 +843,9 @@
           "nextScene": "ch2_1_几内亚"
         }
       ],
+      "audio": {
+        "bgm": "tense"
+      },
       "illustration": {
         "prompt": "A man lying face-down on a desolate windswept beach, just regaining consciousness, wet clothes clinging to his body, waves lapping at his feet, overcast grey sky, wreckage of a ship scattered in the distance on the rocks, moment of survival and awakening, dramatic atmosphere, oil painting style, Théodore Géricault shipwreck influence",
         "alt": "鲁滨孙在荒滩上醒来",
@@ -851,6 +863,9 @@
         "title": "迷途知返",
         "text": "驿车颠簸了三天，终于回到了约克城。\n\n父亲没有责骂我。他只是站在门口，痛风的手扶着门框，看了我很久，然后拍了拍我的肩膀——他的手在抖。母亲哭了整整一个下午，泪水打湿了我风尘仆仆的外衣。\n\n后来我继承了父亲的生意，娶了一位好姑娘，生了三个孩子。日子过得安稳而体面，邻里都说克鲁索家的小子总算收了心。\n\n只是每年九月一日，我都会独自走到赫尔港的海边，站一会儿。海风还是那样咸，浪声还是那样响。我看着远处的船帆消失在海天之间，心里总有一个声音在问——如果当年上了那艘去伦敦的船，会怎样？\n\n没有人回答我。\n\n但那个关于黑色海岸的梦，再也没有来过。",
         "buttonText": "合上书本"
+      },
+      "audio": {
+        "bgm": "ending_hope"
       },
       "illustration": {
         "prompt": "A defeated young man in 17th century clothing walking alone on a dusty road away from the harbor, head bowed in shame, ships visible in the distance behind him, overcast English countryside, returning home in disgrace, melancholic atmosphere, oil painting style, subdued earthy tones",

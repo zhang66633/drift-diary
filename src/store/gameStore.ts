@@ -197,6 +197,13 @@ export const useGameStore = create<GameStore>((set, get) => {
       audio.playBgm(bgmKey);
     }
 
+    // 预加载下一章（场景接近章节末尾时后台加载下一章JSON）
+    const chSceneCount = sceneMgr.getChapterSceneCount(scene.chapter);
+    const chSceneIndex = sceneMgr.getCurrentChapter()?.scenes.findIndex(s => s.id === scene.id) ?? -1;
+    if (chSceneIndex >= 0 && chSceneIndex >= chSceneCount - 2) {
+      sceneMgr.preloadNextChapter(scene.chapter);
+    }
+
     const hookEffects = providence.checkHook(scene.providenceHook);
     if (hookEffects) consequence.execute(hookEffects);
 
@@ -321,7 +328,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         audio.init();
         audio.setMasterVolume(useSettings.getState().volume);
         audio.setSfxVolume(useSettings.getState().sfxVolume);
-        audio.playBgm('adventure');
+        audio.playBgm('main_theme');
         window.removeEventListener('click', initAudio);
         window.removeEventListener('keydown', initAudio);
       };

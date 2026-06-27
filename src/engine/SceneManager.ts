@@ -134,6 +134,33 @@ export class SceneManager {
     return this.history.includes(sceneId);
   }
 
+  /** 预加载下一章（后台加载，不阻塞当前渲染） */
+  preloadNextChapter(currentChapterNum: number): void {
+    const nextChapterNum = currentChapterNum + 1;
+    if (this.chapters.has(nextChapterNum)) return; // 已加载
+    const key = Object.keys(chapterModules).find(k => {
+      const match = k.match(/ch(\d+)\.json$/);
+      return match && parseInt(match[1]) === nextChapterNum;
+    });
+    if (!key) return; // 没有下一章了
+    // 使用 setTimeout 延迟加载，不阻塞当前渲染
+    setTimeout(async () => {
+      try {
+        const mod = await chapterModules[key]();
+        const chapter: Chapter = (mod as unknown as { default?: Chapter }).default ?? (mod as unknown as Chapter);
+        this.chapters.set(nextChapterNum, chapter);
+        this.buildIndex(chapter);
+      } catch { /* 静默失败，场景切换时会重试 */ }
+    }, 0);
+  }
+
+  /** 获取某章的场景数量 */
+  getChapterSceneCount(chapterNum: number): number {
+    const ch = this.chapters.get(chapterNum);
+    if (!ch) return 0;
+    return ch.scenes.length;
+  }
+
   private buildIndex(chapter: Chapter): void {
     for (const scene of chapter.scenes) {
       this.sceneIndex.set(scene.id, { chapter, scene });

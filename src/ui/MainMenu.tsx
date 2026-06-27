@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { SaveSlot } from '../types/save';
-import { Memoir } from './Memoir';
-import { EndingCollection } from './EndingCollection';
-import { SettingsPanel } from './SettingsPanel';
-import { AboutPanel } from './AboutPanel';
+
+const Memoir = lazy(() => import('./Memoir').then(m => ({ default: m.Memoir })));
+const EndingCollection = lazy(() => import('./EndingCollection').then(m => ({ default: m.EndingCollection })));
+const SettingsPanel = lazy(() => import('./SettingsPanel').then(m => ({ default: m.SettingsPanel })));
+const AboutPanel = lazy(() => import('./AboutPanel').then(m => ({ default: m.AboutPanel })));
 
 export function MainMenu() {
   const startNewGame = useGameStore(s => s.startNewGame);
@@ -123,21 +124,21 @@ export function MainMenu() {
             </div>
           </div>
 
-          <div className="mt-14 pt-6 border-t border-dashed" style={{ borderColor: 'rgba(122, 90, 48, 0.2)' }}>
-            <p
-              className="text-center text-xs leading-relaxed"
-              style={{ color: '#9a8060', textIndent: 0, opacity: 0.8 }}
-            >
-              Ctrl+Shift+D 开启调试模式 · Esc 关闭菜单
-            </p>
-          </div>
         </div>
       </div>
 
-      {showMemoir && <Memoir standalone onClose={() => setShowMemoir(false)} />}
-      {showEndings && <EndingCollection onClose={() => setShowEndings(false)} />}
-      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
-      {showAbout && <AboutPanel onClose={() => setShowAbout(false)} />}
+      <Suspense fallback={null}>
+        {showMemoir && <Memoir standalone onClose={() => setShowMemoir(false)} />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {showEndings && <EndingCollection onClose={() => setShowEndings(false)} />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {showAbout && <AboutPanel onClose={() => setShowAbout(false)} />}
+      </Suspense>
     </div>
   );
 }

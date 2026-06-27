@@ -7,3 +7,7 @@ dist-ssr
 !.vscode/extensions.json
 *.log
 .env
+docs/
+scripts/
+MUSIC_GEN_GUIDE.md
+*.py

@@ -1,15 +1,18 @@
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { StatusBar } from './StatusBar';
 import { TypedText } from './TypedText';
 import { ChoiceList } from './ChoiceList';
 import { NarrationOverlay, DreamOverlay, DeathOverlay, ChapterTitleOverlay, EndingOverlay } from './Overlays';
-import { SaveMenu, HistoryViewOverlay } from './Menus';
-import { GameMenu } from './GameMenu';
-import { SettingsPanel } from './SettingsPanel';
-import { Memoir } from './Memoir';
 import { checkConditionWithManagers, formatChineseDate } from '../utils/helpers';
 import type { Choice } from '../types/scene';
+
+// 懒加载：非关键 UI 组件按需下载
+const SaveMenu = lazy(() => import('./Menus').then(m => ({ default: m.SaveMenu })));
+const HistoryViewOverlay = lazy(() => import('./Menus').then(m => ({ default: m.HistoryViewOverlay })));
+const GameMenu = lazy(() => import('./GameMenu').then(m => ({ default: m.GameMenu })));
+const SettingsPanel = lazy(() => import('./SettingsPanel').then(m => ({ default: m.SettingsPanel })));
+const Memoir = lazy(() => import('./Memoir').then(m => ({ default: m.Memoir })));
 
 export function BookShell() {
   const {
@@ -110,6 +113,21 @@ export function BookShell() {
     setShowChapterEndContent(false);
   }, [currentScene?.id]);
 
+  const illustration = currentScene?.illustration;
+  // 插图路径加上 base URL（GitHub Pages 部署时 base 为 /drift-diary/）
+  const imgSrc = illustration?.src ? (import.meta.env.BASE_URL + illustration.src.replace(/^\//, '')) : null;
+
+  // 图片预加载状态：场景一出现就开始加载图片（必须在 early return 之前，保证 hooks 数量一致）
+  const [imgLoaded, setImgLoaded] = useState(false);
+  useEffect(() => {
+    setImgLoaded(false);
+    if (!imgSrc) return;
+    const img = new Image();
+    img.onload = () => setImgLoaded(true);
+    img.onerror = () => setImgLoaded(true);
+    img.src = imgSrc;
+  }, [imgSrc]);
+
   const onTypingComplete = () => {
     useGameStore.setState({ isTyping: false });
   };
@@ -130,21 +148,6 @@ export function BookShell() {
     chapterTitleVisible ||
     !!pendingDeath ||
     !!pendingEnding;
-
-  const illustration = currentScene?.illustration;
-  // 插图路径加上 base URL（GitHub Pages 部署时 base 为 /drift-diary/）
-  const imgSrc = illustration?.src ? (import.meta.env.BASE_URL + illustration.src.replace(/^\//, '')) : null;
-
-  // 图片预加载状态：场景一出现就开始加载图片
-  const [imgLoaded, setImgLoaded] = useState(false);
-  useEffect(() => {
-    setImgLoaded(false);
-    if (!imgSrc) return;
-    const img = new Image();
-    img.onload = () => setImgLoaded(true);
-    img.onerror = () => setImgLoaded(true);
-    img.src = imgSrc;
-  }, [imgSrc]);
 
   // 有插图且不在阻塞遮罩状态下
   const hasIllustration = !!illustration?.src && !hasBlockingEnterOverlay;
@@ -172,6 +175,7 @@ export function BookShell() {
             src={imgSrc!}
             alt={illustration.alt}
             className="illustration-fullpage-img"
+            loading="lazy"
           />
           <div className="illustration-fullpage-overlay" />
         </div>
@@ -229,6 +233,7 @@ export function BookShell() {
               src={imgSrc!}
               alt={illustration!.alt}
               className={`illustration-img illustration-img-${illustration?.position}`}
+              loading="lazy"
             />
           </div>
         )}
@@ -294,12 +299,22 @@ export function BookShell() {
 
       <EndingOverlay ending={pendingEnding} illustrationSrc={imgSrc} onDismiss={dismissEnding} />
 
-      {showSaveMenu && <SaveMenu mode="save" />}
-      {showLoadMenu && <SaveMenu mode="load" />}
-      {showSettingsMenu && <SettingsPanel onClose={closeSettingsMenu} />}
-      {showGameMenu && <GameMenu onClose={closeGameMenu} />}
-      {showMemoir && <Memoir onClose={closeMemoir} />}
-      <HistoryViewOverlay />
+      <Suspense fallback={null}>
+        {showSaveMenu && <SaveMenu mode="save" />}
+        {showLoadMenu && <SaveMenu mode="load" />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {showSettingsMenu && <SettingsPanel onClose={closeSettingsMenu} />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {showGameMenu && <GameMenu onClose={closeGameMenu} />}
+      </Suspense>
+      <Suspense fallback={null}>
+        {showMemoir && <Memoir onClose={closeMemoir} />}
+      </Suspense>
+      <Suspense fallback={null}>
+        <HistoryViewOverlay />
+      </Suspense>
     </div>
   );
 }

@@ -33,7 +33,7 @@ export class AudioManager {
   } | null = null;
   private masterVolume = 0.8;  // 0-1
   private sfxVolume = 0.8;     // 0-1
-  private bgmVolume = 0.3;     // 0-1
+  private bgmVolume = 0.5;     // 0-1
   private initialized = false;
 
   /** 用户首次交互后调用，解锁 AudioContext */

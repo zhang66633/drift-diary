@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { useGameStore } from './store/gameStore';
 import { MainMenu } from './ui/MainMenu';
 import { BookShell } from './ui/BookShell';
-import { SaveMenu } from './ui/Menus';
 import { ErrorBoundary } from './ui/ErrorBoundary';
+
+const SaveMenu = lazy(() => import('./ui/Menus').then(m => ({ default: m.SaveMenu })));
 
 declare global {
   interface Window {
@@ -36,7 +37,9 @@ export default function App() {
   return (
     <ErrorBoundary>
       {showMainMenu ? <MainMenu /> : <BookShell />}
-      {showLoadMenu && <SaveMenu mode="load" />}
+      <Suspense fallback={null}>
+        {showLoadMenu && <SaveMenu mode="load" />}
+      </Suspense>
     </ErrorBoundary>
   );
 }
