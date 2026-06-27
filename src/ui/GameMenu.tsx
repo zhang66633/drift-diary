@@ -80,55 +80,57 @@ export function GameMenu({ onClose }: GameMenuProps) {
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50"
-      style={{ background: 'rgba(42, 31, 20, 0.25)' }}
-      onClick={onClose}
-    >
+    <>
       <div
-        role="menu"
-        aria-label="游戏菜单"
-        onClick={e => e.stopPropagation()}
-        style={{
-          position: 'absolute',
-          top: '46px',
-          right: '16px',
-          width: '230px',
-          background: '#f4ecd8',
-          backgroundImage: `
-            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.65 0 0 0 0 0.55 0 0 0 0 0.40 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
-          `,
-          border: '1px solid #7a5a30',
-          boxShadow: '4px 6px 30px rgba(0,0,0,0.35), 0 0 20px rgba(122, 90, 48, 0.1)',
-          zIndex: 51,
-          transformOrigin: 'top right',
-        }}
+        className="fixed inset-0 z-50"
+        style={{ background: 'rgba(42, 31, 20, 0.25)' }}
+        onClick={onClose}
       >
-        <div className="px-4 py-3" style={{ borderBottom: '1px solid #d4c4a8' }}>
-          <span
-            className="text-xs tracking-[0.3em]"
-            style={{ color: '#7a5a30', opacity: 0.6 }}
-          >
-            菜 单
-          </span>
-        </div>
+        <div
+          role="menu"
+          aria-label="游戏菜单"
+          onClick={e => e.stopPropagation()}
+          style={{
+            position: 'absolute',
+            top: '46px',
+            right: '16px',
+            width: '230px',
+            background: '#f4ecd8',
+            backgroundImage: `
+              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.65 0 0 0 0 0.55 0 0 0 0 0.40 0 0 0 0.03 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")
+            `,
+            border: '1px solid #7a5a30',
+            boxShadow: '4px 6px 30px rgba(0,0,0,0.35), 0 0 20px rgba(122, 90, 48, 0.1)',
+            zIndex: 51,
+            transformOrigin: 'top right',
+          }}
+        >
+          <div className="px-4 py-3" style={{ borderBottom: '1px solid #d4c4a8' }}>
+            <span
+              className="text-xs tracking-[0.3em]"
+              style={{ color: '#7a5a30', opacity: 0.6 }}
+            >
+              菜 单
+            </span>
+          </div>
 
-        <div style={{ padding: '4px 0' }}>
-          <MenuItem icon="✧" label="航海图" onClick={handleClick(openMemoir)} />
-          <MenuItem icon="◆" label="终点 · 结局收录" onClick={() => { closeGameMenu(); setShowEndings(true); }} />
-          <MenuItem icon="◇" label="保存进度" onClick={handleClick(openSaveMenu)} />
-          <MenuItem icon="◈" label="读取进度" onClick={handleClick(openLoadMenu)} />
-          <MenuItem icon="※" label="设置" onClick={handleClick(openSettingsMenu)} />
-        </div>
+          <div style={{ padding: '4px 0' }}>
+            <MenuItem icon="✧" label="航海图" onClick={handleClick(openMemoir)} />
+            <MenuItem icon="◆" label="终点 · 结局收录" onClick={() => setShowEndings(true)} />
+            <MenuItem icon="◇" label="保存进度" onClick={handleClick(openSaveMenu)} />
+            <MenuItem icon="◈" label="读取进度" onClick={handleClick(openLoadMenu)} />
+            <MenuItem icon="※" label="设置" onClick={handleClick(openSettingsMenu)} />
+          </div>
 
-        <div style={{ borderTop: '1px solid #c4a87c', margin: '2px 0' }} />
+          <div style={{ borderTop: '1px solid #c4a87c', margin: '2px 0' }} />
 
-        <div style={{ padding: '4px 0' }}>
-          <MenuItem icon="◈" label="返回主菜单" onClick={handleReturnToMenu} danger />
-          <MenuItem icon="×" label="关闭菜单" onClick={handleClick(() => {})} last />
+          <div style={{ padding: '4px 0' }}>
+            <MenuItem icon="◈" label="返回主菜单" onClick={handleReturnToMenu} danger />
+            <MenuItem icon="×" label="关闭菜单" onClick={handleClick(() => {})} last />
+          </div>
         </div>
       </div>
       {showEndings && <EndingCollection onClose={() => setShowEndings(false)} />}
-    </div>
+    </>
   );
 }

@@ -59,7 +59,7 @@ export function AboutPanel({ onClose }: AboutPanelProps) {
               这是一部基于丹尼尔·笛福原著《鲁滨孙漂流记》改编的文字冒险游戏。你的每一个选择都会影响克鲁索的命运——有些显而易见，有些潜藏暗处，直到多年后才浮出水面。
             </p>
             <p className="mt-2">
-              数据驱动的分支叙事引擎驱动着超过二十个场景、多个结局。没有"错误"的选择，只有不同的道路。
+              没有"错误"的选择，只有不同的道路。你的过去永远在塑造你的现在。
             </p>
           </Section>
 
@@ -74,7 +74,6 @@ export function AboutPanel({ onClose }: AboutPanelProps) {
 
           <Section title="操作提示">
             <ul className="space-y-1 text-sm" style={{ listStyle: 'none', padding: 0 }}>
-              <li><span style={{ color: '#7a5a30' }}>Ctrl+Shift+D</span> — 开启调试模式，显示场景信息和隐藏数值</li>
               <li><span style={{ color: '#7a5a30' }}>Esc</span> — 关闭当前菜单或浮层</li>
               <li><span style={{ color: '#7a5a30' }}>点击选项</span> — 推进剧情，每个决定都不可撤销</li>
               <li>打字机动画中点击正文可跳过动画，直接显示全文</li>
