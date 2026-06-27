@@ -134,6 +134,7 @@ export interface IllustrationSpec {
   alt: string;
   size: IllustrationSize;
   position: 'top' | 'inline' | 'fullpage';
+  src?: string;
   cached?: string;
 }
 

@@ -127,7 +127,7 @@ export function BookShell() {
     !!pendingEnding;
 
   const illustration = currentScene?.illustration;
-  const showIllustration = !!illustration?.cached && !hasBlockingEnterOverlay && !isTyping;
+  const showIllustration = !!illustration?.src && !hasBlockingEnterOverlay && !isTyping;
 
   return (
     <div className="book-shell">
@@ -140,7 +140,7 @@ export function BookShell() {
       {showIllustration && illustration?.position === 'fullpage' && (
         <div className="illustration-fullpage" aria-hidden="true">
           <img
-            src={`data:image/png;base64,${illustration.cached}`}
+            src={illustration.src}
             alt={illustration.alt}
             className="illustration-fullpage-img"
           />
@@ -172,7 +172,7 @@ export function BookShell() {
             }}
           >
             <img
-              src={`data:image/png;base64,${illustration!.cached}`}
+              src={illustration!.src}
               alt={illustration!.alt}
               className={`illustration-img illustration-img-${illustration?.position}`}
             />
