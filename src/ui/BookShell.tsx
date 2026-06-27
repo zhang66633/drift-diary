@@ -127,9 +127,24 @@ export function BookShell() {
     !!pendingEnding;
 
   const illustration = currentScene?.illustration;
-  const showIllustration = !!illustration?.src && !hasBlockingEnterOverlay && !isTyping;
   // 插图路径加上 base URL（GitHub Pages 部署时 base 为 /drift-diary/）
   const imgSrc = illustration?.src ? (import.meta.env.BASE_URL + illustration.src.replace(/^\//, '')) : null;
+
+  // 图片预加载状态：场景一出现就开始加载图片
+  const [imgLoaded, setImgLoaded] = useState(false);
+  useEffect(() => {
+    setImgLoaded(false);
+    if (!imgSrc) return;
+    const img = new Image();
+    img.onload = () => setImgLoaded(true);
+    img.onerror = () => setImgLoaded(true);
+    img.src = imgSrc;
+  }, [imgSrc]);
+
+  // 有插图且不在阻塞遮罩状态下
+  const hasIllustration = !!illustration?.src && !hasBlockingEnterOverlay;
+  // 图片显示条件：加载完成（打字期间也显示图片，与文字同步体验）
+  const showIllustration = hasIllustration && imgLoaded;
 
   return (
     <div className="book-shell">
@@ -165,12 +180,13 @@ export function BookShell() {
         )}
 
         {/* Top/inline illustration */}
-        {showIllustration && illustration?.position !== 'fullpage' && (
+        {hasIllustration && illustration?.position !== 'fullpage' && (
           <div
             className={`illustration-container illustration-${illustration?.position}`}
             style={{
-              transform: contentVisible ? 'translateY(0)' : 'translateY(6px)',
-              transition: 'transform 0.6s ease-out',
+              opacity: showIllustration ? 1 : 0,
+              transform: showIllustration ? 'translateY(0)' : 'translateY(6px)',
+              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
             }}
           >
             <img
