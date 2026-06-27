@@ -128,6 +128,8 @@ export function BookShell() {
 
   const illustration = currentScene?.illustration;
   const showIllustration = !!illustration?.src && !hasBlockingEnterOverlay && !isTyping;
+  // 插图路径加上 base URL（GitHub Pages 部署时 base 为 /drift-diary/）
+  const imgSrc = illustration?.src ? (import.meta.env.BASE_URL + illustration.src.replace(/^\//, '')) : null;
 
   return (
     <div className="book-shell">
@@ -140,7 +142,7 @@ export function BookShell() {
       {showIllustration && illustration?.position === 'fullpage' && (
         <div className="illustration-fullpage" aria-hidden="true">
           <img
-            src={illustration.src}
+            src={imgSrc!}
             alt={illustration.alt}
             className="illustration-fullpage-img"
           />
@@ -172,7 +174,7 @@ export function BookShell() {
             }}
           >
             <img
-              src={illustration!.src}
+              src={imgSrc!}
               alt={illustration!.alt}
               className={`illustration-img illustration-img-${illustration?.position}`}
             />
