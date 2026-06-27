@@ -92,6 +92,10 @@ export function BookShell() {
   const [contentVisible, setContentVisible] = useState(false);
   const prevTypingRef = useRef(isTyping);
 
+  // 章节结束场景的点击显示状态
+  const [showChapterEndContent, setShowChapterEndContent] = useState(false);
+  const isChapterEnd = currentScene?.chapterEnd === true;
+
   useEffect(() => {
     // 当打字从 true 变成 false 时，触发淡入动画
     if (prevTypingRef.current === true && isTyping === false) {
@@ -103,6 +107,7 @@ export function BookShell() {
   // 场景切换时重置动画状态
   useEffect(() => {
     setContentVisible(false);
+    setShowChapterEndContent(false);
   }, [currentScene?.id]);
 
   const onTypingComplete = () => {
@@ -172,11 +177,30 @@ export function BookShell() {
         </div>
       )}
 
+      {/* 章节结束场景：点击提示（图片加载后显示） */}
+      {isChapterEnd && imgLoaded && !showChapterEndContent && (
+        <div
+          className="fixed inset-0 flex items-center justify-center z-30 pointer-events-none"
+        >
+          <div className="text-center" style={{ pointerEvents: 'auto' }}>
+            <div
+              className="text-base cursor-pointer select-none animate-pulse"
+              style={{ color: '#f4ecd8', textIndent: 0, textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}
+              onClick={() => setShowChapterEndContent(true)}
+            >
+              <span className="inline-block mr-2">✦</span>
+              点击继续
+              <span className="inline-block ml-2">✦</span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div
         className={`book-page${showIllustration && illustration?.position === 'fullpage' ? ' book-page-fullpage' : ''}`}
         style={{
-          opacity: hasBlockingEnterOverlay ? 0.15 : (showIllustration && illustration?.position === 'fullpage' ? (imgLoaded ? 1 : 0) : 1),
-          transform: showIllustration && illustration?.position === 'fullpage' && !imgLoaded ? 'translateY(8px)' : 'translateY(0)',
+          opacity: hasBlockingEnterOverlay ? 0.15 : (isChapterEnd ? (showChapterEndContent ? 1 : 0.15) : (showIllustration && illustration?.position === 'fullpage' ? (imgLoaded ? 1 : 0) : 1)),
+          transform: (isChapterEnd && !showChapterEndContent) ? 'translateY(0)' : (showIllustration && illustration?.position === 'fullpage' && !imgLoaded ? 'translateY(8px)' : 'translateY(0)'),
           transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
         }}
       >
