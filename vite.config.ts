@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  base: '/drift-diary/',
+  // Vercel 部署不需子路径；GitHub Pages 时改为 '/drift-diary/'
   plugins: [react()],
   resolve: {
     alias: {
