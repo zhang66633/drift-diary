@@ -52,7 +52,7 @@
             {
               "type": "state",
               "target": "良心",
-              "value": -5,
+              "value": -10,
               "operation": "add"
             },
             {
@@ -175,7 +175,7 @@
             {
               "type": "state",
               "target": "良心",
-              "value": -5,
+              "value": -10,
               "operation": "add"
             },
             {
@@ -248,7 +248,7 @@
             {
               "type": "state",
               "target": "健康",
-              "value": -5,
+              "value": -10,
               "operation": "add"
             },
             {
@@ -271,7 +271,7 @@
             {
               "type": "state",
               "target": "良心",
-              "value": -5,
+              "value": -10,
               "operation": "add"
             },
             {
@@ -310,7 +310,7 @@
             {
               "type": "state",
               "target": "士气",
-              "value": -5,
+              "value": -10,
               "operation": "add"
             },
             {
@@ -448,7 +448,7 @@
             {
               "type": "state",
               "target": "健康",
-              "value": -5,
+              "value": -10,
               "operation": "add"
             },
             {
@@ -498,7 +498,7 @@
             {
               "type": "state",
               "target": "天意",
-              "value": 15,
+              "value": 10,
               "operation": "add"
             },
             {
@@ -617,7 +617,7 @@
             {
               "type": "state",
               "target": "天意",
-              "value": 15,
+              "value": 10,
               "operation": "add"
             },
             {
@@ -706,7 +706,7 @@
             {
               "type": "state",
               "target": "勇气",
-              "value": -5,
+              "value": -10,
               "operation": "add"
             },
             {
@@ -751,7 +751,7 @@
             {
               "type": "state",
               "target": "良心",
-              "value": 20,
+              "value": 10,
               "operation": "add"
             },
             {
