@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 export type TextSpeed = 'slow' | 'normal' | 'fast' | 'instant';
-export type NarrationMode = 'always' | 'click' | 'off';
 
 const TEXT_SPEED_MAP: Record<TextSpeed, number> = {
   slow: 60,
@@ -12,14 +11,12 @@ const TEXT_SPEED_MAP: Record<TextSpeed, number> = {
 
 interface SettingsState {
   textSpeed: TextSpeed;
-  narrationMode: NarrationMode;
   debugMode: boolean;
   volume: number;
 }
 
 interface SettingsStore extends SettingsState {
   setTextSpeed: (speed: TextSpeed) => void;
-  setNarrationMode: (mode: NarrationMode) => void;
   setDebugMode: (on: boolean) => void;
   setVolume: (v: number) => void;
   getTypingIntervalMs: () => number;
@@ -35,7 +32,6 @@ function loadSettings(): SettingsState {
       const parsed = JSON.parse(raw);
       return {
         textSpeed: parsed.textSpeed ?? 'normal',
-        narrationMode: parsed.narrationMode ?? 'always',
         debugMode: parsed.debugMode ?? false,
         volume: parsed.volume ?? 80,
       };
@@ -43,7 +39,6 @@ function loadSettings(): SettingsState {
   } catch { /* ignore */ }
   return {
     textSpeed: 'normal',
-    narrationMode: 'always',
     debugMode: false,
     volume: 80,
   };
@@ -60,11 +55,6 @@ export const useSettings = create<SettingsStore>((set, get) => ({
 
   setTextSpeed(speed) {
     set({ textSpeed: speed });
-    persist({ ...get() });
-  },
-
-  setNarrationMode(mode) {
-    set({ narrationMode: mode });
     persist({ ...get() });
   },
 

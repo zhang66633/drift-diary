@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { Chapter } from '../types/scene';
 import type { SceneSnapshot } from '../types/state';
@@ -39,6 +39,8 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
   const [data, setData] = useState<MemoirData | null>(null);
   const [loading, setLoading] = useState(true);
   const [detailSnap, setDetailSnap] = useState<SceneSnapshot | null>(null);
+  const [activeChapter, setActiveChapter] = useState<number>(0);
+  const chapterRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
   useEffect(() => {
     let cancelled = false;
@@ -149,6 +151,29 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
     return result;
   }, [data]);
 
+  // 滚动时跟踪当前章节
+  useEffect(() => {
+    if (!data || timeline.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const chNum = parseInt(entry.target.getAttribute('data-chapter') || '0');
+            if (chNum > 0) setActiveChapter(chNum);
+          }
+        }
+      },
+      { rootMargin: '-20% 0px -60% 0px' }
+    );
+    chapterRefs.current.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [data, timeline]);
+
+  const scrollToChapter = (chNum: number) => {
+    const el = chapterRefs.current.get(chNum);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -191,41 +216,113 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
         </button>
       </div>
 
-      <div
-        className="flex-1 overflow-y-auto px-6 py-8"
-        onClick={e => e.stopPropagation()}
-        style={{
-          fontFamily: 'serif',
-          background: `
-            radial-gradient(ellipse at 20% 30%, rgba(180,140,80,0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 70%, rgba(180,140,80,0.04) 0%, transparent 50%),
-            linear-gradient(180deg, #3a2a15 0%, #33251080 50%, #2a1f10 100%)
-          `,
-        }}
-      >
-        {loading && (
-          <div className="flex items-center justify-center h-full" style={{ color: '#c4a87c' }}>
-            <p>正在展开回忆……</p>
-          </div>
-        )}
-
-        {!loading && !data && (
-          <div className="flex items-center justify-center h-full" style={{ color: '#c4a87c' }}>
-            <p>尚无航程记录</p>
-          </div>
-        )}
-
-        {!loading && data && (
-          <div className="max-w-xl mx-auto">
+      {/* 章节导航：移动端顶部 tab，桌面端侧栏 */}
+      {!loading && data && timeline.length > 1 && (
+        <>
+          {/* 移动端横向 tab */}
+          <div
+            className="sm:hidden flex gap-1 px-4 py-2 overflow-x-auto"
+            style={{ borderBottom: '1px solid rgba(139,90,26,0.3)', background: 'rgba(26,18,8,0.8)' }}
+            onClick={e => e.stopPropagation()}
+          >
             {timeline.map((ch) => (
-              <div key={ch.chapter} className="mb-10">
-                <div className="flex items-center gap-3 mb-5">
-                  <div style={{ width: '40px', height: '1px', background: '#c4a87c', opacity: 0.4 }} />
-                  <h3 style={{ color: '#d4b87a', fontSize: '16px', letterSpacing: '0.25em', fontWeight: 'bold' }}>
-                    第{chNumLabel(ch.chapter)}章 · {ch.title}
-                  </h3>
-                  <div style={{ flex: 1, height: '1px', background: '#c4a87c', opacity: 0.2 }} />
-                </div>
+              <button
+                key={ch.chapter}
+                onClick={() => scrollToChapter(ch.chapter)}
+                className="px-3 py-1.5 text-xs whitespace-nowrap flex-shrink-0 transition-all"
+                style={{
+                  color: activeChapter === ch.chapter ? '#e8d5a3' : '#8b7355',
+                  borderBottom: activeChapter === ch.chapter ? '2px solid #d4b87a' : '2px solid transparent',
+                  fontFamily: 'serif',
+                  letterSpacing: '0.1em',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                }}
+              >
+                第{chNumLabel(ch.chapter)}章
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+
+      <div className="flex-1 flex overflow-hidden">
+        {/* 桌面端侧栏 */}
+        {!loading && data && timeline.length > 1 && (
+          <div
+            className="hidden sm:block w-44 flex-shrink-0 overflow-y-auto py-8 px-4"
+            style={{
+              borderRight: '1px solid rgba(139,90,26,0.25)',
+              background: 'rgba(26,18,8,0.5)',
+            }}
+            onClick={e => e.stopPropagation()}
+          >
+            <p className="text-xs mb-4 px-2" style={{ color: '#8b7355', letterSpacing: '0.2em', fontFamily: 'serif' }}>
+              章 节
+            </p>
+            <div className="space-y-1">
+              {timeline.map((ch) => (
+                <button
+                  key={ch.chapter}
+                  onClick={() => scrollToChapter(ch.chapter)}
+                  className="w-full text-left px-3 py-2 text-sm transition-all duration-200"
+                  style={{
+                    color: activeChapter === ch.chapter ? '#e8d5a3' : '#8b7355',
+                    background: activeChapter === ch.chapter ? 'rgba(180,140,80,0.12)' : 'transparent',
+                    borderLeft: activeChapter === ch.chapter ? '2px solid #d4b87a' : '2px solid transparent',
+                    fontFamily: 'serif',
+                    letterSpacing: '0.08em',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div className="text-xs opacity-60">第{chNumLabel(ch.chapter)}章</div>
+                  <div className="text-xs mt-0.5 truncate">{ch.title}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div
+          className="flex-1 overflow-y-auto px-6 py-8"
+          onClick={e => e.stopPropagation()}
+          style={{
+            fontFamily: 'serif',
+            background: `
+              radial-gradient(ellipse at 20% 30%, rgba(180,140,80,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 70%, rgba(180,140,80,0.04) 0%, transparent 50%),
+              linear-gradient(180deg, #3a2a15 0%, #33251080 50%, #2a1f10 100%)
+            `,
+          }}
+        >
+          {loading && (
+            <div className="flex items-center justify-center h-full" style={{ color: '#c4a87c' }}>
+              <p>正在展开回忆……</p>
+            </div>
+          )}
+
+          {!loading && !data && (
+            <div className="flex items-center justify-center h-full" style={{ color: '#c4a87c' }}>
+              <p>尚无航程记录</p>
+            </div>
+          )}
+
+          {!loading && data && (
+            <div className="max-w-xl mx-auto">
+              {timeline.map((ch) => (
+                <div
+                  key={ch.chapter}
+                  data-chapter={ch.chapter}
+                  ref={(el) => { if (el) chapterRefs.current.set(ch.chapter, el); }}
+                  className="mb-10"
+                >
+                  <div className="flex items-center gap-3 mb-5">
+                    <div style={{ width: '40px', height: '1px', background: '#c4a87c', opacity: 0.4 }} />
+                    <h3 style={{ color: '#d4b87a', fontSize: '16px', letterSpacing: '0.25em', fontWeight: 'bold' }}>
+                      第{chNumLabel(ch.chapter)}章 · {ch.title}
+                    </h3>
+                    <div style={{ flex: 1, height: '1px', background: '#c4a87c', opacity: 0.2 }} />
+                  </div>
 
                 <div>
                   {ch.entries.map((entry, i) => (
@@ -286,6 +383,7 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
             </div>
           </div>
         )}
+        </div>
       </div>
 
       <div
@@ -299,7 +397,7 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
           letterSpacing: '0.1em',
         }}
       >
-        点击条目可回看原文 · Esc 关闭
+        点击条目可回看原文 · 点击侧栏跳转章节 · Esc 关闭
       </div>
 
       {detailSnap && (

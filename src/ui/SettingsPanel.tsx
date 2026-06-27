@@ -1,4 +1,4 @@
-import { useSettings, type TextSpeed, type NarrationMode } from '../store/settingsStore';
+import { useSettings, type TextSpeed } from '../store/settingsStore';
 
 interface SettingsPanelProps {
   onClose: () => void;
@@ -11,20 +11,12 @@ const SPEED_OPTIONS: { value: TextSpeed; label: string }[] = [
   { value: 'instant', label: '瞬间' },
 ];
 
-const NARRATION_OPTIONS: { value: NarrationMode; label: string; desc: string }[] = [
-  { value: 'always', label: '始终显示', desc: '旁白自动弹出' },
-  { value: 'click', label: '点击展开', desc: '旁白点图标才显示' },
-  { value: 'off', label: '关闭', desc: '不显示旁白' },
-];
-
 export function SettingsPanel({ onClose }: SettingsPanelProps) {
   const {
     textSpeed,
-    narrationMode,
     debugMode,
     volume,
     setTextSpeed,
-    setNarrationMode,
     setDebugMode,
     setVolume,
   } = useSettings();
@@ -88,28 +80,6 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
                 }}
               >
                 {opt.label}
-              </button>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="旁白显示">
-          <div className="flex flex-col gap-2 mt-3" style={{ textIndent: 0 }}>
-            {NARRATION_OPTIONS.map(opt => (
-              <button
-                key={opt.value}
-                onClick={() => setNarrationMode(opt.value)}
-                className="px-4 py-3 text-sm text-left transition-all duration-200 flex justify-between items-center"
-                style={{
-                  cursor: 'pointer',
-                  border: narrationMode === opt.value ? '2px solid #5a4220' : '1px solid #c4a87c',
-                  background: narrationMode === opt.value ? '#e8dcc0' : 'transparent',
-                  color: '#3a2a15',
-                  fontFamily: 'inherit',
-                }}
-              >
-                <span style={{ letterSpacing: '0.05em' }}>{opt.label}</span>
-                <span className="text-xs italic" style={{ color: '#8a7050' }}>{opt.desc}</span>
               </button>
             ))}
           </div>

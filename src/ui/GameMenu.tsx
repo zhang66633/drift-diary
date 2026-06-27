@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { EndingCollection } from './EndingCollection';
 
 interface GameMenuProps {
   onClose: () => void;
@@ -52,6 +54,8 @@ function MenuItem({ icon, label, onClick, danger, last }: MenuItemProps) {
 }
 
 export function GameMenu({ onClose }: GameMenuProps) {
+  const [showEndings, setShowEndings] = useState(false);
+
   const {
     openSaveMenu,
     openLoadMenu,
@@ -111,8 +115,9 @@ export function GameMenu({ onClose }: GameMenuProps) {
 
         <div style={{ padding: '4px 0' }}>
           <MenuItem icon="✧" label="航海图" onClick={handleClick(openMemoir)} />
-          <MenuItem icon="◆" label="保存进度" onClick={handleClick(openSaveMenu)} />
-          <MenuItem icon="◇" label="读取进度" onClick={handleClick(openLoadMenu)} />
+          <MenuItem icon="◆" label="终点 · 结局收录" onClick={() => { closeGameMenu(); setShowEndings(true); }} />
+          <MenuItem icon="◇" label="保存进度" onClick={handleClick(openSaveMenu)} />
+          <MenuItem icon="◈" label="读取进度" onClick={handleClick(openLoadMenu)} />
           <MenuItem icon="※" label="设置" onClick={handleClick(openSettingsMenu)} />
         </div>
 
@@ -123,6 +128,7 @@ export function GameMenu({ onClose }: GameMenuProps) {
           <MenuItem icon="×" label="关闭菜单" onClick={handleClick(() => {})} last />
         </div>
       </div>
+      {showEndings && <EndingCollection onClose={() => setShowEndings(false)} />}
     </div>
   );
 }

@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import type { SaveSlot } from '../types/save';
 import { Memoir } from './Memoir';
+import { EndingCollection } from './EndingCollection';
+import { SettingsPanel } from './SettingsPanel';
+import { AboutPanel } from './AboutPanel';
 
 export function MainMenu() {
   const startNewGame = useGameStore(s => s.startNewGame);
@@ -9,6 +12,9 @@ export function MainMenu() {
   const openLoadMenu = useGameStore(s => s.openLoadMenu);
   const [latestSlot, setLatestSlot] = useState<SaveSlot | null>(null);
   const [showMemoir, setShowMemoir] = useState(false);
+  const [showEndings, setShowEndings] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -69,27 +75,52 @@ export function MainMenu() {
             </div>
           </div>
 
-          <div className="space-y-2" style={{ textIndent: 0 }}>
-            <MenuButton variant="primary" onClick={handleNewGame}>
-              <span className="mr-2" style={{ opacity: 0.6 }}>✧</span>
-              翻开新的一页
-            </MenuButton>
-
-            {latestSlot && (
-              <MenuButton variant="secondary" onClick={() => load(latestSlot.id)}>
-                继续阅读 · {latestSlot.label}
+          <div style={{ textIndent: 0 }}>
+            {/* 主行动 */}
+            <div className="space-y-2 mb-2">
+              <MenuButton variant="primary" onClick={handleNewGame}>
+                <span className="mr-2" style={{ opacity: 0.6 }}>✧</span>
+                翻开新的一页
               </MenuButton>
-            )}
 
-            {latestSlot && (
-              <MenuButton variant="secondary" onClick={openLoadMenu}>
-                读取其他存档…
+              {latestSlot && (
+                <MenuButton variant="secondary" onClick={() => load(latestSlot.id)}>
+                  继续阅读 · {latestSlot.label}
+                </MenuButton>
+              )}
+
+              {latestSlot && (
+                <MenuButton variant="secondary" onClick={openLoadMenu}>
+                  读取其他存档…
+                </MenuButton>
+              )}
+            </div>
+
+            {/* 分隔 */}
+            <div className="my-3" style={{ borderTop: '1px dashed rgba(122, 90, 48, 0.2)' }} />
+
+            {/* 回顾 */}
+            <div className="space-y-1 mb-2">
+              <MenuButton variant="secondary" onClick={() => setShowMemoir(true)}>
+                ◈ 航海图 · 航程回顾
               </MenuButton>
-            )}
+              <MenuButton variant="secondary" onClick={() => setShowEndings(true)}>
+                ◆ 终点 · 结局收录
+              </MenuButton>
+            </div>
 
-            <MenuButton variant="secondary" onClick={() => setShowMemoir(true)}>
-              航海图 · 航程回顾
-            </MenuButton>
+            {/* 分隔 */}
+            <div className="my-3" style={{ borderTop: '1px dashed rgba(122, 90, 48, 0.2)' }} />
+
+            {/* 其他 */}
+            <div className="space-y-1">
+              <MenuButton variant="secondary" onClick={() => setShowSettings(true)}>
+                ※ 设置
+              </MenuButton>
+              <MenuButton variant="secondary" onClick={() => setShowAbout(true)}>
+                ¶ 关于本作
+              </MenuButton>
+            </div>
           </div>
 
           <div className="mt-14 pt-6 border-t border-dashed" style={{ borderColor: 'rgba(122, 90, 48, 0.2)' }}>
@@ -104,6 +135,9 @@ export function MainMenu() {
       </div>
 
       {showMemoir && <Memoir standalone onClose={() => setShowMemoir(false)} />}
+      {showEndings && <EndingCollection onClose={() => setShowEndings(false)} />}
+      {showSettings && <SettingsPanel onClose={() => setShowSettings(false)} />}
+      {showAbout && <AboutPanel onClose={() => setShowAbout(false)} />}
     </div>
   );
 }
