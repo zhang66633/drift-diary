@@ -11,3 +11,5 @@ docs/
 scripts/
 MUSIC_GEN_GUIDE.md
 *.py
+.vercel
+.env*
