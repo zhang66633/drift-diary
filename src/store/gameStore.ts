@@ -191,6 +191,12 @@ export const useGameStore = create<GameStore>((set, get) => {
       audio.playSfx(scene.audio.sfx);
     }
 
+    // 背景音乐切换
+    const bgmKey = scene.audio?.bgm;
+    if (bgmKey) {
+      audio.playBgm(bgmKey);
+    }
+
     const hookEffects = providence.checkHook(scene.providenceHook);
     if (hookEffects) consequence.execute(hookEffects);
 
