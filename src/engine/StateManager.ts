@@ -83,7 +83,14 @@ export class StateManager {
   }
 
   reset(state: PlayerState, resources: Resources, skills: Skills): void {
-    this.state = { ...state };
+    // 仅保留已知的 STATE_KEYS，防止旧存档残留已删除字段（如"信念"）
+    const clean: PlayerState = { 良心: 50, 天意: 50, 勇气: 50, 士气: 50, 健康: 100 };
+    for (const key of STATE_KEYS) {
+      if (typeof (state as any)[key] === 'number') {
+        (clean as any)[key] = (state as any)[key];
+      }
+    }
+    this.state = clean;
     this.resources = { ...resources, 同伴: [...resources.同伴] };
     this.skills = { ...skills };
   }

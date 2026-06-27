@@ -63,6 +63,11 @@ export interface Consequence {
   value?: number | string | boolean | string[];
   operation?: 'set' | 'add' | 'push' | 'remove';
   condition?: Condition;
+  /** 天意动态缩放：实际值 = best + (worst - best) × (1 - 天意/100)，量级向上取5的倍数 */
+  scaleByProvidence?: {
+    worst: number;  // 天意=0 时的效果值
+    best: number;   // 天意=100 时的效果值
+  };
 }
 
 export type ConsequenceType =

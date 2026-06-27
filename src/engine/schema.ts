@@ -20,6 +20,10 @@ const ConsequenceSchema = z.object({
   value: z.union([z.string(), z.number(), z.boolean(), z.array(z.string())]).optional(),
   operation: z.enum(['set', 'add', 'push', 'remove']).optional(),
   condition: ConditionSchema.optional(),
+  scaleByProvidence: z.object({
+    worst: z.number(),
+    best: z.number(),
+  }).optional(),
 });
 
 const TextSegmentSchema = z.object({

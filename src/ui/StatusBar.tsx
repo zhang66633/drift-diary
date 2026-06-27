@@ -19,6 +19,10 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
     sceneId: s.gameState.currentSceneId,
   }));
 
+  // 移动端短日期，避免换行
+  const dateStr = formatChineseDate(time.date);
+  const compactDate = dateStr.replace(/^(\d+)年/, ''); // 移动端省略年份："八月十五日"
+
   const StatusItem = ({
     symbol,
     value,
@@ -39,23 +43,28 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
         <span
           className="inline-flex items-center justify-center"
           style={{
-            marginRight: '4px',
+            marginRight: '3px',
             color: '#7a5a30',
-            fontSize: '0.75rem',
-            width: '14px',
+            fontSize: '0.7rem',
+            width: '12px',
             opacity: 0.85,
           }}
         >
           {symbol}
         </span>
-        <span style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 500 }}>{value}</span>
+        <span
+          className="text-[0.65rem] sm:text-xs"
+          style={{ fontVariantNumeric: 'tabular-nums', fontWeight: 500 }}
+        >
+          {value}
+        </span>
       </span>
     </Tooltip>
   );
 
   const Separator = () => (
     <span
-      className="select-none"
+      className="select-none hidden sm:inline"
       style={{ color: '#c4a87c', opacity: 0.5, fontSize: '0.75rem' }}
     >
       ·
@@ -79,8 +88,13 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
         role="status"
         aria-label="游戏状态栏"
       >
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 flex-1 min-w-0">
-          <StatusItem symbol="§" value={formatChineseDate(time.date)} tooltip="故事日期" label="故事日期" />
+        <div className="flex flex-nowrap sm:flex-wrap items-center gap-x-1.5 sm:gap-x-3 gap-y-1 flex-1 min-w-0 overflow-x-auto">
+          <span className="hidden sm:contents">
+            <StatusItem symbol="§" value={dateStr} tooltip="故事日期" label="故事日期" />
+          </span>
+          <span className="sm:hidden">
+            <StatusItem symbol="§" value={compactDate} tooltip={`故事日期：${dateStr}`} label="故事日期" />
+          </span>
           <Separator />
           <StatusItem symbol="†" value={state.健康} tooltip="健康：体力与性命，归零则亡" label="健康" />
           <Separator />
@@ -183,7 +197,8 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
               DEBUG
             </span>
             <span>良心:{state.良心}</span>
-            <span>天意:{providence}</span>
+            <span>天意:{state.天意}</span>
+            <span>天命:{providence}</span>
             <span>航海:{skills.航海}</span>
             <span style={{ fontSize: '0.65rem' }}>
               场景:{sceneId}

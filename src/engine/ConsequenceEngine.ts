@@ -58,8 +58,20 @@ export class ConsequenceEngine {
       case 'state': {
         if (!target || val === undefined) return;
         const key = target as keyof PlayerState;
-        if (op === 'add') this.stateMgr.modifyState(key, val);
-        else this.stateMgr.setState(key, val);
+        let finalVal = val;
+        if (c.scaleByProvidence && typeof val === 'number') {
+          const tianYi = this.providence.getValue();
+          const w = Math.abs(c.scaleByProvidence.worst);
+          const b = Math.abs(c.scaleByProvidence.best);
+          const sign = c.scaleByProvidence.worst >= 0 ? 1 : -1;
+          // 线性插值：天意越高，效果越接近 best
+          const raw = b + (w - b) * (1 - tianYi / 100);
+          // 向上取整到 5 的倍数（压线感：惩罚/奖励都偏重）
+          const rounded = Math.ceil(raw / 5) * 5;
+          finalVal = rounded * sign;
+        }
+        if (op === 'add') this.stateMgr.modifyState(key, finalVal);
+        else this.stateMgr.setState(key, finalVal);
         break;
       }
       case 'resource': {

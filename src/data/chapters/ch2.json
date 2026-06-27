@@ -189,6 +189,9 @@
       "chapter": 2,
       "beat": "2.3 萨里为奴·备逃",
       "date": "1654-08-20",
+      "onEnter": [
+        {"type": "state", "target": "勇气", "operation": "add", "value": -30, "scaleByProvidence": {"worst": -30, "best": -5}}
+      ],
       "text": [
         "我在萨里当了两年奴隶。",
         "海盗船长是个严厉而狡猾的人，我替他管船、打鱼、干家务，事事都得小心翼翼。稍微做错一点，就是一顿鞭子。",
@@ -360,16 +363,6 @@
       "chapter": 2,
       "beat": "2.6 海上漂泊",
       "date": "1654-08-27",
-      "providenceHook": {
-        "lowThreshold": 35,
-        "highThreshold": 65,
-        "lowEffects": [
-          {"type": "state", "target": "士气", "value": -15, "operation": "add"}
-        ],
-        "highEffects": [
-          {"type": "state", "target": "士气", "value": 8, "operation": "add"}
-        ]
-      },
       "text": [
         "我和苏里在海上漂了十天。",
         "太阳像一块烧红的烙铁悬在头顶，晒得裸露的皮肤起了水泡，一碰到咸水就刺疼。海风里全是腥味，吹得嘴唇干裂出一道道血口子。我们沿着海岸向南行驶，不敢靠岸太近——摩尔人的村落随时可能有人追来。白天酷热，夜里海风又冷得像刀子，淡水一点点变少，面包干得像石头。",
@@ -408,6 +401,7 @@
           "text": "冒险靠岸取水",
           "consequences": [
             {"type": "state", "target": "健康", "value": -5, "operation": "add"},
+            {"type": "state", "target": "士气", "operation": "add", "value": -25, "scaleByProvidence": {"worst": -25, "best": 0}},
             {"type": "resource", "target": "水", "value": 2, "operation": "add"},
             {"type": "flag", "target": "漂泊", "value": "岸取"}
           ],
@@ -1243,6 +1237,9 @@
       "date": "1659-09-30",
       "chapterEnd": true,
       "onEnter": [
+        {"type": "state", "target": "勇气", "operation": "add", "value": -20, "scaleByProvidence": {"worst": -20, "best": -5}},
+        {"type": "state", "target": "士气", "operation": "add", "value": -25, "scaleByProvidence": {"worst": -25, "best": -5}},
+        {"type": "state", "target": "健康", "operation": "add", "value": -15, "scaleByProvidence": {"worst": -15, "best": 0}},
         {"type": "resource", "target": "钱", "value": 0, "operation": "set"},
         {"type": "resource", "target": "食物", "value": 0, "operation": "set"},
         {"type": "resource", "target": "水", "value": 0, "operation": "set"},
