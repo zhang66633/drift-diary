@@ -199,9 +199,10 @@ export function BookShell() {
       <div
         className={`book-page${showIllustration && illustration?.position === 'fullpage' ? ' book-page-fullpage' : ''}`}
         style={{
-          opacity: hasBlockingEnterOverlay ? 0.15 : (isChapterEnd ? (showChapterEndContent ? 1 : 0.15) : (showIllustration && illustration?.position === 'fullpage' ? (imgLoaded ? 1 : 0) : 1)),
+          opacity: hasBlockingEnterOverlay ? 0 : (isChapterEnd ? (showChapterEndContent ? 1 : 0) : (showIllustration && illustration?.position === 'fullpage' ? (imgLoaded ? 1 : 0) : 1)),
           transform: (isChapterEnd && !showChapterEndContent) ? 'translateY(0)' : (showIllustration && illustration?.position === 'fullpage' && !imgLoaded ? 'translateY(8px)' : 'translateY(0)'),
           transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+          pointerEvents: isChapterEnd && !showChapterEndContent ? 'none' : 'auto',
         }}
       >
         {dateStr && !chapterTitleVisible && (

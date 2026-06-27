@@ -316,6 +316,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         audio.init();
         audio.setMasterVolume(useSettings.getState().volume);
         audio.setSfxVolume(useSettings.getState().sfxVolume);
+        audio.playBgm('adventure');
         window.removeEventListener('click', initAudio);
         window.removeEventListener('keydown', initAudio);
       };
@@ -351,7 +352,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (!checkCondition(choice.requirement)) return;
 
-      audio.playSfx('choice');
+      audio.playSfx('page_turn');
 
       if (snapshots.length > 0) {
         const lastSnap = snapshots[snapshots.length - 1];
