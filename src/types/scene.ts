@@ -118,7 +118,6 @@ export interface EndingSpec {
   title: string;
   text: string;
   buttonText?: string;
-  lionText?: string | ConditionalText;
   moneyText?: string | ConditionalText;
 }
 

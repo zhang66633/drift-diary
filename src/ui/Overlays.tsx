@@ -250,10 +250,7 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
 
   if (!ending) return null;
 
-  const lionPlaceholder = '想起那头没敢打的狮子';
-  const resolvedText = typeof ending.lionText === 'string' && ending.lionText
-    ? ending.text.replace(lionPlaceholder, ending.lionText)
-    : ending.text;
+  const resolvedText = ending.text;
 
   return (
     <div
