@@ -317,6 +317,16 @@
             "worst": -30,
             "best": -5
           }
+        },
+        {
+          "type": "state",
+          "target": "士气",
+          "value": -15,
+          "operation": "add",
+          "scaleByProvidence": {
+            "worst": -25,
+            "best": -5
+          }
         }
       ],
       "text": [
