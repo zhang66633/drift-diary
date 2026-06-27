@@ -155,7 +155,14 @@ export function BookShell() {
 
       {/* Fullpage illustration: immersive background */}
       {showIllustration && illustration?.position === 'fullpage' && (
-        <div className="illustration-fullpage" aria-hidden="true">
+        <div
+          className="illustration-fullpage"
+          aria-hidden="true"
+          style={{
+            opacity: imgLoaded ? 1 : 0,
+            transition: 'opacity 0.4s ease-out',
+          }}
+        >
           <img
             src={imgSrc!}
             alt={illustration.alt}
@@ -167,7 +174,11 @@ export function BookShell() {
 
       <div
         className={`book-page${showIllustration && illustration?.position === 'fullpage' ? ' book-page-fullpage' : ''}`}
-        style={{ opacity: hasBlockingEnterOverlay ? 0.15 : 1, transition: 'opacity 0.3s ease' }}
+        style={{
+          opacity: hasBlockingEnterOverlay ? 0.15 : (showIllustration && illustration?.position === 'fullpage' ? (imgLoaded ? 1 : 0) : 1),
+          transform: showIllustration && illustration?.position === 'fullpage' && !imgLoaded ? 'translateY(8px)' : 'translateY(0)',
+          transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+        }}
       >
         {dateStr && !chapterTitleVisible && (
           <div className="mb-6">
