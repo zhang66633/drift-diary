@@ -297,7 +297,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.65) saturate(0.8);
+    filter: brightness(0.85) saturate(0.9);
   }
 
   .illustration-fullpage-overlay {
@@ -305,9 +305,9 @@
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(26, 16, 8, 0.3) 0%,
-      rgba(26, 16, 8, 0.15) 50%,
-      rgba(26, 16, 8, 0.3) 100%
+      rgba(26, 16, 8, 0.12) 0%,
+      rgba(26, 16, 8, 0.05) 50%,
+      rgba(26, 16, 8, 0.12) 100%
     );
   }
 
@@ -344,38 +344,39 @@
   .book-page-fullpage {
     position: relative;
     z-index: 1;
-    color: #e8dcc0;
-    background: rgba(26, 16, 8, 0.45);
+    color: #2a1f14;
+    background: rgba(244, 236, 216, 0.75);
     border-radius: 6px;
     margin: 2rem auto;
     padding: 2.5rem 2rem;
     max-width: 44rem;
     backdrop-filter: blur(2px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
   }
 
   .book-page-fullpage .date-badge {
-    color: #d4c098;
-    background: rgba(244, 236, 216, 0.1);
+    color: #6a5030;
+    background: rgba(244, 236, 216, 0.6);
     border-color: rgba(180, 140, 80, 0.4);
   }
 
   .book-page-fullpage .quotation {
-    color: #d4c098;
+    color: #6a5030;
     border-top-color: rgba(180, 140, 80, 0.4);
     border-bottom-color: rgba(180, 140, 80, 0.4);
   }
 
   .book-page-fullpage .quotation::before {
-    color: rgba(180, 140, 80, 0.6);
+    color: rgba(106, 80, 48, 0.6);
     background: transparent;
   }
 
   .book-page-fullpage .choice-item {
-    color: #d4c098;
+    color: #5a4020;
   }
 
   .book-page-fullpage .choice-item:hover {
-    color: #f4ecd8;
+    color: #2a1f14;
     border-left-color: rgba(180, 140, 80, 0.8);
   }
 }

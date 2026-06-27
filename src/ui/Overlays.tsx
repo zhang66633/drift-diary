@@ -244,7 +244,7 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
       role="dialog"
       aria-modal="true"
       aria-label={ending.title || '结局'}
-      style={{ background: 'rgba(8, 4, 0, 0.96)' }}
+      style={{ background: 'linear-gradient(180deg, #e8dcc0 0%, #f4ecd8 100%)' }}
       onClick={onDismiss}
     >
       {illustrationSrc && (
@@ -256,14 +256,14 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              opacity: 0.25,
-              filter: 'brightness(0.6) saturate(0.7)',
+              opacity: 0.6,
+              filter: 'brightness(0.9) saturate(0.85)',
             }}
           />
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(180deg, rgba(8,4,0,0.6) 0%, rgba(8,4,0,0.85) 50%, rgba(8,4,0,0.9) 100%)',
+              background: 'linear-gradient(180deg, rgba(244,236,216,0.15) 0%, rgba(244,236,216,0.5) 40%, rgba(244,236,216,0.85) 100%)',
             }}
           />
         </div>
@@ -273,7 +273,7 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
           className="max-w-xl w-full py-8 text-center flex-shrink-0"
           onClick={e => e.stopPropagation()}
         >
-          <div className="mb-6 flex justify-center gap-3" style={{ color: '#7a6a5a', opacity: 0.5 }}>
+          <div className="mb-6 flex justify-center gap-3" style={{ color: '#8a7050', opacity: 0.6 }}>
             <span>✦</span>
             <span>✧</span>
             <span>✦</span>
@@ -281,7 +281,7 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
 
           <p
             className="text-sm mb-4 tracking-[0.4em]"
-            style={{ color: '#7a6a5a', textIndent: 0 }}
+            style={{ color: '#8a7050', textIndent: 0 }}
           >
             — 结 局 —
           </p>
@@ -289,10 +289,10 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
           <h2
             className="text-3xl sm:text-4xl font-semibold mb-10"
             style={{
-              color: '#d4c4a8',
+              color: '#3a2815',
               letterSpacing: '0.35em',
               textIndent: 0,
-              textShadow: '0 0 30px rgba(196, 168, 124, 0.2)',
+              textShadow: '0 2px 10px rgba(255, 240, 200, 0.5)',
             }}
           >
             {ending.title}
@@ -301,17 +301,17 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
           <div className="relative mx-auto max-w-md">
             <div
               className="absolute inset-x-0 top-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, #6a5a4a, transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, #a08050, transparent)' }}
             />
             <div
               className="absolute inset-x-0 bottom-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, #6a5a4a, transparent)' }}
+              style={{ background: 'linear-gradient(90deg, transparent, #a08050, transparent)' }}
             />
             <div className="py-8 px-4">
               <p
                 className="italic leading-loose"
                 style={{
-                  color: '#a89a8a',
+                  color: '#4a3825',
                   textIndent: '2em',
                   whiteSpace: 'pre-line',
                   textAlign: 'justify',
@@ -324,7 +324,7 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
                 <p
                   className="italic leading-loose mt-6"
                   style={{
-                    color: '#a89a8a',
+                    color: '#4a3825',
                     textIndent: '2em',
                     whiteSpace: 'pre-line',
                     textAlign: 'justify',
@@ -340,9 +340,9 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
           <button
             className="mt-8 px-10 py-3 text-base cursor-pointer select-none transition-all duration-300"
             style={{
-              color: '#d4c4a8',
-              background: 'transparent',
-              border: '1px solid #8a7a5a',
+              color: '#5a4020',
+              background: 'rgba(244, 236, 216, 0.5)',
+              border: '1px solid #a08050',
               letterSpacing: '0.2em',
               textIndent: 0,
               fontFamily: 'inherit',
@@ -350,15 +350,15 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
             onClick={onDismiss}
             onMouseEnter={e => {
               const btn = e.currentTarget;
-              btn.style.borderColor = '#c4a87c';
-              btn.style.color = '#f0e4c8';
-              btn.style.boxShadow = '0 0 25px rgba(196, 168, 124, 0.25)';
+              btn.style.borderColor = '#8a6030';
+              btn.style.color = '#3a2815';
+              btn.style.boxShadow = '0 0 20px rgba(160, 128, 80, 0.3)';
               btn.style.transform = 'translateY(-1px)';
             }}
             onMouseLeave={e => {
               const btn = e.currentTarget;
-              btn.style.borderColor = '#8a7a5a';
-              btn.style.color = '#d4c4a8';
+              btn.style.borderColor = '#a08050';
+              btn.style.color = '#5a4020';
               btn.style.boxShadow = 'none';
               btn.style.transform = 'translateY(0)';
             }}
