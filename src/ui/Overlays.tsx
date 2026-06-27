@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import type { NarrationSpec, DreamSpec, DeathSpec, EndingSpec } from '../types/scene';
 
 interface NarrationOverlayProps {
@@ -231,6 +232,22 @@ interface EndingOverlayProps {
 }
 
 export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOverlayProps) {
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    setImgLoaded(false);
+    setShowContent(false);
+  }, [ending]);
+
+  const handleImageLoad = () => {
+    setImgLoaded(true);
+  };
+
+  const handleReveal = () => {
+    setShowContent(true);
+  };
+
   if (!ending) return null;
 
   const lionPlaceholder = '想起那头没敢打的狮子';
@@ -245,19 +262,22 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
       aria-modal="true"
       aria-label={ending.title || '结局'}
       style={{ background: 'linear-gradient(180deg, #e8dcc0 0%, #f4ecd8 100%)' }}
-      onClick={onDismiss}
+      onClick={handleReveal}
     >
+      {/* 图片层 - 始终显示 */}
       {illustrationSrc && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 overflow-hidden">
           <img
             src={illustrationSrc}
             alt=""
+            onLoad={handleImageLoad}
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              opacity: 0.6,
+              opacity: imgLoaded ? 0.6 : 0,
               filter: 'brightness(0.9) saturate(0.85)',
+              transition: 'opacity 0.6s ease-out',
             }}
           />
           <div
@@ -268,10 +288,46 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
           />
         </div>
       )}
-      <div className="flex items-center justify-center min-h-full p-8 relative z-10">
+
+      {/* 点击提示 - 图片加载后显示，内容未显示时可见 */}
+      {!showContent && (
+        <div
+          className="absolute inset-0 flex items-center justify-center z-20"
+          style={{
+            opacity: imgLoaded ? 1 : 0,
+            transition: 'opacity 0.5s ease-out',
+            pointerEvents: 'none',
+          }}
+        >
+          <div className="text-center" style={{ pointerEvents: 'auto' }}>
+            <div
+              className="text-base cursor-pointer select-none animate-pulse"
+              style={{ color: '#6a5a4a', textIndent: 0 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleReveal();
+              }}
+            >
+              <span className="inline-block mr-2">✦</span>
+              点击继续
+              <span className="inline-block ml-2">✦</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 文字内容 - 点击后显示 */}
+      <div
+        className="flex items-center justify-center min-h-full p-8 relative z-10"
+        style={{
+          opacity: showContent ? 1 : 0,
+          transition: 'opacity 0.5s ease-out',
+          pointerEvents: showContent ? 'auto' : 'none',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div
           className="max-w-xl w-full py-8 text-center flex-shrink-0"
-          onClick={e => e.stopPropagation()}
         >
           <div className="mb-6 flex justify-center gap-3" style={{ color: '#8a7050', opacity: 0.6 }}>
             <span>✦</span>
