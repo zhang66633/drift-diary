@@ -256,7 +256,7 @@ export function BookShell() {
 
       <DeathOverlay death={pendingDeath} onDismiss={dismissDeath} />
 
-      <EndingOverlay ending={pendingEnding} onDismiss={dismissEnding} />
+      <EndingOverlay ending={pendingEnding} illustrationSrc={imgSrc} onDismiss={dismissEnding} />
 
       {showSaveMenu && <SaveMenu mode="save" />}
       {showLoadMenu && <SaveMenu mode="load" />}

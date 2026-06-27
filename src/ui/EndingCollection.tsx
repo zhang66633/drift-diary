@@ -25,13 +25,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
     async function load() {
       setLoading(true);
       try {
-        // 收集所有结局场景
-        const historySet = new Set<string>();
-        const latest = _saveMgr.getLatestSave();
-        if (latest) {
-          for (const id of latest.gameState.history) historySet.add(id);
-          historySet.add(latest.gameState.currentSceneId);
-        }
+        const unlockedSet = new Set<string>(_saveMgr.getUnlockedEndings());
 
         const chapters: Chapter[] = [];
         const chapterModules = import.meta.glob<Chapter>('../data/chapters/ch*.json', { eager: false });
@@ -60,7 +54,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
           sceneId: scene.id,
           chapter: ch.chapter,
           chapterTitle: ch.title,
-          unlocked: historySet.has(scene.id),
+          unlocked: unlockedSet.has(scene.id),
         }));
 
         if (!cancelled) setEndings(entries);

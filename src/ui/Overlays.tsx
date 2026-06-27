@@ -226,10 +226,11 @@ export function ChapterTitleOverlay({ chapter, title, quotation, visible, onDism
 
 interface EndingOverlayProps {
   ending: EndingSpec | null;
+  illustrationSrc?: string | null;
   onDismiss: () => void;
 }
 
-export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
+export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOverlayProps) {
   if (!ending) return null;
 
   const lionPlaceholder = '想起那头没敢打的狮子';
@@ -246,7 +247,28 @@ export function EndingOverlay({ ending, onDismiss }: EndingOverlayProps) {
       style={{ background: 'rgba(8, 4, 0, 0.96)' }}
       onClick={onDismiss}
     >
-      <div className="flex items-center justify-center min-h-full p-8">
+      {illustrationSrc && (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <img
+            src={illustrationSrc}
+            alt=""
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: 0.25,
+              filter: 'brightness(0.6) saturate(0.7)',
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(180deg, rgba(8,4,0,0.6) 0%, rgba(8,4,0,0.85) 50%, rgba(8,4,0,0.9) 100%)',
+            }}
+          />
+        </div>
+      )}
+      <div className="flex items-center justify-center min-h-full p-8 relative z-10">
         <div
           className="max-w-xl w-full py-8 text-center flex-shrink-0"
           onClick={e => e.stopPropagation()}

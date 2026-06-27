@@ -225,6 +225,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         lionText: consequence.resolveText(scene.ending.lionText) as any,
         moneyText: consequence.resolveText(scene.ending.moneyText) as any,
       };
+      saveMgr.unlockEnding(scene.id);
     }
 
     if (wasSept1 && timeMgr.isSeptemberFirst() && !scene.chapterStart && !scene.dream) {

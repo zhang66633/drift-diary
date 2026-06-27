@@ -13,6 +13,7 @@ export interface SaveData {
   version: string;
   slots: SaveSlot[];
   activeSlotId: string | null;
+  unlockedEndings: string[];
 }
 
 export const SAVE_VERSION = '0.1.0';

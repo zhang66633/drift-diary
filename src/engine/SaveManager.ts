@@ -102,6 +102,17 @@ export class SaveManager {
     return [...this.data.slots].sort((a, b) => b.timestamp - a.timestamp)[0];
   }
 
+  getUnlockedEndings(): string[] {
+    return [...this.data.unlockedEndings];
+  }
+
+  unlockEnding(sceneId: string): void {
+    if (!this.data.unlockedEndings.includes(sceneId)) {
+      this.data.unlockedEndings.push(sceneId);
+      this.persist();
+    }
+  }
+
   migrate(oldSave: SaveData): SaveData {
     // 预留版本迁移逻辑
     return oldSave;
@@ -110,16 +121,17 @@ export class SaveManager {
   private loadFromStorage(): SaveData {
     const raw = this.storage.getItem(SAVE_KEY);
     if (!raw) {
-      return { version: SAVE_VERSION, slots: [], activeSlotId: null };
+      return { version: SAVE_VERSION, slots: [], activeSlotId: null, unlockedEndings: [] };
     }
     try {
       const parsed = JSON.parse(raw) as SaveData;
       if (parsed.version !== SAVE_VERSION) {
         return this.migrate(parsed);
       }
+      if (!parsed.unlockedEndings) parsed.unlockedEndings = [];
       return parsed;
     } catch {
-      return { version: SAVE_VERSION, slots: [], activeSlotId: null };
+      return { version: SAVE_VERSION, slots: [], activeSlotId: null, unlockedEndings: [] };
     }
   }
 
