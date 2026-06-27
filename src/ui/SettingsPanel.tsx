@@ -15,11 +15,9 @@ const SPEED_OPTIONS: { value: TextSpeed; label: string }[] = [
 export function SettingsPanel({ onClose }: SettingsPanelProps) {
   const {
     textSpeed,
-    debugMode,
     volume,
     sfxVolume,
     setTextSpeed,
-    setDebugMode,
     setVolume,
     setSfxVolume,
   } = useSettings();
@@ -127,48 +125,6 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
           </div>
         </Section>
 
-        <Section title="调试模式">
-          <label className="flex items-center justify-between cursor-pointer" style={{ textIndent: 0 }}>
-            <span className="text-sm" style={{ color: '#3a2a15', letterSpacing: '0.05em' }}>
-              显示场景ID和调试信息
-            </span>
-            <div
-              role="switch"
-              aria-checked={debugMode}
-              aria-label="调试模式"
-              tabIndex={0}
-              onClick={() => setDebugMode(!debugMode)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setDebugMode(!debugMode);
-                }
-              }}
-              style={{
-                width: '44px',
-                height: '24px',
-                borderRadius: '12px',
-                background: debugMode ? '#7a5a30' : '#c4a87c',
-                position: 'relative',
-                cursor: 'pointer',
-                transition: 'background 0.2s ease',
-                flexShrink: 0,
-              }}
-            >
-              <div style={{
-                width: '20px',
-                height: '20px',
-                borderRadius: '50%',
-                background: '#f4ecd8',
-                position: 'absolute',
-                top: '2px',
-                left: debugMode ? '22px' : '2px',
-                transition: 'left 0.2s ease',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-              }} />
-            </div>
-          </label>
-        </Section>
       </div>
     </div>
   );

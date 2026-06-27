@@ -76,7 +76,7 @@ export class AudioManager {
     const ctx = this.ensureContext();
     if (!ctx || !this.masterGain) return;
 
-    const url = `/audio/ambient/${key}.mp3`;
+    const url = import.meta.env.BASE_URL + `audio/ambient/${key}.mp3`;
     await this.preload(key, url);
     const buffer = this.bufferCache[key];
     if (!buffer) return;
@@ -122,7 +122,7 @@ export class AudioManager {
     const ctx = this.ensureContext();
     if (!ctx || !this.sfxGain) return;
 
-    const url = `/audio/sfx/${key}.mp3`;
+    const url = import.meta.env.BASE_URL + `audio/sfx/${key}.mp3`;
     await this.preload(key, url);
     const buffer = this.bufferCache[key];
     if (!buffer) return;
