@@ -171,6 +171,17 @@ export class AudioManager {
     this.currentBgmKey = key;
   }
 
+  /** 后台预加载 BGM 文件到浏览器缓存，切换时即刻播放 */
+  preloadBgm(key: BgmKey): void {
+    if (!this.bgmAudio) return;
+    const url = import.meta.env.BASE_URL + `audio/bgm/${key}.mp3`;
+    // 创建临时 Audio 元素触发浏览器缓存预热，不播放
+    const tmp = new Audio();
+    tmp.preload = 'auto';
+    tmp.src = url;
+    tmp.load();
+  }
+
   stopBgm(): void {
     if (!this.bgmAudio || !this.currentBgmKey) return;
     const ctx = this.ctx;

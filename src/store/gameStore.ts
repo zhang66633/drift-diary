@@ -207,11 +207,27 @@ export const useGameStore = create<GameStore>((set, get) => {
       audio.playBgm('main_theme');
     }
 
-    // 预加载下一章（场景接近章节末尾时后台加载下一章JSON）
+    // 预加载下一章（场景接近章节末尾时后台加载下一章JSON + 结局资源）
     const chSceneCount = sceneMgr.getChapterSceneCount(scene.chapter);
     const chSceneIndex = sceneMgr.getCurrentChapter()?.scenes.findIndex(s => s.id === scene.id) ?? -1;
     if (chSceneIndex >= 0 && chSceneIndex >= chSceneCount - 2) {
       sceneMgr.preloadNextChapter(scene.chapter);
+      // 后台预加载当前章节结局的 BGM 和插图，进入结局时丝滑无等待
+      const chapter = sceneMgr.getCurrentChapter();
+      if (chapter) {
+        const endingScene = chapter.scenes.find(s => !!s.ending);
+        if (endingScene) {
+          // BGM 预加载到浏览器缓存
+          const endingBgm = endingScene.audio?.bgm;
+          if (endingBgm) audio.preloadBgm(endingBgm);
+          // 插图预加载到浏览器缓存
+          const endingImg = endingScene.illustration?.src;
+          if (endingImg) {
+            const img = new Image();
+            img.src = import.meta.env.BASE_URL + endingImg.replace(/^\//, '');
+          }
+        }
+      }
     }
 
     const hookEffects = providence.checkHook(scene.providenceHook);
