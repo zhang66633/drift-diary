@@ -1,9 +1,9 @@
 /**
- * AudioManager — 封装 Web Audio API，管理环境音循环和 UI 音效。
+ * AudioManager — BGM 用 HTML5 Audio 流式播放，SFX 用 Web Audio API。
  *
- * - 背景音乐（bgm）：独立循环，音量较低
- * - 环境音（ambient）：无缝循环，场景切换时交叉渐变
- * - UI 音效（sfx）：一次性播放，不循环
+ * - 背景音乐（bgm）：HTML5 Audio 流式，即时播放无需完整下载
+ * - 环境音（ambient）：Web Audio 无缝循环，场景切换时交叉渐变
+ * - UI 音效（sfx）：Web Audio 一次性播放，不循环
  * - 主音量 + 音效音量独立控制
  */
 
@@ -26,11 +26,13 @@ export class AudioManager {
     source: AudioBufferSourceNode;
     gain: GainNode;
   } | null = null;
-  private currentBgm: {
-    key: BgmKey;
-    source: AudioBufferSourceNode;
-    gain: GainNode;
-  } | null = null;
+
+  // ── BGM：HTML5 Audio 流式播放 ──
+  private bgmAudio: HTMLAudioElement | null = null;
+  private bgmMediaSource: MediaElementAudioSourceNode | null = null;
+  private bgmSourceGain: GainNode | null = null;
+  private currentBgmKey: BgmKey | null = null;
+
   private masterVolume = 0.8;  // 0-1
   private sfxVolume = 0.8;     // 0-1
   private bgmVolume = 0.7;     // 0-1
@@ -59,6 +61,18 @@ export class AudioManager {
       this.bgmGain = this.ctx.createGain();
       this.bgmGain.gain.value = this.bgmVolume;
       this.bgmGain.connect(this.masterGain);
+
+      // 创建 BGM Audio 元素（贯穿游戏生命期，只创建一次）
+      this.bgmAudio = new Audio();
+      this.bgmAudio.loop = true;
+      this.bgmAudio.preload = 'auto';
+      // 通过 MediaElementSourceNode 接入 Web Audio 增益链
+      this.bgmMediaSource = this.ctx.createMediaElementSource(this.bgmAudio);
+      this.bgmSourceGain = this.ctx.createGain();
+      this.bgmSourceGain.gain.value = 0;
+      this.bgmMediaSource.connect(this.bgmSourceGain);
+      this.bgmSourceGain.connect(this.bgmGain);
+
       this.initialized = true;
     } catch {
       console.warn('AudioContext not available');
@@ -73,7 +87,7 @@ export class AudioManager {
     return this.ctx;
   }
 
-  // ── 预加载 ──
+  // ── 预加载（仅 SFX / ambient 用 Web Audio buffer） ──
 
   async preload(key: string, url: string): Promise<void> {
     const ctx = this.ctx;
@@ -89,7 +103,7 @@ export class AudioManager {
     }
   }
 
-  // ── 环境音 ──
+  // ── 环境音（保留 Web Audio — 无缝循环 + 交叉渐变） ──
 
   async playAmbient(key: AmbientKey, crossfade = true): Promise<void> {
     const ctx = this.ensureContext();
@@ -105,16 +119,14 @@ export class AudioManager {
     source.loop = true;
 
     const gain = ctx.createGain();
-    gain.connect(this.masterGain);  // ambient goes straight to master, not sfxGain
+    gain.connect(this.masterGain);
 
     if (this.currentAmbient && crossfade) {
-      // 交叉渐变：旧音轨淡出，新音轨淡入
       const old = this.currentAmbient;
       const oldGain = old.gain;
       oldGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.0);
       gain.gain.setValueAtTime(0, ctx.currentTime);
       gain.gain.linearRampToValueAtTime(1, ctx.currentTime + 1.0);
-      // 延迟停止旧音轨
       setTimeout(() => {
         try { old.source.stop(); } catch { /* already stopped */ }
       }, 1200);
@@ -135,54 +147,42 @@ export class AudioManager {
     }
   }
 
-  // ── 背景音乐 ──
+  // ── 背景音乐（HTML5 Audio 流式，即时播放） ──
 
   async playBgm(key: BgmKey): Promise<void> {
     const ctx = this.ensureContext();
-    if (!ctx || !this.bgmGain) return;
+    if (!ctx || !this.bgmAudio || !this.bgmSourceGain) return;
 
-    if (this.currentBgm?.key === key) return;
+    if (this.currentBgmKey === key) return;
 
     const url = import.meta.env.BASE_URL + `audio/bgm/${key}.mp3`;
-    await this.preload(`bgm_${key}`, url);
-    const buffer = this.bufferCache[`bgm_${key}`];
-    if (!buffer) return;
 
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.loop = true;
-
-    const gain = ctx.createGain();
-    gain.connect(this.bgmGain);
-    gain.gain.value = 0;
-
-    if (this.currentBgm) {
-      const old = this.currentBgm;
-      old.gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.8);
-      setTimeout(() => {
-        try { old.source.stop(); } catch { /* already stopped */ }
-      }, 1000);
+    if (this.currentBgmKey) {
+      // 淡出当前 BGM
+      this.bgmSourceGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+      await new Promise(r => setTimeout(r, 600));
     }
 
-    source.connect(gain);
-    source.start(0);
-    gain.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.8);
-
-    this.currentBgm = { key, source, gain };
+    // 切换音源并播放（HTML5 Audio 流式，即刻开始）
+    this.bgmAudio.src = url;
+    this.bgmAudio.load();
+    this.bgmAudio.play().catch(() => {});
+    this.bgmSourceGain.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.5);
+    this.currentBgmKey = key;
   }
 
   stopBgm(): void {
-    if (this.currentBgm) {
-      const ctx = this.ctx;
-      if (ctx) {
-        this.currentBgm.gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.0);
-        setTimeout(() => {
-          try { this.currentBgm?.source.stop(); } catch { /* ok */ }
-        }, 1200);
-      } else {
-        try { this.currentBgm.source.stop(); } catch { /* ok */ }
-      }
-      this.currentBgm = null;
+    if (!this.bgmAudio || !this.currentBgmKey) return;
+    const ctx = this.ctx;
+    if (ctx && this.bgmSourceGain) {
+      this.bgmSourceGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.0);
+      setTimeout(() => {
+        this.bgmAudio?.pause();
+        this.currentBgmKey = null;
+      }, 1200);
+    } else {
+      this.bgmAudio.pause();
+      this.currentBgmKey = null;
     }
   }
 
@@ -256,6 +256,11 @@ export class AudioManager {
 
   destroy(): void {
     this.stopAmbient();
+    if (this.bgmAudio) {
+      this.bgmAudio.pause();
+      this.bgmAudio.removeAttribute('src');
+      this.bgmAudio = null;
+    }
     if (this.ctx) {
       this.ctx.close().catch(() => {});
       this.ctx = null;
