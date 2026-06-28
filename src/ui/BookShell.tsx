@@ -181,8 +181,8 @@ export function BookShell() {
         </div>
       )}
 
-      {/* 章节结束场景：点击提示（图片加载后显示） */}
-      {isChapterEnd && imgLoaded && !showChapterEndContent && (
+      {/* 章节结束场景：点击提示（遮罩消失后即显示，不等图片加载） */}
+      {isChapterEnd && !hasBlockingEnterOverlay && !showChapterEndContent && (
         <div
           className="fixed inset-0 flex items-center justify-center z-30 pointer-events-none"
         >
