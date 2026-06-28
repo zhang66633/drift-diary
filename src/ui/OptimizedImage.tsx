@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { isLowPerf } from '../utils/perf';
 
 interface OptimizedImageProps {
   src: string;
@@ -42,6 +43,7 @@ export function OptimizedImage({
 }: OptimizedImageProps) {
   const imgRef = useRef<HTMLImageElement>(null);
   const finalLoading = priority ? 'eager' : loading;
+  const lowPerf = isLowPerf();
 
   useEffect(() => {
     if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
@@ -52,6 +54,7 @@ export function OptimizedImage({
   const wrapperStyle: React.CSSProperties = {
     position: 'relative',
     overflow: 'hidden',
+    background: lowPerf ? '#d4c4a8' : undefined,
     ...style,
   };
 
@@ -79,9 +82,11 @@ export function OptimizedImage({
     onLoad?.();
   };
 
+  const showLqip = !lowPerf && !!lqipSrc;
+
   return (
     <div style={wrapperStyle} className={className}>
-      {lqipSrc && (
+      {showLqip && (
         <img
           src={lqipSrc}
           alt=""
@@ -105,6 +110,7 @@ export function OptimizedImage({
             height: '100%',
             objectFit,
             opacity: 1,
+            transition: lowPerf ? 'none' : 'opacity 0.5s ease-out',
           }}
           decoding="async"
         />

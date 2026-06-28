@@ -462,6 +462,33 @@
   }
 }
 
+/* 低性能设备降级：减少动画、滤镜和复杂渲染 */
+.perf-degraded *,
+.perf-degraded *::before,
+.perf-degraded *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.perf-degraded .illustration-fullpage-img {
+  filter: none !important;
+}
+
+.perf-degraded .book-page-fullpage {
+  backdrop-filter: none !important;
+  background: rgba(244, 236, 216, 0.9);
+}
+
+.perf-degraded .book-shell {
+  background-image: none;
+  background-color: #f4ecd8;
+}
+
+.perf-degraded .overlay-panel::before {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .book-page {
     padding: 2rem 1.25rem;
