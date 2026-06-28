@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import type { Chapter, Scene } from '../types/scene';
+import type { Chapter, Scene, IllustrationSpec } from '../types/scene';
 
 interface EndingEntry {
   title: string;
@@ -9,6 +9,7 @@ interface EndingEntry {
   chapter: number;
   chapterTitle: string;
   unlocked: boolean;
+  illustration?: IllustrationSpec;
 }
 
 interface EndingCollectionProps {
@@ -19,6 +20,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
   const { _sceneMgr, _saveMgr } = useGameStore();
   const [endings, setEndings] = useState<EndingEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [zoomedImg, setZoomedImg] = useState<{ src: string; alt: string } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,6 +57,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
           chapter: ch.chapter,
           chapterTitle: ch.title,
           unlocked: unlockedSet.has(scene.id),
+          illustration: scene.illustration,
         }));
 
         if (!cancelled) setEndings(entries);
@@ -70,11 +73,19 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        if (zoomedImg) setZoomedImg(null);
+        else onClose();
+      }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [onClose]);
+  }, [onClose, zoomedImg]);
+
+  const imgSrc = (illustration: IllustrationSpec) => {
+    if (!illustration.src) return null;
+    return import.meta.env.BASE_URL + illustration.src.replace(/^\//, '');
+  };
 
   return (
     <div
@@ -85,7 +96,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
       style={{
         background: 'linear-gradient(135deg, #1a1208 0%, #0d0a05 100%)',
       }}
-      onClick={onClose}
+      onClick={zoomedImg ? () => setZoomedImg(null) : onClose}
     >
       <div
         className="flex items-center justify-between px-6 py-4 z-20"
@@ -138,74 +149,137 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
 
         {!loading && (
           <div className="max-w-2xl mx-auto grid gap-6 sm:grid-cols-2">
-            {endings.map((ending) => (
-              <div
-                key={ending.sceneId}
-                className="p-6 transition-all duration-300"
-                style={{
-                  background: ending.unlocked
-                    ? 'linear-gradient(135deg, rgba(60,40,20,0.5), rgba(40,25,10,0.5))'
-                    : 'linear-gradient(135deg, rgba(30,20,10,0.4), rgba(20,12,6,0.4))',
-                  border: ending.unlocked
-                    ? '1px solid rgba(180,140,60,0.45)'
-                    : '1px solid rgba(100,80,50,0.2)',
-                  opacity: ending.unlocked ? 1 : 0.55,
-                }}
-              >
-                <div className="mb-3">
-                  {ending.unlocked ? (
-                    <div
-                      className="text-lg font-bold mb-1"
-                      style={{ color: '#e8d5a3', letterSpacing: '0.1em' }}
-                    >
-                      {ending.title}
+            {endings.map((ending) => {
+              const illustrationUrl = ending.illustration ? imgSrc(ending.illustration) : null;
+              return (
+                <div
+                  key={ending.sceneId}
+                  className="p-6 transition-all duration-300"
+                  style={{
+                    background: ending.unlocked
+                      ? 'linear-gradient(135deg, rgba(60,40,20,0.5), rgba(40,25,10,0.5))'
+                      : 'linear-gradient(135deg, rgba(30,20,10,0.4), rgba(20,12,6,0.4))',
+                    border: ending.unlocked
+                      ? '1px solid rgba(180,140,60,0.45)'
+                      : '1px solid rgba(100,80,50,0.2)',
+                    opacity: ending.unlocked ? 1 : 0.55,
+                  }}
+                >
+                  <div className="mb-3">
+                    {ending.unlocked ? (
+                      <div
+                        className="text-lg font-bold mb-1"
+                        style={{ color: '#e8d5a3', letterSpacing: '0.1em' }}
+                      >
+                        {ending.title}
+                      </div>
+                    ) : (
+                      <div
+                        className="text-lg font-bold mb-1"
+                        style={{ color: '#6a5030', letterSpacing: '0.15em' }}
+                      >
+                        ???
+                      </div>
+                    )}
+                    <div className="text-xs" style={{ color: '#8b6f47', opacity: 0.7 }}>
+                      第{['一','二','三','四','五','六','七','八','九','十'][ending.chapter - 1] || ending.chapter}章 · {ending.chapterTitle}
                     </div>
-                  ) : (
+                  </div>
+
+                  {/* 结局插图缩略图 */}
+                  {ending.unlocked && illustrationUrl && (
                     <div
-                      className="text-lg font-bold mb-1"
-                      style={{ color: '#6a5030', letterSpacing: '0.15em' }}
+                      className="mb-3 cursor-pointer overflow-hidden group relative"
+                      style={{
+                        borderRadius: '2px',
+                        border: '1px solid rgba(180,140,60,0.25)',
+                        aspectRatio: ending.illustration?.size?.startsWith('portrait') ? '3/4' : '16/9',
+                      }}
+                      onClick={() => setZoomedImg({
+                        src: illustrationUrl,
+                        alt: ending.illustration?.alt ?? ending.title,
+                      })}
+                      title="点击放大"
                     >
-                      ???
+                      <img
+                        src={illustrationUrl}
+                        alt={ending.illustration?.alt ?? ending.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                      <div
+                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        style={{ background: 'rgba(0,0,0,0.3)' }}
+                      >
+                        <span style={{ color: '#f4ecd8', fontSize: '24px' }}>⊕</span>
+                      </div>
                     </div>
                   )}
-                  <div className="text-xs" style={{ color: '#8b6f47', opacity: 0.7 }}>
-                    第{['一','二','三','四','五','六','七','八','九','十'][ending.chapter - 1] || ending.chapter}章 · {ending.chapterTitle}
+
+                  {ending.unlocked ? (
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: '#c4a87c', fontStyle: 'italic' }}
+                    >
+                      {ending.text.length > 120 ? ending.text.slice(0, 120) + '……' : ending.text}
+                    </p>
+                  ) : (
+                    <p
+                      className="text-sm leading-relaxed italic"
+                      style={{ color: '#5a4020' }}
+                    >
+                      命运的另一条路尚未被探索。或许在某个岔路口，你的选择会让你抵达此处。
+                    </p>
+                  )}
+
+                  {/* 装饰元素 */}
+                  <div className="mt-4 flex justify-end">
+                    <span
+                      style={{
+                        color: ending.unlocked ? '#b49450' : '#4a3020',
+                        fontSize: '12px',
+                        opacity: ending.unlocked ? 0.8 : 0.4,
+                      }}
+                    >
+                      {ending.unlocked ? '✦ 已抵达' : '◇ 未抵达'}
+                    </span>
                   </div>
                 </div>
-
-                {ending.unlocked ? (
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: '#c4a87c', fontStyle: 'italic' }}
-                  >
-                    {ending.text.length > 120 ? ending.text.slice(0, 120) + '……' : ending.text}
-                  </p>
-                ) : (
-                  <p
-                    className="text-sm leading-relaxed italic"
-                    style={{ color: '#5a4020' }}
-                  >
-                    命运的另一条路尚未被探索。或许在某个岔路口，你的选择会让你抵达此处。
-                  </p>
-                )}
-
-                {/* 装饰元素 */}
-                <div className="mt-4 flex justify-end">
-                  <span
-                    style={{
-                      color: ending.unlocked ? '#b49450' : '#4a3020',
-                      fontSize: '12px',
-                      opacity: ending.unlocked ? 0.8 : 0.4,
-                    }}
-                  >
-                    {ending.unlocked ? '✦ 已抵达' : '◇ 未抵达'}
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* 图片放大查看 */}
+      {zoomedImg && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-8"
+          style={{ background: 'rgba(0,0,0,0.92)' }}
+          onClick={() => setZoomedImg(null)}
+        >
+          <button
+            className="absolute top-4 right-4 text-2xl cursor-pointer z-10"
+            style={{ color: '#c4a87c' }}
+            onClick={() => setZoomedImg(null)}
+          >
+            ✕
+          </button>
+          <img
+            src={zoomedImg.src}
+            alt={zoomedImg.alt}
+            className="max-w-full max-h-full object-contain"
+            style={{ borderRadius: '2px' }}
+            onClick={e => e.stopPropagation()}
+          />
+          <p
+            className="absolute bottom-6 text-center text-sm"
+            style={{ color: '#8b6f47' }}
+          >
+            {zoomedImg.alt}
+          </p>
+        </div>
+      )}
 
       <div
         className="px-6 py-2 text-center"
