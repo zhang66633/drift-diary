@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 interface OptimizedImageProps {
   src: string;
@@ -40,25 +40,14 @@ export function OptimizedImage({
   style,
   objectFit = 'cover',
 }: OptimizedImageProps) {
-  const [loaded, setLoaded] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const finalLoading = priority ? 'eager' : loading;
 
   useEffect(() => {
-    setLoaded(false);
-    if (priority) {
-      const targetSrc = webpSrc || src;
-      if (preloadCache.has(targetSrc)) {
-        setLoaded(true);
-      }
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      onLoad?.();
     }
-  }, [src, webpSrc, priority]);
-
-  const handleLoad = () => {
-    setLoaded(true);
-    preloadCache.add(webpSrc || src);
-    onLoad?.();
-  };
+  }, [src, webpSrc, onLoad]);
 
   const wrapperStyle: React.CSSProperties = {
     position: 'relative',
@@ -73,38 +62,50 @@ export function OptimizedImage({
     height: '100%',
     objectFit,
     filter: 'blur(20px) saturate(1.2)',
-    opacity: loaded ? 0 : 1,
-    transition: 'opacity 0.6s ease-out',
     transform: 'scale(1.1)',
     pointerEvents: 'none',
+    opacity: 1,
+    transition: 'opacity 0.5s ease-out',
   };
 
-  const imgStyle: React.CSSProperties = {
-    width: '100%',
-    height: '100%',
-    objectFit,
-    opacity: loaded ? 1 : 0,
-    transition: 'opacity 0.6s ease-out',
+  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    const parent = img.parentElement;
+    const lqip = parent?.previousElementSibling as HTMLElement | null;
+    if (lqip?.classList.contains('opt-lqip')) {
+      lqip.style.opacity = '0';
+    }
+    preloadCache.add(webpSrc || src);
+    onLoad?.();
   };
 
   return (
-    <div ref={containerRef} style={wrapperStyle} className={className}>
+    <div style={wrapperStyle} className={className}>
       {lqipSrc && (
         <img
           src={lqipSrc}
           alt=""
           aria-hidden="true"
+          className="opt-lqip"
           style={lqipStyle}
+          loading="eager"
+          decoding="async"
         />
       )}
       <picture>
         {webpSrc && <source srcSet={webpSrc} type="image/webp" />}
         <img
+          ref={imgRef}
           src={src}
           alt={alt}
           loading={finalLoading}
           onLoad={handleLoad}
-          style={imgStyle}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit,
+            opacity: 1,
+          }}
           decoding="async"
         />
       </picture>

@@ -237,7 +237,9 @@ export const useGameStore = create<GameStore>((set, get) => {
         }
       }
       if (nextBgmKeys.size > 0) {
-        audio.preloadBgmBatch([...nextBgmKeys]);
+        setTimeout(() => {
+          audio.preloadBgmBatch([...nextBgmKeys]);
+        }, 2000);
       }
     }
 

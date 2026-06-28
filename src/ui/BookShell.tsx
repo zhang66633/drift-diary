@@ -128,12 +128,7 @@ export function BookShell() {
 
   useEffect(() => {
     setImgLoaded(false);
-    if (!imgPaths) return;
-
-    preloadIllustration(illustration?.src).then(() => {
-      setImgLoaded(true);
-    });
-  }, [imgPaths, illustration?.src]);
+  }, [imgPaths]);
 
   useEffect(() => {
     if (!currentScene?.choices || !flagMgr || !stateMgr || !providence) return;
@@ -163,7 +158,7 @@ export function BookShell() {
       }
     };
 
-    const timer = setTimeout(preloadNext, 300);
+    const timer = setTimeout(preloadNext, 1500);
     return () => clearTimeout(timer);
   }, [currentScene?.id, sceneMgr, flagMgr, stateMgr, providence, currentScene?.choices]);
 
