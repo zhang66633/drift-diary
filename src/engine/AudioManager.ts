@@ -33,7 +33,7 @@ export class AudioManager {
   } | null = null;
   private masterVolume = 0.8;  // 0-1
   private sfxVolume = 0.8;     // 0-1
-  private bgmVolume = 0.5;     // 0-1
+  private bgmVolume = 0.7;     // 0-1
   private initialized = false;
 
   /** 用户首次交互后调用，解锁 AudioContext */
@@ -41,6 +41,12 @@ export class AudioManager {
     if (this.initialized) return;
     try {
       this.ctx = new AudioContext();
+      // 页面切后台再回来时自动恢复 AudioContext
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && this.ctx?.state === 'suspended') {
+          this.ctx.resume().catch(() => {});
+        }
+      });
       // 主音量 → destination
       this.masterGain = this.ctx.createGain();
       this.masterGain.gain.value = this.masterVolume;
