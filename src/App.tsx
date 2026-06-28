@@ -1,9 +1,11 @@
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useGameStore } from './store/gameStore';
 import { MainMenu } from './ui/MainMenu';
 import { BookShell } from './ui/BookShell';
 import { ErrorBoundary } from './ui/ErrorBoundary';
 import { AudioHint } from './ui/AudioHint';
+import { LoadingScreen } from './ui/LoadingScreen';
+import { preloadCriticalResources } from './utils/preload';
 
 const SaveMenu = lazy(() => import('./ui/Menus').then(m => ({ default: m.SaveMenu })));
 
@@ -20,6 +22,9 @@ export default function App() {
   const init = useGameStore(s => s.init);
   const isDebugMode = useGameStore(s => s.isDebugMode);
 
+  const [resourcesReady, setResourcesReady] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
+
   useEffect(() => {
     init();
     if (typeof window !== 'undefined' && isDebugMode) {
@@ -27,12 +32,28 @@ export default function App() {
     }
   }, [init, isDebugMode]);
 
-  if (!initialized) {
-    return (
-      <div className="book-shell flex items-center justify-center">
-        <p style={{ color: '#7a5a30', textIndent: 0 }}>手稿正在展开……</p>
-      </div>
-    );
+  useEffect(() => {
+    if (!initialized) return;
+
+    let cancelled = false;
+
+    preloadCriticalResources({
+      onProgress: (p) => {
+        if (!cancelled) setLoadProgress(p);
+      },
+    }).then(() => {
+      if (!cancelled) {
+        setTimeout(() => setResourcesReady(true), 200);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initialized]);
+
+  if (!initialized || !resourcesReady) {
+    return <LoadingScreen progress={loadProgress} />;
   }
 
   return (
