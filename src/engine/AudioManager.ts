@@ -1,10 +1,15 @@
 /**
  * AudioManager — BGM 用 HTML5 Audio 流式播放，SFX 用 Web Audio API。
  *
- * - 背景音乐（bgm）：HTML5 Audio 流式，即时播放无需完整下载
+ * - 背景音乐（bgm）：HTML5 Audio 流式，渐进式加载（低码率→高码率）
  * - 环境音（ambient）：Web Audio 无缝循环，场景切换时交叉渐变
  * - UI 音效（sfx）：Web Audio 一次性播放，不循环
  * - 主音量 + 音效音量独立控制
+ *
+ * 渐进式 BGM 加载策略：
+ * 1. 先播放低码率版本（32kbps，体积约原始 25%），快速出声
+ * 2. 后台预加载高码率版本（原始 128kbps 或压缩版 64kbps）
+ * 3. 高码率版本就绪后，无缝切换到高清音质
  */
 
 type AmbientKey = string;
@@ -13,6 +18,13 @@ type BgmKey = string;
 
 interface AudioBufferCache {
   [key: string]: AudioBuffer;
+}
+
+interface BgmPreloadState {
+  lowReady: boolean;
+  highReady: boolean;
+  lowUrl: string;
+  highUrl: string;
 }
 
 export class AudioManager {
@@ -27,16 +39,26 @@ export class AudioManager {
     gain: GainNode;
   } | null = null;
 
-  // ── BGM：HTML5 Audio 流式播放 ──
+  // ── BGM：HTML5 Audio 渐进式流式播放 ──
   private bgmAudio: HTMLAudioElement | null = null;
   private bgmMediaSource: MediaElementAudioSourceNode | null = null;
   private bgmSourceGain: GainNode | null = null;
   private currentBgmKey: BgmKey | null = null;
+  private bgmPreloadCache = new Map<BgmKey, BgmPreloadState>();
 
   private masterVolume = 0.8;  // 0-1
   private sfxVolume = 0.8;     // 0-1
   private bgmVolume = 0.7;     // 0-1
   private initialized = false;
+
+  /** 获取 BGM 的低码率和原始 URL */
+  private getBgmUrls(key: BgmKey): { lowUrl: string; highUrl: string } {
+    const base = import.meta.env.BASE_URL + 'audio/bgm';
+    return {
+      lowUrl: `${base}/low/${key}.mp3`,
+      highUrl: `${base}/${key}.mp3`,
+    };
+  }
 
   /** 用户首次交互后调用，解锁 AudioContext */
   async init(): Promise<void> {
@@ -147,24 +169,38 @@ export class AudioManager {
     }
   }
 
-  // ── 背景音乐（HTML5 Audio 流式，即时播放） ──
+  // ── 背景音乐（HTML5 Audio 渐进式加载） ──
 
-  /** 切换 BGM — 首次调用须在用户手势内，确保移动端不拦截 */
+  /**
+   * 切换 BGM — 渐进式加载：
+   * 1. 先用低码率版本快速开始播放
+   * 2. 高码率版本就绪后无缝升级
+   */
   playBgm(key: BgmKey): void {
     const ctx = this.ensureContext();
     if (!ctx || !this.bgmAudio || !this.bgmSourceGain) return;
 
     if (this.currentBgmKey === key) return;
 
-    const url = import.meta.env.BASE_URL + `audio/bgm/${key}.mp3`;
+    const { lowUrl, highUrl } = this.getBgmUrls(key);
+    const cachedState = this.bgmPreloadCache.get(key);
+    const highReady = cachedState?.highReady ?? false;
 
     const doPlay = () => {
-      this.bgmAudio!.src = url;
-      this.bgmAudio!.load();
-      // play() 必须在同步调用栈内，移动端才放行
-      this.bgmAudio!.play().catch(() => {});
-      this.bgmSourceGain!.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.5);
+      if (!this.bgmAudio || !this.bgmSourceGain) return;
+
+      // 优先播放高码率版本（如果已预加载完成），否则先播放低码率
+      const srcUrl = highReady ? highUrl : lowUrl;
+      this.bgmAudio.src = srcUrl;
+      this.bgmAudio.load();
+      this.bgmAudio.play().catch(() => {});
+      this.bgmSourceGain.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.5);
       this.currentBgmKey = key;
+
+      // 如果播放的是低码率版本，后台加载高码率版本
+      if (!highReady) {
+        this.upgradeToHighQuality(key, highUrl);
+      }
     };
 
     if (this.currentBgmKey) {
@@ -176,15 +212,68 @@ export class AudioManager {
     }
   }
 
-  /** 后台预加载 BGM 文件到浏览器缓存，切换时即刻播放 */
+  /** 后台加载高码率 BGM，就绪后无缝替换低码率版本 */
+  private upgradeToHighQuality(key: BgmKey, highUrl: string): void {
+    const audio = new Audio();
+    audio.preload = 'auto';
+    audio.src = highUrl;
+
+    const canPlay = () => {
+      // 仅在当前播放的是同一首 BGM 时才升级
+      if (this.currentBgmKey === key && this.bgmAudio) {
+        const currentTime = this.bgmAudio.currentTime;
+        // 在当前播放位置无缝切换到高码率版本
+        this.bgmAudio.src = highUrl;
+        this.bgmAudio.currentTime = currentTime;
+        this.bgmAudio.play().catch(() => {});
+
+        // 更新预加载缓存
+        const state = this.bgmPreloadCache.get(key);
+        if (state) state.highReady = true;
+      }
+      audio.removeEventListener('canplaythrough', canPlay);
+    };
+
+    audio.addEventListener('canplaythrough', canPlay);
+    audio.load();
+  }
+
+  /**
+   * 后台预加载 BGM（低码率 + 高码率双版本）
+   * 首次预加载时同时开始下载两个版本
+   */
   preloadBgm(key: BgmKey): void {
-    if (!this.bgmAudio) return;
-    const url = import.meta.env.BASE_URL + `audio/bgm/${key}.mp3`;
-    // 创建临时 Audio 元素触发浏览器缓存预热，不播放
-    const tmp = new Audio();
-    tmp.preload = 'auto';
-    tmp.src = url;
-    tmp.load();
+    if (this.bgmPreloadCache.has(key)) return;
+
+    const { lowUrl, highUrl } = this.getBgmUrls(key);
+    const state: BgmPreloadState = { lowReady: false, highReady: false, lowUrl, highUrl };
+    this.bgmPreloadCache.set(key, state);
+
+    // 预加载低码率版本（极小，秒级完成）
+    const lowAudio = new Audio();
+    lowAudio.preload = 'auto';
+    lowAudio.src = lowUrl;
+    lowAudio.addEventListener('canplaythrough', () => { state.lowReady = true; }, { once: true });
+    lowAudio.addEventListener('error', () => { /* 静默 */ }, { once: true });
+    lowAudio.load();
+
+    // 预加载高码率版本（较大，后台下载）
+    const highAudio = new Audio();
+    highAudio.preload = 'auto';
+    highAudio.src = highUrl;
+    highAudio.addEventListener('canplaythrough', () => { state.highReady = true; }, { once: true });
+    highAudio.addEventListener('error', () => { /* 静默 */ }, { once: true });
+    highAudio.load();
+  }
+
+  /**
+   * 预加载多首 BGM（用于预判下一步可能的场景）
+   * 同时启动所有指定 BGM 的预加载
+   */
+  preloadBgmBatch(keys: BgmKey[]): void {
+    for (const key of keys) {
+      this.preloadBgm(key);
+    }
   }
 
   stopBgm(): void {
@@ -282,6 +371,7 @@ export class AudioManager {
       this.ctx = null;
     }
     this.bufferCache = {};
+    this.bgmPreloadCache.clear();
     this.initialized = false;
   }
 }

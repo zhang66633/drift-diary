@@ -223,6 +223,24 @@ export const useGameStore = create<GameStore>((set, get) => {
       audio.playBgm('main_theme');
     }
 
+    // 智能预加载：预加载所有可选分支下一场景的 BGM
+    if (scene.choices) {
+      const nextBgmKeys = new Set<string>();
+      for (const choice of scene.choices) {
+        if (choice.nextScene) {
+          try {
+            const nextScene = sceneMgr.getScene(choice.nextScene);
+            if (nextScene?.audio?.bgm) {
+              nextBgmKeys.add(nextScene.audio.bgm);
+            }
+          } catch { /* 场景尚未加载，跳过 */ }
+        }
+      }
+      if (nextBgmKeys.size > 0) {
+        audio.preloadBgmBatch([...nextBgmKeys]);
+      }
+    }
+
     // 预加载下一章（场景接近章节末尾时后台加载下一章JSON + 结局资源）
     const chSceneCount = sceneMgr.getChapterSceneCount(scene.chapter);
     const chSceneIndex = sceneMgr.getCurrentChapter()?.scenes.findIndex(s => s.id === scene.id) ?? -1;
