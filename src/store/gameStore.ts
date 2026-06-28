@@ -495,6 +495,7 @@ export const useGameStore = create<GameStore>((set, get) => {
         showMainMenu: true,
       });
       snapshots = [];
+      audio.playBgm('main_theme');
     },
 
     async dismissDeath() {

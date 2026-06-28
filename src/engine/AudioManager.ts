@@ -152,15 +152,15 @@ export class AudioManager {
 
     if (this.currentBgm) {
       const old = this.currentBgm;
-      old.gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.5);
+      old.gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.8);
       setTimeout(() => {
         try { old.source.stop(); } catch { /* already stopped */ }
-      }, 1700);
+      }, 1000);
     }
 
     source.connect(gain);
     source.start(0);
-    gain.gain.linearRampToValueAtTime(1, ctx.currentTime + 1.5);
+    gain.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.8);
 
     this.currentBgm = { key, source, gain };
   }
@@ -204,10 +204,16 @@ export class AudioManager {
 
     const source = ctx.createBufferSource();
     source.buffer = buffer;
-    source.connect(this.sfxGain);
+    // 为短促音效增加音量提升，确保翻页等细微声音可听见
+    const boost = ctx.createGain();
+    boost.gain.value = 1.8;
+    boost.connect(this.sfxGain);
+    source.connect(boost);
     source.start(0);
-    // one-shot: stop after buffer duration
-    source.onended = () => source.disconnect();
+    source.onended = () => {
+      boost.disconnect();
+      source.disconnect();
+    };
   }
 
   // ── 音量控制 ──

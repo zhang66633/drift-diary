@@ -122,6 +122,7 @@ export const SceneSchema = z.object({
   audio: z.object({
     ambient: z.string().optional(),
     sfx: z.string().optional(),
+    bgm: z.string().optional(),
   }).optional(),
   choices: z.array(ChoiceSchema).optional(),
   multiChoice: MultiChoiceSchema.optional(),
