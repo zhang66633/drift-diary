@@ -149,7 +149,8 @@ export class AudioManager {
 
   // ── 背景音乐（HTML5 Audio 流式，即时播放） ──
 
-  async playBgm(key: BgmKey): Promise<void> {
+  /** 切换 BGM — 首次调用须在用户手势内，确保移动端不拦截 */
+  playBgm(key: BgmKey): void {
     const ctx = this.ensureContext();
     if (!ctx || !this.bgmAudio || !this.bgmSourceGain) return;
 
@@ -157,18 +158,22 @@ export class AudioManager {
 
     const url = import.meta.env.BASE_URL + `audio/bgm/${key}.mp3`;
 
-    if (this.currentBgmKey) {
-      // 淡出当前 BGM
-      this.bgmSourceGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
-      await new Promise(r => setTimeout(r, 600));
-    }
+    const doPlay = () => {
+      this.bgmAudio!.src = url;
+      this.bgmAudio!.load();
+      // play() 必须在同步调用栈内，移动端才放行
+      this.bgmAudio!.play().catch(() => {});
+      this.bgmSourceGain!.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.5);
+      this.currentBgmKey = key;
+    };
 
-    // 切换音源并播放（HTML5 Audio 流式，即刻开始）
-    this.bgmAudio.src = url;
-    this.bgmAudio.load();
-    this.bgmAudio.play().catch(() => {});
-    this.bgmSourceGain.gain.linearRampToValueAtTime(1, ctx.currentTime + 0.5);
-    this.currentBgmKey = key;
+    if (this.currentBgmKey) {
+      // 淡出当前 BGM，稍后切入新曲
+      this.bgmSourceGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
+      setTimeout(doPlay, 600);
+    } else {
+      doPlay();
+    }
   }
 
   /** 后台预加载 BGM 文件到浏览器缓存，切换时即刻播放 */

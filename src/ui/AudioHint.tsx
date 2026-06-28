@@ -1,35 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 /** 首次访问时显示的诗意音频激活提示——点击任意位置即消失并响起 BGM */
 export function AudioHint() {
   const [visible, setVisible] = useState(() => {
-    // 同一会话只显示一次
     if (typeof window !== 'undefined') {
       return !sessionStorage.getItem('audio_hint_dismissed');
     }
     return false;
   });
+  const [fading, setFading] = useState(false);
+
+  const dismiss = useCallback((e?: React.MouseEvent | React.PointerEvent) => {
+    if (fading) return;
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setFading(true);
+    try { sessionStorage.setItem('audio_hint_dismissed', '1'); } catch {}
+    setTimeout(() => setVisible(false), 400);
+  }, [fading]);
 
   useEffect(() => {
     if (!visible) return;
-    const dismiss = () => {
-      setVisible(false);
-      try { sessionStorage.setItem('audio_hint_dismissed', '1'); } catch {}
+    const handlePointer = (e: PointerEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      dismiss();
     };
-    window.addEventListener('pointerdown', dismiss);
-    return () => window.removeEventListener('pointerdown', dismiss);
-  }, [visible]);
+    window.addEventListener('pointerdown', handlePointer);
+    return () => window.removeEventListener('pointerdown', handlePointer);
+  }, [visible, dismiss]);
 
   if (!visible) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none"
+      className="fixed inset-0 z-[100] flex items-center justify-center"
       style={{
         background: 'radial-gradient(ellipse at center, rgba(26,16,8,0.7) 0%, rgba(13,10,5,0.92) 100%)',
         backdropFilter: 'blur(4px)',
-        transition: 'opacity 0.5s ease-out',
+        opacity: fading ? 0 : 1,
+        transition: 'opacity 0.4s ease-out',
       }}
+      onPointerDown={dismiss}
     >
       <div className="text-center px-8">
         <div className="mb-8" style={{ opacity: 0.6 }}>
