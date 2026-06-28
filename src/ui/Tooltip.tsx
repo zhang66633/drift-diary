@@ -1,4 +1,4 @@
-import { useState, useRef, useId, type ReactNode, Children, cloneElement, isValidElement } from 'react';
+import { useState, useRef, useId, useEffect, type ReactNode, Children, cloneElement, isValidElement } from 'react';
 
 interface TooltipProps {
   text: string;
@@ -9,6 +9,7 @@ interface TooltipProps {
 export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLSpanElement>(null);
   const tooltipId = useId();
 
   const show = () => {
@@ -21,10 +22,20 @@ export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
     setVisible(false);
   };
 
-  const toggle = () => {
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    // 点击立即显示，不等延迟
     setVisible(v => !v);
   };
+
+  // 点击页面其他地方关闭 tooltip
+  useEffect(() => {
+    if (!visible) return;
+    const close = () => setVisible(false);
+    document.addEventListener('pointerdown', close);
+    return () => document.removeEventListener('pointerdown', close);
+  }, [visible]);
 
   const child = Children.only(children);
   const trigger = isValidElement(child)
@@ -35,12 +46,13 @@ export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
 
   return (
     <span
+      ref={containerRef}
       style={{ position: 'relative', display: 'inline-flex', textIndent: 0 }}
       onMouseEnter={show}
       onMouseLeave={hide}
       onFocus={show}
       onBlur={hide}
-      onClick={toggle}
+      onClick={handleClick}
     >
       {trigger}
       {visible && (
@@ -61,13 +73,14 @@ export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
             lineHeight: 1.4,
             whiteSpace: 'nowrap',
             borderRadius: '2px',
-            pointerEvents: 'none',
+            pointerEvents: 'auto',
             zIndex: 50,
             fontFamily: 'inherit',
             letterSpacing: '0.05em',
             boxShadow: '0 2px 8px rgba(42, 31, 20, 0.3)',
             animation: 'tooltipFadeIn 0.15s ease-out',
           }}
+          onClick={e => e.stopPropagation()}
         >
           {text}
         </span>
