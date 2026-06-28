@@ -21,6 +21,11 @@ export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
     setVisible(false);
   };
 
+  const toggle = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setVisible(v => !v);
+  };
+
   const child = Children.only(children);
   const trigger = isValidElement(child)
     ? cloneElement(child as React.ReactElement, {
@@ -35,6 +40,7 @@ export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
       onMouseLeave={hide}
       onFocus={show}
       onBlur={hide}
+      onClick={toggle}
     >
       {trigger}
       {visible && (

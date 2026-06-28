@@ -15,6 +15,13 @@ import { validateChapter } from '../engine/schema';
 import { useSettings } from './settingsStore';
 import { getResourceMap } from '../utils/helpers';
 
+/** 保留专属 BGM 的特殊场景——其它场景统一使用 main_theme */
+const KEEP_BGM_SCENES = new Set([
+  'ch2_3_被俘',    // 海盗战斗
+  'ch2_4_为奴',    // 选择拿多少食物
+  'ch2_15_远航',   // 最后一个遇险
+]);
+
 interface GameStore {
   // Internal managers (exposed for UI integration, prefixed with _)
   _stateMgr: StateManager;
@@ -191,10 +198,13 @@ export const useGameStore = create<GameStore>((set, get) => {
       audio.playSfx(scene.audio.sfx);
     }
 
-    // 背景音乐切换
+    // 背景音乐切换：大多数场景统一主旋律，特殊场景保留原BGM
     const bgmKey = scene.audio?.bgm;
-    if (bgmKey) {
-      audio.playBgm(bgmKey);
+    if (scene.ending || KEEP_BGM_SCENES.has(scene.id)) {
+      // 结局 / 海盗战斗 / 遇险 / 食物选择 → 使用场景专属BGM
+      if (bgmKey) audio.playBgm(bgmKey);
+    } else {
+      audio.playBgm('main_theme');
     }
 
     // 预加载下一章（场景接近章节末尾时后台加载下一章JSON）
