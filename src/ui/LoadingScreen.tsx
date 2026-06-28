@@ -4,6 +4,8 @@ import { isLowPerf } from '../utils/perf';
 interface LoadingScreenProps {
   progress: number;
   hint?: string;
+  onSkip?: () => void;
+  showSkip?: boolean;
 }
 
 const hints = [
@@ -12,11 +14,13 @@ const hints = [
   '羊皮卷正在展开……',
   '鹦鹉在整理羽毛……',
   '潮水正在涨落……',
+  '椰树在风中摇曳……',
 ];
 
-export function LoadingScreen({ progress, hint }: LoadingScreenProps) {
+export function LoadingScreen({ progress, hint, onSkip, showSkip = true }: LoadingScreenProps) {
   const [hintIndex, setHintIndex] = useState(0);
   const lowPerf = isLowPerf();
+  const canSkip = showSkip && progress >= 15 && onSkip;
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -111,10 +115,31 @@ export function LoadingScreen({ progress, hint }: LoadingScreenProps) {
             marginTop: '0.5rem',
             textIndent: 0,
             opacity: 0.6,
+            marginBottom: canSkip ? '1.5rem' : 0,
           }}
         >
           {Math.round(progress)}%
         </div>
+
+        {canSkip && (
+          <button
+            onClick={onSkip}
+            style={{
+              background: 'transparent',
+              border: '1px solid rgba(122, 90, 48, 0.4)',
+              color: '#7a5a30',
+              padding: '0.5rem 1.5rem',
+              fontSize: '0.8125rem',
+              letterSpacing: '0.1em',
+              cursor: 'pointer',
+              fontFamily: 'inherit',
+              borderRadius: '2px',
+              transition: lowPerf ? 'none' : 'all 0.2s ease',
+            }}
+          >
+            跳过，直接进入
+          </button>
+        )}
       </div>
     </div>
   );

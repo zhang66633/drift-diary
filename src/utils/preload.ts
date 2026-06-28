@@ -10,8 +10,35 @@ export interface PreloadResource {
 
 export interface PreloadOptions {
   onProgress?: (percent: number) => void;
-  lowPerfMode?: boolean;
+  mode?: 'critical' | 'full';
 }
+
+const ALL_ILLUSTRATIONS = [
+  'ch1_1_父训',
+  'ch1_5_风暴',
+  'ch1_8_岸上',
+  'ch1_9_归途',
+  'ch2_3_宁死不屈',
+  'ch2_7_迷失',
+  'ch2_7_饿死',
+  'ch2_8_猎狮',
+  'ch2_9_怯懦',
+  'ch2_11_葡船',
+  'ch2_14_安分',
+  'ch2_16_荒岛',
+];
+
+const ALL_BGM = [
+  'main_theme',
+  'dream',
+  'ending_hope',
+  'ending_sad',
+  'harbor',
+  'island',
+  'ship',
+  'storm',
+  'tense',
+];
 
 async function loadImage(url: string): Promise<void> {
   return new Promise((resolve) => {
@@ -45,51 +72,41 @@ async function loadFont(fontFamily: string): Promise<void> {
 export async function preloadCriticalResources(
   options: PreloadOptions = {}
 ): Promise<void> {
-  const { onProgress, lowPerfMode = isLowPerf() } = options;
+  const { onProgress, mode = isLowPerf() ? 'critical' : 'full' } = options;
 
   const baseUrl = import.meta.env.BASE_URL;
-
   const resources: PreloadResource[] = [];
 
-  // 首屏关键插图（第一章第一个场景）
-  const firstSceneImg = 'illustrations/ch1_1_父训.png';
-  const imgPaths = getIllustrationPaths(firstSceneImg, baseUrl);
-  resources.push({
-    type: 'image',
-    key: 'first-scene-webp',
-    url: imgPaths.webp,
-    weight: 20,
-  });
-
-  // 低性能模式下，只预加载最关键的首图
-  if (!lowPerfMode) {
-    resources.push({
-      type: 'image',
-      key: 'first-scene-lqip',
-      url: imgPaths.lqip,
-      weight: 2,
-    });
-
-    resources.push({
-      type: 'audio',
-      key: 'main-theme',
-      url: `${baseUrl}audio/bgm/main_theme.mp3`,
-      weight: 15,
-    });
-
+  if (mode === 'full') {
+    for (const name of ALL_ILLUSTRATIONS) {
+      const paths = getIllustrationPaths(`illustrations/${name}.png`, baseUrl);
+      resources.push({
+        type: 'image',
+        key: `img-${name}`,
+        url: paths.webp,
+        weight: 3,
+      });
+    }
+    for (const name of ALL_BGM) {
+      resources.push({
+        type: 'audio',
+        key: `bgm-${name}`,
+        url: `${baseUrl}audio/bgm/${name}.mp3`,
+        weight: 5,
+      });
+    }
     resources.push({
       type: 'font',
       key: 'noto-serif-sc',
-      weight: 5,
+      weight: 3,
     });
-
-    // 预加载第二章插图（如果用户快速推进）
-    const ch2Img = 'illustrations/ch2_11_葡船.png';
-    const ch2Paths = getIllustrationPaths(ch2Img, baseUrl);
+  } else {
+    const firstSceneImg = 'illustrations/ch1_1_父训.png';
+    const imgPaths = getIllustrationPaths(firstSceneImg, baseUrl);
     resources.push({
       type: 'image',
-      key: 'ch2-first-webp',
-      url: ch2Paths.webp,
+      key: 'first-scene-webp',
+      url: imgPaths.webp,
       weight: 10,
     });
   }
@@ -103,7 +120,6 @@ export async function preloadCriticalResources(
     onProgress?.(percent);
   };
 
-  // 按顺序加载，避免并发过高
   for (const resource of resources) {
     const weight = resource.weight ?? 1;
 
@@ -127,4 +143,8 @@ export async function preloadCriticalResources(
   }
 
   onProgress?.(100);
+}
+
+export function getPreloadMode(): 'critical' | 'full' {
+  return isLowPerf() ? 'critical' : 'full';
 }

@@ -1,11 +1,11 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState, lazy, Suspense, useCallback } from 'react';
 import { useGameStore } from './store/gameStore';
 import { MainMenu } from './ui/MainMenu';
 import { BookShell } from './ui/BookShell';
 import { ErrorBoundary } from './ui/ErrorBoundary';
 import { AudioHint } from './ui/AudioHint';
 import { LoadingScreen } from './ui/LoadingScreen';
-import { preloadCriticalResources } from './utils/preload';
+import { preloadCriticalResources, getPreloadMode } from './utils/preload';
 
 const SaveMenu = lazy(() => import('./ui/Menus').then(m => ({ default: m.SaveMenu })));
 
@@ -24,6 +24,7 @@ export default function App() {
 
   const [resourcesReady, setResourcesReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
+  const [skipped, setSkipped] = useState(false);
 
   useEffect(() => {
     init();
@@ -32,12 +33,18 @@ export default function App() {
     }
   }, [init, isDebugMode]);
 
+  const handleSkip = useCallback(() => {
+    setSkipped(true);
+    setResourcesReady(true);
+  }, []);
+
   useEffect(() => {
-    if (!initialized) return;
+    if (!initialized || skipped) return;
 
     let cancelled = false;
 
     preloadCriticalResources({
+      mode: getPreloadMode(),
       onProgress: (p) => {
         if (!cancelled) setLoadProgress(p);
       },
@@ -50,10 +57,16 @@ export default function App() {
     return () => {
       cancelled = true;
     };
-  }, [initialized]);
+  }, [initialized, skipped]);
 
   if (!initialized || !resourcesReady) {
-    return <LoadingScreen progress={loadProgress} />;
+    return (
+      <LoadingScreen
+        progress={loadProgress}
+        onSkip={handleSkip}
+        showSkip={getPreloadMode() === 'full'}
+      />
+    );
   }
 
   return (
