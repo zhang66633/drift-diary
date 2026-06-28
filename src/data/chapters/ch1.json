@@ -353,7 +353,7 @@
             {
               "type": "state",
               "target": "天意",
-              "value": 10,
+              "value": 5,
               "operation": "add"
             },
             {
@@ -504,7 +504,7 @@
             {
               "type": "state",
               "target": "天意",
-              "value": 10,
+              "value": 5,
               "operation": "add"
             },
             {
@@ -624,7 +624,7 @@
             {
               "type": "state",
               "target": "天意",
-              "value": 10,
+              "value": 5,
               "operation": "add"
             },
             {
