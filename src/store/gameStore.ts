@@ -176,6 +176,22 @@ export const useGameStore = create<GameStore>((set, get) => {
     );
   }
 
+  /** 预加载章节内所有结局的 BGM 和插图——分支结局随时触发，提前缓存 */
+  function preloadChapterEndingAssets(chapterNum: number): void {
+    const chapter = sceneMgr.getLoadedChapters().find(c => c.chapter === chapterNum);
+    if (!chapter) return;
+    const endingScenes = chapter.scenes.filter(s => !!s.ending);
+    for (const scene of endingScenes) {
+      const bgm = scene.audio?.bgm;
+      if (bgm) audio.preloadBgm(bgm);
+      const img = scene.illustration?.src;
+      if (img) {
+        const imgEl = new Image();
+        imgEl.src = import.meta.env.BASE_URL + img.replace(/^\//, '');
+      }
+    }
+  }
+
   async function enterScene(sceneId: string): Promise<void> {
     await sceneMgr.ensureSceneLoaded(sceneId);
     const scene = sceneMgr.goToScene(sceneId);
@@ -374,6 +390,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       const ch1 = await sceneMgr.loadChapter(1);
       const validCh1 = validateChapter(ch1);
       sceneMgr.loadChapterSync(validCh1);
+      preloadChapterEndingAssets(1);
       const firstScene = ch1.scenes[0];
       if (!firstScene) throw new Error('Chapter 1 has no scenes');
       sceneMgr.setInitialScene(firstScene.id);
@@ -584,6 +601,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       const ch = await sceneMgr.loadChapter(chapterNum);
       const validCh = validateChapter(ch);
       sceneMgr.loadChapterSync(validCh);
+      preloadChapterEndingAssets(chapterNum);
       sceneMgr.setInitialScene(loaded.currentSceneId);
 
       set({ showMainMenu: false });
