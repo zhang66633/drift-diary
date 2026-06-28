@@ -1864,9 +1864,9 @@
             "type": "state",
             "target": "士气",
             "operator": "gte",
-            "value": 50
+            "value": 60
           },
-          "requireFailText": "士气不足",
+          "requireFailText": "士气不足（需≥60）",
           "consequences": [
             {
               "type": "state",
