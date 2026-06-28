@@ -514,11 +514,6 @@
               "operation": "add"
             },
             {
-              "type": "providence",
-              "value": 5,
-              "operation": "add"
-            },
-            {
               "type": "flag",
               "target": "砍桅行动",
               "value": "祈祷"
@@ -637,11 +632,6 @@
               "type": "state",
               "target": "健康",
               "value": -10,
-              "operation": "add"
-            },
-            {
-              "type": "providence",
-              "value": 10,
               "operation": "add"
             },
             {
