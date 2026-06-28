@@ -3,6 +3,7 @@ import { useGameStore } from './store/gameStore';
 import { MainMenu } from './ui/MainMenu';
 import { BookShell } from './ui/BookShell';
 import { ErrorBoundary } from './ui/ErrorBoundary';
+import { AudioHint } from './ui/AudioHint';
 
 const SaveMenu = lazy(() => import('./ui/Menus').then(m => ({ default: m.SaveMenu })));
 
@@ -40,6 +41,7 @@ export default function App() {
       <Suspense fallback={null}>
         {showLoadMenu && <SaveMenu mode="load" />}
       </Suspense>
+      <AudioHint />
     </ErrorBoundary>
   );
 }
