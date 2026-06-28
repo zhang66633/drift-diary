@@ -12,10 +12,7 @@ export function AudioHint() {
 
   const dismiss = useCallback((e?: React.MouseEvent | React.PointerEvent) => {
     if (fading) return;
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    if (e) e.preventDefault();
     setFading(true);
     try { sessionStorage.setItem('audio_hint_dismissed', '1'); } catch {}
     setTimeout(() => setVisible(false), 400);
@@ -25,7 +22,6 @@ export function AudioHint() {
     if (!visible) return;
     const handlePointer = (e: PointerEvent) => {
       e.preventDefault();
-      e.stopPropagation();
       dismiss();
     };
     window.addEventListener('pointerdown', handlePointer);
