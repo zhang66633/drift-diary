@@ -5,6 +5,8 @@ import { TypedText } from './TypedText';
 import { ChoiceList } from './ChoiceList';
 import { NarrationOverlay, DreamOverlay, DeathOverlay, ChapterTitleOverlay, EndingOverlay } from './Overlays';
 import { checkConditionWithManagers, formatChineseDate } from '../utils/helpers';
+import { OptimizedImage } from './OptimizedImage';
+import { getIllustrationPaths, preloadIllustration } from '../utils/imageUtils';
 import type { Choice } from '../types/scene';
 
 // 懒加载：非关键 UI 组件按需下载
@@ -114,19 +116,56 @@ export function BookShell() {
   }, [currentScene?.id]);
 
   const illustration = currentScene?.illustration;
-  // 插图路径加上 base URL（GitHub Pages 部署时 base 为 /drift-diary/）
-  const imgSrc = illustration?.src ? (import.meta.env.BASE_URL + illustration.src.replace(/^\//, '')) : null;
 
-  // 图片预加载状态：场景一出现就开始加载图片（必须在 early return 之前，保证 hooks 数量一致）
+  const imgPaths = useMemo(() => {
+    if (!illustration?.src) return null;
+    return getIllustrationPaths(illustration.src);
+  }, [illustration?.src]);
+
+  const imgSrc = imgPaths?.original || null;
+
   const [imgLoaded, setImgLoaded] = useState(false);
+
   useEffect(() => {
     setImgLoaded(false);
-    if (!imgSrc) return;
-    const img = new Image();
-    img.onload = () => setImgLoaded(true);
-    img.onerror = () => setImgLoaded(true);
-    img.src = imgSrc;
-  }, [imgSrc]);
+    if (!imgPaths) return;
+
+    preloadIllustration(illustration?.src).then(() => {
+      setImgLoaded(true);
+    });
+  }, [imgPaths, illustration?.src]);
+
+  useEffect(() => {
+    if (!currentScene?.choices || !flagMgr || !stateMgr || !providence) return;
+
+    const nextSceneIds: string[] = [];
+    for (const choice of currentScene.choices) {
+      if (checkConditionWithManagers(choice.condition, flagMgr, stateMgr, providence)) {
+        if (choice.nextScene) {
+          nextSceneIds.push(choice.nextScene);
+        }
+      }
+    }
+
+    if (nextSceneIds.length === 0) return;
+
+    const preloadNext = async () => {
+      for (const sceneId of nextSceneIds) {
+        try {
+          await sceneMgr.ensureSceneLoaded(sceneId);
+          const scene = sceneMgr.getScene(sceneId);
+          if (scene?.illustration?.src) {
+            preloadIllustration(scene.illustration.src);
+          }
+        } catch {
+          // 静默失败
+        }
+      }
+    };
+
+    const timer = setTimeout(preloadNext, 300);
+    return () => clearTimeout(timer);
+  }, [currentScene?.id, sceneMgr, flagMgr, stateMgr, providence, currentScene?.choices]);
 
   const onTypingComplete = () => {
     useGameStore.setState({ isTyping: false });
@@ -162,7 +201,7 @@ export function BookShell() {
       />
 
       {/* Fullpage illustration: immersive background */}
-      {showIllustration && illustration?.position === 'fullpage' && (
+      {showIllustration && illustration?.position === 'fullpage' && imgPaths && (
         <div
           className="illustration-fullpage"
           aria-hidden="true"
@@ -171,11 +210,15 @@ export function BookShell() {
             transition: 'opacity 0.4s ease-out',
           }}
         >
-          <img
-            src={imgSrc!}
+          <OptimizedImage
+            src={imgPaths.original}
+            webpSrc={imgPaths.webp}
+            lqipSrc={imgPaths.lqip}
             alt={illustration.alt}
             className="illustration-fullpage-img"
-            loading="lazy"
+            priority={true}
+            objectFit="cover"
+            onLoad={() => setImgLoaded(true)}
           />
           <div className="illustration-fullpage-overlay" />
         </div>
@@ -220,7 +263,7 @@ export function BookShell() {
         )}
 
         {/* Top/inline illustration */}
-        {hasIllustration && illustration?.position !== 'fullpage' && (
+        {hasIllustration && illustration?.position !== 'fullpage' && imgPaths && (
           <div
             className={`illustration-container illustration-${illustration?.position}`}
             style={{
@@ -229,11 +272,15 @@ export function BookShell() {
               transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
             }}
           >
-            <img
-              src={imgSrc!}
+            <OptimizedImage
+              src={imgPaths.original}
+              webpSrc={imgPaths.webp}
+              lqipSrc={imgPaths.lqip}
               alt={illustration!.alt}
               className={`illustration-img illustration-img-${illustration?.position}`}
               loading="lazy"
+              objectFit="cover"
+              onLoad={() => setImgLoaded(true)}
             />
           </div>
         )}

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { OptimizedImage } from './OptimizedImage';
+import { getIllustrationPaths } from '../utils/imageUtils';
 import type { NarrationSpec, DreamSpec, DeathSpec, EndingSpec } from '../types/scene';
 
 interface NarrationOverlayProps {
@@ -235,6 +237,8 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
   const [imgLoaded, setImgLoaded] = useState(false);
   const [showContent, setShowContent] = useState(false);
 
+  const imgPaths = illustrationSrc ? getIllustrationPaths(illustrationSrc.replace(import.meta.env.BASE_URL, '')) : null;
+
   useEffect(() => {
     setImgLoaded(false);
     setShowContent(false);
@@ -262,20 +266,23 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
       onClick={handleReveal}
     >
       {/* 图片层 - 始终显示 */}
-      {illustrationSrc && (
+      {imgPaths && (
         <div className="absolute inset-0 overflow-hidden">
-          <img
-            src={illustrationSrc}
+          <OptimizedImage
+            src={imgPaths.original}
+            webpSrc={imgPaths.webp}
+            lqipSrc={imgPaths.lqip}
             alt=""
-            onLoad={handleImageLoad}
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover',
               opacity: imgLoaded ? 0.6 : 0,
               filter: 'brightness(0.9) saturate(0.85)',
               transition: 'opacity 0.6s ease-out',
             }}
+            priority={true}
+            objectFit="cover"
+            onLoad={handleImageLoad}
           />
           <div
             className="absolute inset-0"

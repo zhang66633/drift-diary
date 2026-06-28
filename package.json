@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "generate-illustrations": "tsx scripts/generate-illustrations.ts"
+    "generate-illustrations": "tsx scripts/generate-illustrations.ts",
+    "optimize-images": "node scripts/optimize-images.mjs"
   },
   "dependencies": {
     "@volcengine/ark-runtime": "^1.0.9",

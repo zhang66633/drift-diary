@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { OptimizedImage } from './OptimizedImage';
+import { getIllustrationPaths } from '../utils/imageUtils';
 import type { Chapter, Scene, IllustrationSpec } from '../types/scene';
 
 interface EndingEntry {
@@ -20,7 +22,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
   const { _sceneMgr, _saveMgr } = useGameStore();
   const [endings, setEndings] = useState<EndingEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [zoomedImg, setZoomedImg] = useState<{ src: string; alt: string } | null>(null);
+  const [zoomedImg, setZoomedImg] = useState<{ src: string; webp: string; lqip: string; alt: string } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,9 +84,9 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose, zoomedImg]);
 
-  const imgSrc = (illustration: IllustrationSpec) => {
+  const getImgPaths = (illustration: IllustrationSpec) => {
     if (!illustration.src) return null;
-    return import.meta.env.BASE_URL + illustration.src.replace(/^\//, '');
+    return getIllustrationPaths(illustration.src);
   };
 
   return (
@@ -150,7 +152,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
         {!loading && (
           <div className="max-w-2xl mx-auto grid gap-6 sm:grid-cols-2">
             {endings.map((ending) => {
-              const illustrationUrl = ending.illustration ? imgSrc(ending.illustration) : null;
+              const illustrationPaths = ending.illustration ? getImgPaths(ending.illustration) : null;
               return (
                 <div
                   key={ending.sceneId}
@@ -187,7 +189,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
                   </div>
 
                   {/* 结局插图缩略图 */}
-                  {ending.unlocked && illustrationUrl && (
+                  {ending.unlocked && illustrationPaths && (
                     <div
                       className="mb-3 cursor-pointer overflow-hidden group relative"
                       style={{
@@ -196,16 +198,21 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
                         aspectRatio: ending.illustration?.size?.startsWith('portrait') ? '3/4' : '16/9',
                       }}
                       onClick={() => setZoomedImg({
-                        src: illustrationUrl,
+                        src: illustrationPaths.original,
+                        webp: illustrationPaths.webp,
+                        lqip: illustrationPaths.lqip,
                         alt: ending.illustration?.alt ?? ending.title,
                       })}
                       title="点击放大"
                     >
-                      <img
-                        src={illustrationUrl}
+                      <OptimizedImage
+                        src={illustrationPaths.original}
+                        webpSrc={illustrationPaths.webp}
+                        lqipSrc={illustrationPaths.lqip}
                         alt={ending.illustration?.alt ?? ending.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                         loading="lazy"
+                        objectFit="cover"
                       />
                       <div
                         className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
@@ -265,12 +272,15 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
           >
             ✕
           </button>
-          <img
+          <OptimizedImage
             src={zoomedImg.src}
+            webpSrc={zoomedImg.webp}
+            lqipSrc={zoomedImg.lqip}
             alt={zoomedImg.alt}
-            className="max-w-full max-h-full object-contain"
+            className="max-w-full max-h-full"
             style={{ borderRadius: '2px' }}
-            onClick={e => e.stopPropagation()}
+            priority={true}
+            objectFit="contain"
           />
           <p
             className="absolute bottom-6 text-center text-sm"
