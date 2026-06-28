@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
+import { useGameStore } from '../store/gameStore';
+import { useSettings } from '../store/settingsStore';
 
-/** 首次访问时显示的诗意音频激活提示——点击任意位置即消失并响起 BGM */
+/** 首次访问时显示的诗意音频激活提示——点击即消失并直接启动 BGM */
 export function AudioHint() {
   const [visible, setVisible] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -10,23 +12,23 @@ export function AudioHint() {
   });
   const [fading, setFading] = useState(false);
 
-  const dismiss = useCallback((e?: React.MouseEvent | React.PointerEvent) => {
+  const dismiss = useCallback((e: React.PointerEvent) => {
     if (fading) return;
-    if (e) e.preventDefault();
+    e.preventDefault();
+    e.stopPropagation();
     setFading(true);
     try { sessionStorage.setItem('audio_hint_dismissed', '1'); } catch {}
-    setTimeout(() => setVisible(false), 400);
-  }, [fading]);
 
-  useEffect(() => {
-    if (!visible) return;
-    const handlePointer = (e: PointerEvent) => {
-      e.preventDefault();
-      dismiss();
-    };
-    window.addEventListener('pointerdown', handlePointer);
-    return () => window.removeEventListener('pointerdown', handlePointer);
-  }, [visible, dismiss]);
+    // 直接在此触发音频初始化——确保在用户手势同步栈内
+    const audio = useGameStore.getState()._audio;
+    const settings = useSettings.getState();
+    audio.init();
+    audio.setMasterVolume(settings.volume);
+    audio.setSfxVolume(settings.sfxVolume);
+    audio.playBgm('main_theme');
+
+    setTimeout(() => setVisible(false), 500);
+  }, [fading]);
 
   if (!visible) return null;
 
@@ -37,7 +39,7 @@ export function AudioHint() {
         background: 'radial-gradient(ellipse at center, rgba(26,16,8,0.7) 0%, rgba(13,10,5,0.92) 100%)',
         backdropFilter: 'blur(4px)',
         opacity: fading ? 0 : 1,
-        transition: 'opacity 0.4s ease-out',
+        transition: 'opacity 0.5s ease-out',
       }}
       onPointerDown={dismiss}
     >
