@@ -365,16 +365,16 @@ export const useGameStore = create<GameStore>((set, get) => {
         audio.setMasterVolume(settings.volume);
         audio.setSfxVolume(settings.sfxVolume);
       });
-      // 首次用户点击时初始化 AudioContext
+      // 首次用户交互时初始化 AudioContext（pointerdown 比 click 更早触发）
       const initAudio = () => {
         audio.init();
         audio.setMasterVolume(useSettings.getState().volume);
         audio.setSfxVolume(useSettings.getState().sfxVolume);
         audio.playBgm('main_theme');
-        window.removeEventListener('click', initAudio);
+        window.removeEventListener('pointerdown', initAudio);
         window.removeEventListener('keydown', initAudio);
       };
-      window.addEventListener('click', initAudio);
+      window.addEventListener('pointerdown', initAudio);
       window.addEventListener('keydown', initAudio);
       refreshState();
     },
