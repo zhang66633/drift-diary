@@ -1410,12 +1410,6 @@
               "operation": "add"
             },
             {
-              "type": "state",
-              "target": "健康",
-              "value": -10,
-              "operation": "add"
-            },
-            {
               "type": "resource",
               "target": "弹药",
               "value": -1,
