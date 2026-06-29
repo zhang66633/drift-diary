@@ -224,7 +224,7 @@ export function BookShell() {
       />
 
       {/* Fullpage illustration: immersive background */}
-      {showIllustration && illustration?.position === 'fullpage' && imgPaths && (
+      {hasIllustration && illustration?.position === 'fullpage' && imgPaths && (
         <div
           className="illustration-fullpage"
           aria-hidden="true"
