@@ -265,9 +265,9 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
       style={{ background: 'linear-gradient(180deg, #e8dcc0 0%, #f4ecd8 100%)' }}
       onClick={handleReveal}
     >
-      {/* 图片层 - 始终显示 */}
+      {/* 图片层 - 作为背景，始终显示 */}
       {imgPaths && (
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden" style={{ opacity: 0.18, filter: 'brightness(0.85) saturate(0.7)' }}>
           <OptimizedImage
             src={imgPaths.original}
             webpSrc={imgPaths.webp}
@@ -276,9 +276,6 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
             style={{
               width: '100%',
               height: '100%',
-              opacity: imgLoaded ? 0.6 : 0,
-              filter: 'brightness(0.9) saturate(0.85)',
-              transition: 'opacity 0.6s ease-out',
             }}
             priority={true}
             objectFit="cover"
@@ -287,7 +284,7 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(180deg, rgba(244,236,216,0.15) 0%, rgba(244,236,216,0.5) 40%, rgba(244,236,216,0.85) 100%)',
+              background: 'linear-gradient(180deg, rgba(244,236,216,0.3) 0%, rgba(244,236,216,0.7) 50%, rgba(244,236,216,0.95) 100%)',
             }}
           />
         </div>
@@ -396,6 +393,31 @@ export function EndingOverlay({ ending, illustrationSrc, onDismiss }: EndingOver
               )}
             </div>
           </div>
+
+          {/* 插图：放在结局文本之后 */}
+          {imgPaths && (
+            <div
+              className="mt-10 mb-6 mx-auto max-w-sm"
+              style={{
+                opacity: imgLoaded ? 1 : 0,
+                transition: 'opacity 0.8s ease-out',
+                border: '1px solid rgba(160, 128, 80, 0.2)',
+                boxShadow: '0 4px 24px rgba(80, 50, 20, 0.1)',
+                borderRadius: '2px',
+                overflow: 'hidden',
+              }}
+            >
+              <OptimizedImage
+                src={imgPaths.original}
+                webpSrc={imgPaths.webp}
+                lqipSrc={imgPaths.lqip}
+                alt=""
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+                objectFit="contain"
+                onLoad={handleImageLoad}
+              />
+            </div>
+          )}
 
           <button
             className="mt-8 px-10 py-3 text-base cursor-pointer select-none transition-all duration-300"
