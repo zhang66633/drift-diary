@@ -212,9 +212,11 @@ export function BookShell() {
     !!pendingEnding;
 
   // 有插图且不在阻塞遮罩状态下
-  const hasIllustration = !!illustration?.src && !hasBlockingEnterOverlay;
+  const hasIllustration = !!illustration?.src;
+  // fullpage 插图始终渲染（作为背景层），inline/top 插图在 blocking overlay 期间隐藏
+  const showInlineIllustration = hasIllustration && !hasBlockingEnterOverlay;
   // 图片显示条件：加载完成（打字期间也显示图片，与文字同步体验）
-  const showIllustration = hasIllustration && imgLoaded;
+  const showIllustration = showInlineIllustration && imgLoaded;
 
   return (
     <div className="book-shell">
@@ -286,7 +288,7 @@ export function BookShell() {
         )}
 
         {/* Top/inline illustration */}
-        {hasIllustration && illustration?.position !== 'fullpage' && imgPaths && (
+        {showInlineIllustration && illustration?.position !== 'fullpage' && imgPaths && (
           <div
             className={`illustration-container illustration-${illustration?.position}`}
             style={{
