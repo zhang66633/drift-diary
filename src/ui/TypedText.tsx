@@ -25,6 +25,10 @@ export function TypedText({ paragraphs, onComplete }: TypedTextProps) {
   const currentFullText = paragraphs[currentParagraphIndex] ?? '';
   const isCurrentTyping = !isAllDone && charIndex < currentFullText.length;
 
+  // Ref to avoid stale closure in setInterval callback
+  const currentFullTextRef = useRef(currentFullText);
+  currentFullTextRef.current = currentFullText;
+
   const handleClick = useCallback(() => {
     if (isAllDone) return;
 
@@ -68,13 +72,14 @@ export function TypedText({ paragraphs, onComplete }: TypedTextProps) {
 
     timerRef.current = window.setInterval(() => {
       setCharIndex(i => {
-        if (i >= currentFullText.length) {
+        const fullText = currentFullTextRef.current;
+        if (i >= fullText.length) {
           clearTimer();
           return i;
         }
         const next = i + 1;
-        setCurrentText(currentFullText.slice(0, next));
-        if (next >= currentFullText.length) {
+        setCurrentText(fullText.slice(0, next));
+        if (next >= fullText.length) {
           clearTimer();
         }
         return next;
@@ -82,7 +87,7 @@ export function TypedText({ paragraphs, onComplete }: TypedTextProps) {
     }, typingSpeedMs);
 
     return clearTimer;
-  }, [currentParagraphIndex, paragraphs, charIndex, isAllDone, clearTimer, onComplete, typingSpeedMs, currentFullText]);
+  }, [currentParagraphIndex, paragraphs, charIndex, isAllDone, clearTimer, onComplete, typingSpeedMs]);
 
   useEffect(() => {
     setFinishedCount(0);
@@ -112,7 +117,19 @@ export function TypedText({ paragraphs, onComplete }: TypedTextProps) {
   }
 
   return (
-    <div onClick={handleClick} style={{ cursor: isAllDone ? 'default' : 'pointer' }}>
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label={isAllDone ? '文本已显示完毕' : isCurrentTyping ? '点击加速或按空格继续' : '点击或按空格继续'}
+      onClick={handleClick}
+      onKeyDown={(e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
+      style={{ cursor: isAllDone ? 'default' : 'pointer', outline: 'none' }}
+    >
       {renderedParagraphs}
       {!isAllDone && typingSpeedMs > 0 && (
         <p className="text-xs mt-2 italic select-none" style={{ color: '#7a5a30', textIndent: 0 }}>

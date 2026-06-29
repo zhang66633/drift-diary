@@ -114,8 +114,12 @@ export class SaveManager {
   }
 
   migrate(oldSave: SaveData): SaveData {
-    // 预留版本迁移逻辑
-    return oldSave;
+    // 版本不匹配时清除旧存档，避免状态损坏
+    console.warn(
+      `Save version mismatch: save is ${oldSave.version}, app expects ${SAVE_VERSION}. ` +
+      'Old saves will be discarded.'
+    );
+    return { version: SAVE_VERSION, slots: [], activeSlotId: null, unlockedEndings: [] };
   }
 
   private loadFromStorage(): SaveData {

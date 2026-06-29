@@ -1,3 +1,5 @@
+import { Section } from './shared';
+
 interface AboutPanelProps {
   onClose: () => void;
 }
@@ -54,7 +56,7 @@ export function AboutPanel({ onClose }: AboutPanelProps) {
         </div>
 
         <div className="space-y-7" style={{ color: '#3a2a15', lineHeight: 1.9 }}>
-          <Section title="游戏特色">
+          <Section bordered title="游戏特色">
             <p>
               这是一部基于丹尼尔·笛福原著《鲁滨孙漂流记》改编的文字冒险游戏。你的每一个选择都会影响克鲁索的命运——有些显而易见，有些潜藏暗处，直到多年后才浮出水面。
             </p>
@@ -63,7 +65,7 @@ export function AboutPanel({ onClose }: AboutPanelProps) {
             </p>
           </Section>
 
-          <Section title="世界如何回应你">
+          <Section bordered title="世界如何回应你">
             <p>
               除了可见的状态——体力、心志、胆色——还有更深层的力量在暗中起作用。有些选择会改变你与他人的关系，有些则在冥冥之中改变了风向。你无法看见它们，但它们决定了有些路走得通，有些路走不通。
             </p>
@@ -72,7 +74,7 @@ export function AboutPanel({ onClose }: AboutPanelProps) {
             </p>
           </Section>
 
-          <Section title="操作提示">
+          <Section bordered title="操作提示">
             <ul className="space-y-1 text-sm" style={{ listStyle: 'none', padding: 0 }}>
               <li><span style={{ color: '#7a5a30' }}>Esc</span> — 关闭当前菜单或浮层</li>
               <li><span style={{ color: '#7a5a30' }}>点击选项</span> — 推进剧情，每个决定都不可撤销</li>
@@ -80,7 +82,7 @@ export function AboutPanel({ onClose }: AboutPanelProps) {
             </ul>
           </Section>
 
-          <Section title="创作说明">
+          <Section bordered title="创作说明">
             <p>
               改编自丹尼尔·笛福 <span style={{ fontStyle: 'italic' }}>Robinson Crusoe</span>（1719）。
               原著中克鲁索的独白天然带有回忆录体的反思性——多年后的自己回看年轻时的决定，带着悔恨、自嘲和宿命感。本作试图将这种叙事质感翻译为游戏机制：你的过去永远在塑造你的现在。
@@ -101,22 +103,4 @@ export function AboutPanel({ onClose }: AboutPanelProps) {
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <h3
-        className="text-sm font-semibold mb-3 pb-1"
-        style={{
-          color: '#5a4220',
-          letterSpacing: '0.18em',
-          borderBottom: '1px solid rgba(122, 90, 48, 0.25)',
-        }}
-      >
-        {title}
-      </h3>
-      <div className="text-sm leading-relaxed" style={{ textIndent: '2em' }}>
-        {children}
-      </div>
-    </div>
-  );
-}
+

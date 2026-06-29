@@ -12,7 +12,13 @@ export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
   const [coords, setCoords] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLSpanElement>(null);
+  const isTouchDevice = useRef(false);
   const tooltipId = useId();
+
+  // Detect touch device once on mount
+  useEffect(() => {
+    isTouchDevice.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  }, []);
 
   const updateCoords = () => {
     if (!containerRef.current) return;
@@ -38,7 +44,10 @@ export function Tooltip({ text, children, position = 'top' }: TooltipProps) {
     e.stopPropagation();
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     updateCoords();
-    setVisible(v => !v);
+    // On touch devices, toggle on tap; on desktop, click does nothing (hover handles it)
+    if (isTouchDevice.current) {
+      setVisible(v => !v);
+    }
   };
 
   // 点击页面其他地方关闭 + 滚动时更新位置

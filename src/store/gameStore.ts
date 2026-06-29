@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { GameState, SceneSnapshot } from '../types/state';
-import type { Scene, NarrationSpec, DreamSpec, DeathSpec, EndingSpec, Condition } from '../types/scene';
+import type { Scene, NarrationSpec, DreamSpec, DeathSpec, EndingSpec } from '../types/scene';
 import type { SaveSlot } from '../types/save';
 import { createInitialState } from '../types/state';
 import { StateManager } from '../engine/StateManager';
@@ -13,7 +13,7 @@ import { AudioManager } from '../engine/AudioManager';
 import { SaveManager, localStorageAdapter } from '../engine/SaveManager';
 import { validateChapter } from '../engine/schema';
 import { useSettings } from './settingsStore';
-import { getResourceMap } from '../utils/helpers';
+import { getResourceMap, checkConditionWithManagers } from '../utils/helpers';
 
 /** 保留专属 BGM 的特殊场景——其它场景统一使用 main_theme */
 const KEEP_BGM_SCENES = new Set([
@@ -165,17 +165,6 @@ export const useGameStore = create<GameStore>((set, get) => {
     });
   }
 
-  function checkCondition(condition: Condition | undefined): boolean {
-    if (!condition) return true;
-    return flagMgr.checkCondition(
-      condition,
-      () => stateMgr.getState() as unknown as Record<string, number>,
-      () => getResourceMap(stateMgr.getResources()),
-      () => stateMgr.getSkills() as unknown as Record<string, number>,
-      () => providence.getValue(),
-    );
-  }
-
   /** 预加载章节内所有结局的 BGM 和插图——分支结局随时触发，提前缓存 */
   function preloadChapterEndingAssets(chapterNum: number): void {
     const chapter = sceneMgr.getLoadedChapters().find(c => c.chapter === chapterNum);
@@ -279,11 +268,15 @@ export const useGameStore = create<GameStore>((set, get) => {
     const resolvedText = scene.text.map(t => consequence.resolveText(t));
     const snapshot = takeSnapshot(scene, resolvedText, timeMgr);
     snapshots.push(snapshot);
+    // Cap at 100 snapshots to prevent memory bloat over long playthroughs
+    if (snapshots.length > 100) {
+      snapshots = snapshots.slice(-100);
+    }
 
     let pendingNarration: NarrationSpec | null = null;
     if (scene.narration?.trigger === 'on_enter') {
       const narrationText = consequence.resolveText(scene.narration.text);
-      if (checkCondition(scene.narration.condition) && narrationText) {
+      if (checkConditionWithManagers(scene.narration.condition, flagMgr, stateMgr, providence) && narrationText) {
         pendingNarration = { ...scene.narration, text: narrationText };
       }
     }
@@ -425,7 +418,7 @@ export const useGameStore = create<GameStore>((set, get) => {
       const choice = scene.choices.find(c => c.id === choiceId);
       if (!choice) return;
 
-      if (!checkCondition(choice.requirement)) return;
+      if (!checkConditionWithManagers(choice.requirement, flagMgr, stateMgr, providence)) return;
 
       audio.playSfx('page_turn');
 
@@ -448,7 +441,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (choice.narration?.trigger === 'on_choice') {
         const narrationText = consequence.resolveText(choice.narration.text);
-        if (checkCondition(choice.narration.condition) && narrationText) {
+        if (checkConditionWithManagers(choice.narration.condition, flagMgr, stateMgr, providence) && narrationText) {
           set({ pendingChoiceNarration: { ...choice.narration, text: narrationText }, pendingNextScene: choice.nextScene ?? null });
         } else if (choice.nextScene) {
           await enterScene(choice.nextScene);
@@ -486,7 +479,7 @@ export const useGameStore = create<GameStore>((set, get) => {
 
       if (mc.narration?.trigger === 'on_choice') {
         const narrationText = consequence.resolveText(mc.narration.text);
-        if (checkCondition(mc.narration.condition) && narrationText) {
+        if (checkConditionWithManagers(mc.narration.condition, flagMgr, stateMgr, providence) && narrationText) {
           set({ pendingChoiceNarration: { ...mc.narration, text: narrationText }, pendingNextScene: mc.nextScene });
         } else {
           await enterScene(mc.nextScene);

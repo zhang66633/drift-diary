@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { cnNumber } from '../utils/helpers';
 import type { Chapter } from '../types/scene';
 import type { SceneSnapshot } from '../types/state';
 
@@ -32,7 +33,6 @@ interface TimelineChapter {
   entries: TimelineEntry[];
 }
 
-const chNumLabel = (n: number) => ['一','二','三','四','五','六','七','八','九','十'][n - 1] || String(n);
 
 export function Memoir({ onClose, standalone = false }: MemoirProps) {
   const { _sceneMgr, _saveMgr, getMemoirData } = useGameStore();
@@ -143,7 +143,7 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
       const chData = chapterMap.get(chapter);
       result.push({
         chapter,
-        title: chData?.title ?? `第${chNumLabel(chapter)}章`,
+        title: chData?.title ?? `第${cnNumber(chapter)}章`,
         entries: entriesByChapter.get(chapter) ?? [],
       });
     }
@@ -239,7 +239,7 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
                   cursor: 'pointer',
                 }}
               >
-                第{chNumLabel(ch.chapter)}章
+                第{cnNumber(ch.chapter)}章
               </button>
             ))}
           </div>
@@ -275,7 +275,7 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
                     cursor: 'pointer',
                   }}
                 >
-                  <div className="text-xs opacity-60">第{chNumLabel(ch.chapter)}章</div>
+                  <div className="text-xs opacity-60">第{cnNumber(ch.chapter)}章</div>
                   <div className="text-xs mt-0.5 truncate">{ch.title}</div>
                 </button>
               ))}
@@ -319,7 +319,7 @@ export function Memoir({ onClose, standalone = false }: MemoirProps) {
                   <div className="flex items-center gap-3 mb-5">
                     <div style={{ width: '40px', height: '1px', background: '#c4a87c', opacity: 0.4 }} />
                     <h3 style={{ color: '#d4b87a', fontSize: '16px', letterSpacing: '0.25em', fontWeight: 'bold' }}>
-                      第{chNumLabel(ch.chapter)}章 · {ch.title}
+                      第{cnNumber(ch.chapter)}章 · {ch.title}
                     </h3>
                     <div style={{ flex: 1, height: '1px', background: '#c4a87c', opacity: 0.2 }} />
                   </div>

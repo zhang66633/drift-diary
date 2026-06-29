@@ -50,7 +50,8 @@ export class ConsequenceEngine {
   private executeOne(c: Consequence): void {
     if (!this.checkCondition(c.condition)) return;
 
-    const val = c.value as number | undefined;
+    const rawVal = c.value;
+    const val = typeof rawVal === 'number' ? rawVal : undefined;
     const op = c.operation ?? 'set';
     const target = c.target;
 

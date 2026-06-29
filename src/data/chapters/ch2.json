@@ -361,7 +361,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": 3,
               "operation": "add"
             },
@@ -425,7 +425,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": 2,
               "operation": "add"
             },
@@ -464,7 +464,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": 1,
               "operation": "add"
             }
@@ -758,7 +758,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": 2,
               "operation": "add"
             },
@@ -809,7 +809,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": -1,
               "operation": "add"
             },
@@ -859,7 +859,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": -1,
               "operation": "add"
             },
@@ -971,7 +971,7 @@
         "alt": "饥饿而死",
         "size": "portrait_4_3",
         "position": "inline",
-        "src": "/illustrations/ch2_7_饿死.webp"
+        "src": "/illustrations/ch2_7_饿死.png"
       }
     },
     {
@@ -1175,7 +1175,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": 3,
               "operation": "add"
             },
@@ -1243,7 +1243,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": 1,
               "operation": "add"
             },
@@ -1309,7 +1309,7 @@
             },
             {
               "type": "resource",
-              "target": "水",
+              "target": "淡水",
               "value": -1,
               "operation": "add"
             },
@@ -2414,7 +2414,7 @@
         },
         {
           "type": "resource",
-          "target": "水",
+          "target": "淡水",
           "value": 0,
           "operation": "set"
         },

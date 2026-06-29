@@ -75,6 +75,11 @@ export function LoadingScreen({ progress, hint, onSkip, showSkip = true }: Loadi
         </div>
 
         <div
+          role="progressbar"
+          aria-valuenow={Math.round(progress)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`加载进度 ${Math.round(progress)}%`}
           style={{
             width: '100%',
             height: '4px',

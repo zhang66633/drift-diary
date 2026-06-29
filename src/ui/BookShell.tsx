@@ -17,20 +17,49 @@ const SettingsPanel = lazy(() => import('./SettingsPanel').then(m => ({ default:
 const Memoir = lazy(() => import('./Memoir').then(m => ({ default: m.Memoir })));
 
 export function BookShell() {
+  // Individual selectors: only re-render when the specific value changes
+  const currentScene = useGameStore(s => s.currentScene);
+  const pendingNarration = useGameStore(s => s.pendingNarration);
+  const pendingDream = useGameStore(s => s.pendingDream);
+  const pendingDeath = useGameStore(s => s.pendingDeath);
+  const pendingEnding = useGameStore(s => s.pendingEnding);
+  const pendingChoiceNarration = useGameStore(s => s.pendingChoiceNarration);
+  const isTyping = useGameStore(s => s.isTyping);
+  const chapterTitleVisible = useGameStore(s => s.chapterTitleVisible);
+  const showSaveMenu = useGameStore(s => s.showSaveMenu);
+  const showLoadMenu = useGameStore(s => s.showLoadMenu);
+  const showSettingsMenu = useGameStore(s => s.showSettingsMenu);
+  const showGameMenu = useGameStore(s => s.showGameMenu);
+  const showMemoir = useGameStore(s => s.showMemoir);
+
+  // Managers and actions are stable (set once in store creator) — get from getState()
+  const getManagers = () => {
+    const s = useGameStore.getState();
+    return {
+      consequence: s._consequence!,
+      flagMgr: s._flagMgr!,
+      stateMgr: s._stateMgr!,
+      providence: s._providence!,
+      sceneMgr: s._sceneMgr!,
+      chooseChoice: s.chooseChoice,
+      dismissNarration: s.dismissNarration,
+      dismissDream: s.dismissDream,
+      dismissDeath: s.dismissDeath,
+      dismissEnding: s.dismissEnding,
+      dismissChapterTitle: s.dismissChapterTitle,
+      openGameMenu: s.openGameMenu,
+      closeGameMenu: s.closeGameMenu,
+      closeSettingsMenu: s.closeSettingsMenu,
+      closeMemoir: s.closeMemoir,
+    };
+  };
+
   const {
-    currentScene,
-    pendingNarration,
-    pendingDream,
-    pendingDeath,
-    pendingEnding,
-    pendingChoiceNarration,
-    isTyping,
-    chapterTitleVisible,
-    showSaveMenu,
-    showLoadMenu,
-    showSettingsMenu,
-    showGameMenu,
-    showMemoir,
+    consequence,
+    flagMgr,
+    stateMgr,
+    providence,
+    sceneMgr,
     chooseChoice,
     dismissNarration,
     dismissDream,
@@ -41,12 +70,7 @@ export function BookShell() {
     closeGameMenu,
     closeSettingsMenu,
     closeMemoir,
-    _consequence: consequence,
-    _flagMgr: flagMgr,
-    _stateMgr: stateMgr,
-    _providence: providence,
-    _sceneMgr: sceneMgr,
-  } = useGameStore();
+  } = getManagers();
 
   const resolvedParagraphs = useMemo(() => {
     if (!currentScene) return [];
@@ -126,18 +150,22 @@ export function BookShell() {
 
   const [imgLoaded, setImgLoaded] = useState(false);
 
+  // Track already-preloaded scene IDs to avoid re-running the effect on every render
+  const preloadedIds = useRef<Set<string>>(new Set());
+
   useEffect(() => {
     setImgLoaded(false);
   }, [imgPaths]);
 
   useEffect(() => {
-    if (!currentScene?.choices || !flagMgr || !stateMgr || !providence) return;
+    if (!currentScene?.id || !currentScene?.choices || !flagMgr || !stateMgr || !providence) return;
 
     const nextSceneIds: string[] = [];
     for (const choice of currentScene.choices) {
       if (checkConditionWithManagers(choice.condition, flagMgr, stateMgr, providence)) {
-        if (choice.nextScene) {
+        if (choice.nextScene && !preloadedIds.current.has(choice.nextScene)) {
           nextSceneIds.push(choice.nextScene);
+          preloadedIds.current.add(choice.nextScene);
         }
       }
     }
@@ -160,7 +188,7 @@ export function BookShell() {
 
     const timer = setTimeout(preloadNext, 1500);
     return () => clearTimeout(timer);
-  }, [currentScene?.id, sceneMgr, flagMgr, stateMgr, providence, currentScene?.choices]);
+  }, [currentScene?.id, sceneMgr, flagMgr, stateMgr, providence]);
 
   const onTypingComplete = () => {
     useGameStore.setState({ isTyping: false });

@@ -7,32 +7,19 @@ interface StatusBarProps {
   onToggleMenu?: () => void;
 }
 
-export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
-  const { isDebug, state, resources, skills, flags, time, sceneId } = useGameStore(s => ({
-    isDebug: s.isDebugMode,
-    state: s.gameState.state,
-    resources: s.gameState.resources,
-    skills: s.gameState.skills,
-    flags: s.gameState.flags,
-    time: s.gameState.time,
-    sceneId: s.gameState.currentSceneId,
-  }));
-
-  // 移动端短日期，避免换行
-  const dateStr = formatChineseDate(time.date);
-  const compactDate = dateStr.replace(/^(\d+)年/, ''); // 移动端省略年份："八月十五日"
-
-  const StatusItem = ({
-    symbol,
-    value,
-    tooltip,
-    label,
-  }: {
-    symbol: string;
-    value: string | number;
-    tooltip: string;
-    label: string;
-  }) => (
+// Module-scope components to avoid unmount/remount on every render
+function StatusItem({
+  symbol,
+  value,
+  tooltip,
+  label,
+}: {
+  symbol: string;
+  value: string | number;
+  tooltip: string;
+  label: string;
+}) {
+  return (
     <Tooltip text={tooltip} position="bottom">
       <span
         className="inline-flex items-center"
@@ -60,8 +47,10 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
       </span>
     </Tooltip>
   );
+}
 
-  const Separator = () => (
+function Separator() {
+  return (
     <span
       className="select-none hidden sm:inline"
       style={{ color: '#c4a87c', opacity: 0.5, fontSize: '0.75rem' }}
@@ -69,6 +58,22 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
       ·
     </span>
   );
+}
+
+export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
+  const { isDebug, state, resources, skills, flags, time, sceneId } = useGameStore(s => ({
+    isDebug: s.isDebugMode,
+    state: s.gameState.state,
+    resources: s.gameState.resources,
+    skills: s.gameState.skills,
+    flags: s.gameState.flags,
+    time: s.gameState.time,
+    sceneId: s.gameState.currentSceneId,
+  }));
+
+  // 移动端短日期，避免换行
+  const dateStr = formatChineseDate(time.date);
+  const compactDate = dateStr.replace(/^(\d+)年/, ''); // 移动端省略年份："八月十五日"
 
   return (
     <div

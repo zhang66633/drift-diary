@@ -197,7 +197,10 @@ export function SaveMenu({ mode }: SaveMenuProps) {
 }
 
 export function HistoryMenu() {
-  const { getHistoryList, openHistory, closeHistoryMenu, returnToMenu } = useGameStore();
+  const getHistoryList = useGameStore(s => s.getHistoryList);
+  const openHistory = useGameStore(s => s.openHistory);
+  const closeHistoryMenu = useGameStore(s => s.closeHistoryMenu);
+  const returnToMenu = useGameStore(s => s.returnToMenu);
   const history = getHistoryList();
 
   return (
@@ -311,7 +314,8 @@ export function HistoryMenu() {
 }
 
 export function HistoryViewOverlay() {
-  const { historyView, closeHistory } = useGameStore();
+  const historyView = useGameStore(s => s.historyView);
+  const closeHistory = useGameStore(s => s.closeHistory);
 
   if (!historyView) return null;
 

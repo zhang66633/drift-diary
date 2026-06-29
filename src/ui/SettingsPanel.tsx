@@ -1,5 +1,7 @@
+import { useRef, useCallback } from 'react';
 import { useSettings, type TextSpeed } from '../store/settingsStore';
 import { useGameStore } from '../store/gameStore';
+import { Section } from './shared';
 
 interface SettingsPanelProps {
   onClose: () => void;
@@ -22,6 +24,21 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
     setSfxVolume,
   } = useSettings();
   const _audio = useGameStore(s => s._audio);
+  const volumeTimerRef = useRef<number | null>(null);
+
+  const debouncedSetVolume = useCallback((v: number) => {
+    setVolume(v);
+    _audio.setMasterVolume(v);
+    if (volumeTimerRef.current) clearTimeout(volumeTimerRef.current);
+    volumeTimerRef.current = window.setTimeout(() => {
+      // persist happens via settingsStore
+    }, 150);
+  }, [setVolume, _audio]);
+
+  const debouncedSetSfxVolume = useCallback((v: number) => {
+    setSfxVolume(v);
+    _audio.setSfxVolume(v);
+  }, [setSfxVolume, _audio]);
 
   return (
     <div
@@ -71,6 +88,7 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               <button
                 key={opt.value}
                 onClick={() => setTextSpeed(opt.value)}
+                aria-pressed={textSpeed === opt.value}
                 className="flex-1 px-3 py-2.5 text-sm transition-all duration-200"
                 style={{
                   cursor: 'pointer',
@@ -94,10 +112,10 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               min={0}
               max={100}
               value={volume}
+              aria-label="主音量"
               onChange={e => {
                 const v = parseInt(e.target.value, 10);
-                setVolume(v);
-                _audio.setMasterVolume(v);
+                debouncedSetVolume(v);
               }}
               className="flex-1"
               style={{ accentColor: '#7a5a30' }}
@@ -113,10 +131,10 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
               min={0}
               max={100}
               value={sfxVolume}
+              aria-label="音效音量"
               onChange={e => {
                 const v = parseInt(e.target.value, 10);
-                setSfxVolume(v);
-                _audio.setSfxVolume(v);
+                debouncedSetSfxVolume(v);
               }}
               className="flex-1"
               style={{ accentColor: '#7a5a30' }}
@@ -126,20 +144,6 @@ export function SettingsPanel({ onClose }: SettingsPanelProps) {
         </Section>
 
       </div>
-    </div>
-  );
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="mb-7" style={{ textIndent: 0 }}>
-      <h3
-        className="text-sm font-semibold"
-        style={{ color: '#5a4220', textIndent: 0, letterSpacing: '0.15em' }}
-      >
-        {title}
-      </h3>
-      {children}
     </div>
   );
 }

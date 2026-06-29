@@ -55,6 +55,7 @@ const EndingSpecSchema = z.object({
   title: z.string(),
   text: z.string(),
   buttonText: z.string().optional(),
+  moneyText: z.union([z.string(), ConditionalTextSchema]).optional(),
 });
 
 const SenseTagSchema = z.object({

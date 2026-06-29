@@ -42,6 +42,7 @@ export function OptimizedImage({
   objectFit = 'cover',
 }: OptimizedImageProps) {
   const imgRef = useRef<HTMLImageElement>(null);
+  const lqipRef = useRef<HTMLImageElement>(null);
   const finalLoading = priority ? 'eager' : loading;
   const lowPerf = isLowPerf();
 
@@ -72,11 +73,9 @@ export function OptimizedImage({
   };
 
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const img = e.currentTarget;
-    const parent = img.parentElement;
-    const lqip = parent?.previousElementSibling as HTMLElement | null;
-    if (lqip?.classList.contains('opt-lqip')) {
-      lqip.style.opacity = '0';
+    // Use ref instead of fragile DOM traversal
+    if (lqipRef.current) {
+      lqipRef.current.style.opacity = '0';
     }
     preloadCache.add(webpSrc || src);
     onLoad?.();
@@ -88,6 +87,7 @@ export function OptimizedImage({
     <div style={wrapperStyle} className={className}>
       {showLqip && (
         <img
+          ref={lqipRef}
           src={lqipSrc}
           alt=""
           aria-hidden="true"

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { cnNumber } from '../utils/helpers';
 import { OptimizedImage } from './OptimizedImage';
 import { getIllustrationPaths } from '../utils/imageUtils';
 import type { Chapter, Scene, IllustrationSpec } from '../types/scene';
@@ -184,7 +185,7 @@ export function EndingCollection({ onClose }: EndingCollectionProps) {
                       </div>
                     )}
                     <div className="text-xs" style={{ color: '#8b6f47', opacity: 0.7 }}>
-                      第{['一','二','三','四','五','六','七','八','九','十'][ending.chapter - 1] || ending.chapter}章 · {ending.chapterTitle}
+                      第{cnNumber(ending.chapter)}章 · {ending.chapterTitle}
                     </div>
                   </div>
 

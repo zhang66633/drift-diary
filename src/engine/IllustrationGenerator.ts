@@ -53,7 +53,7 @@ export class IllustrationGenerator {
   private defaultFormat: 'b64_json' | 'url';
 
   constructor(apiKey?: string, model?: string) {
-    const key = apiKey || (typeof process !== 'undefined' ? process.env.ARK_API_KEY : undefined);
+    const key = apiKey || import.meta.env.VITE_ARK_API_KEY || '';
     if (!key) {
       throw new Error(
         'IllustrationGenerator: API key is required. Pass it to the constructor or set ARK_API_KEY environment variable.'

@@ -12,11 +12,26 @@
 
   body {
     font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
-    background-color: #1a1008;
-    color: #2a1f14;
+    background-color: var(--color-bg-dark, #1a1008);
+    color: var(--color-text-primary, #2a1f14);
     overflow: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  :root {
+    --color-bg-dark: #1a1008;
+    --color-bg-paper: #f4ecd8;
+    --color-accent: #7a5a30;
+    --color-accent-dark: #5a4220;
+    --color-accent-light: #c4a87c;
+    --color-text-primary: #2a1f14;
+    --color-text-secondary: #5a4635;
+    --color-text-muted: #7a5a30;
+    --color-danger: #8a4030;
+    --color-danger-light: #c48878;
+    --color-gold: #e8d5a3;
+    --color-border-light: rgba(122, 90, 48, 0.25);
   }
 
   ::selection {
@@ -42,7 +57,7 @@
     height: 100%;
     width: 100%;
     overflow: auto;
-    background-color: #f4ecd8;
+    background-color: var(--color-bg-paper, #f4ecd8);
     background-image:
       radial-gradient(ellipse at 30% 20%, rgba(255, 240, 200, 0.15) 0%, transparent 50%),
       radial-gradient(ellipse at 70% 80%, rgba(180, 140, 80, 0.1) 0%, transparent 50%),

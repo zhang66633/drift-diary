@@ -9,6 +9,7 @@ export class SceneManager {
   private chapterData: Chapter | null = null;
   private sceneIndex = new Map<string, { chapter: Chapter; scene: Scene }>();
   private history: string[] = [];
+  private preloadTimer: ReturnType<typeof setTimeout> | null = null;
 
   async loadChapter(chapterNum: number): Promise<Chapter> {
     if (this.chapters.has(chapterNum)) {
@@ -90,6 +91,10 @@ export class SceneManager {
   }
 
   reset(): void {
+    if (this.preloadTimer !== null) {
+      clearTimeout(this.preloadTimer);
+      this.preloadTimer = null;
+    }
     this.chapters.clear();
     this.currentSceneId = '';
     this.chapterData = null;
@@ -144,7 +149,7 @@ export class SceneManager {
     });
     if (!key) return; // 没有下一章了
     // 使用 setTimeout 延迟加载，不阻塞当前渲染
-    setTimeout(async () => {
+    this.preloadTimer = setTimeout(async () => {
       try {
         const mod = await chapterModules[key]();
         const chapter: Chapter = (mod as unknown as { default?: Chapter }).default ?? (mod as unknown as Chapter);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { EndingCollection } from './EndingCollection';
 
@@ -55,6 +55,7 @@ function MenuItem({ icon, label, onClick, danger, last }: MenuItemProps) {
 
 export function GameMenu({ onClose }: GameMenuProps) {
   const [showEndings, setShowEndings] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const {
     openSaveMenu,
@@ -65,19 +66,48 @@ export function GameMenu({ onClose }: GameMenuProps) {
     closeGameMenu,
   } = useGameStore();
 
-  const handleClick = (action: () => void) => {
+  const handleClick = useCallback((action: () => void) => {
     return () => {
       closeGameMenu();
       action();
     };
-  };
+  }, [closeGameMenu]);
 
-  const handleReturnToMenu = () => {
+  const handleReturnToMenu = useCallback(() => {
     if (confirm('确定要返回主菜单吗？未保存的进度将会丢失。')) {
       closeGameMenu();
       returnToMenu();
     }
-  };
+  }, [closeGameMenu, returnToMenu]);
+
+  // Keyboard navigation: Escape to close, arrow keys to navigate
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (!menuRef.current) return;
+      const items = menuRef.current.querySelectorAll<HTMLElement>('[role="menuitem"]');
+      if (items.length === 0) return;
+      const currentIndex = Array.from(items).findIndex(el => el === document.activeElement);
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = (currentIndex + 1) % items.length;
+        items[next].focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = (currentIndex - 1 + items.length) % items.length;
+        items[prev].focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    // Focus first item on mount
+    setTimeout(() => {
+      menuRef.current?.querySelector<HTMLElement>('[role="menuitem"]')?.focus();
+    }, 100);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   return (
     <>
@@ -87,6 +117,7 @@ export function GameMenu({ onClose }: GameMenuProps) {
         onClick={onClose}
       >
         <div
+          ref={menuRef}
           role="menu"
           aria-label="游戏菜单"
           onClick={e => e.stopPropagation()}
