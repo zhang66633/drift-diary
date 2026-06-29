@@ -72,7 +72,7 @@ export function OptimizedImage({
     transition: 'opacity 0.5s ease-out',
   };
 
-  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const handleLoad = () => {
     // Use ref instead of fragile DOM traversal
     if (lqipRef.current) {
       lqipRef.current.style.opacity = '0';

@@ -13,7 +13,7 @@ import { AudioManager } from '../engine/AudioManager';
 import { SaveManager, localStorageAdapter } from '../engine/SaveManager';
 import { validateChapter } from '../engine/schema';
 import { useSettings } from './settingsStore';
-import { getResourceMap, checkConditionWithManagers } from '../utils/helpers';
+import { checkConditionWithManagers } from '../utils/helpers';
 
 /** 保留专属 BGM 的特殊场景——其它场景统一使用 main_theme */
 const KEEP_BGM_SCENES = new Set([
