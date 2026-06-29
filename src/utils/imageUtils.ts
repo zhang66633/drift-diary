@@ -8,16 +8,15 @@ export function getIllustrationPaths(src: string, baseUrl: string = import.meta.
   const normalizedSrc = src.replace(/^\//, '');
   const fullSrc = baseUrl + normalizedSrc;
 
-  const lastDotIndex = fullSrc.lastIndexOf('.');
-  const basePath = lastDotIndex > -1 ? fullSrc.slice(0, lastDotIndex) : fullSrc;
+  // Strip extension to derive alternate formats
+  const basePath = fullSrc.replace(/\.(png|webp|jpg|jpeg)$/i, '');
 
   const webpPath = basePath + '.webp';
 
   const lqipDirIndex = normalizedSrc.lastIndexOf('/');
   const lqipBase = lqipDirIndex > -1 ? normalizedSrc.slice(0, lqipDirIndex + 1) + 'lqip/' + normalizedSrc.slice(lqipDirIndex + 1) : 'lqip/' + normalizedSrc;
   const lqipFull = baseUrl + lqipBase;
-  const lqipLastDot = lqipFull.lastIndexOf('.');
-  const lqipPath = lqipLastDot > -1 ? lqipFull.slice(0, lqipLastDot) + '.jpg' : lqipFull + '.jpg';
+  const lqipPath = lqipFull.replace(/\.(png|webp|jpg|jpeg)$/i, '.jpg');
 
   return {
     original: fullSrc,

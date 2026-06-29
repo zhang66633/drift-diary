@@ -79,7 +79,7 @@ export async function preloadCriticalResources(
 
   if (mode === 'full') {
     for (const name of ALL_ILLUSTRATIONS) {
-      const paths = getIllustrationPaths(`illustrations/${name}.png`, baseUrl);
+      const paths = getIllustrationPaths(`illustrations/${name}.webp`, baseUrl);
       resources.push({
         type: 'image',
         key: `img-${name}`,
@@ -101,7 +101,7 @@ export async function preloadCriticalResources(
       weight: 3,
     });
   } else {
-    const firstSceneImg = 'illustrations/ch1_1_父训.png';
+    const firstSceneImg = 'illustrations/ch1_1_父训.webp';
     const imgPaths = getIllustrationPaths(firstSceneImg, baseUrl);
     resources.push({
       type: 'image',

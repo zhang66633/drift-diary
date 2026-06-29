@@ -104,7 +104,7 @@
         "alt": "父亲在书房训斥鲁滨孙",
         "size": "portrait_4_3",
         "position": "inline",
-        "src": "/illustrations/ch1_1_父训.png"
+        "src": "/illustrations/ch1_1_父训.webp"
       }
     },
     {
@@ -535,7 +535,7 @@
         "alt": "雅茅斯风暴中砍桅的船员",
         "size": "landscape_16_9",
         "position": "top",
-        "src": "/illustrations/ch1_5_风暴.png"
+        "src": "/illustrations/ch1_5_风暴.webp"
       }
     },
     {
@@ -841,7 +841,7 @@
         "alt": "鲁滨孙在荒滩上醒来",
         "size": "landscape_16_9",
         "position": "top",
-        "src": "/illustrations/ch1_8_岸上.png"
+        "src": "/illustrations/ch1_8_岸上.webp"
       }
     },
     {
@@ -862,7 +862,7 @@
         "alt": "鲁滨孙羞愧归家",
         "size": "landscape_16_9",
         "position": "top",
-        "src": "/illustrations/ch1_9_归途.png"
+        "src": "/illustrations/ch1_9_归途.webp"
       }
     }
   ]
