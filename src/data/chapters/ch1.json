@@ -837,8 +837,8 @@
         "bgm": "tense"
       },
       "illustration": {
-        "prompt": "A man lying face-down on a desolate windswept beach, just regaining consciousness, wet clothes clinging to his body, waves lapping at his feet, overcast grey sky, wreckage of a ship scattered in the distance on the rocks, moment of survival and awakening, dramatic atmosphere, oil painting style, Théodore Géricault shipwreck influence",
-        "alt": "鲁滨孙在荒滩上醒来",
+        "prompt": "A young 17th century English man lying on a haystack inside a humble fisherman's cottage, coarse wool blanket covering him, morning light streaming through cracked old wooden windows, an old sea captain with weathered face and bloodshot eyes standing beside him looking down with stern disapproval, fishing nets and simple furniture in the background, salty sea breeze atmosphere, moment of shame and indecision, oil painting style, Dutch Golden Age interior lighting, Rembrandt influenced chiaroscuro",
+        "alt": "鲁滨孙在渔夫家中醒来，老船长劝他回家",
         "size": "landscape_16_9",
         "position": "top",
         "src": "/illustrations/ch1_8_岸上.webp"
