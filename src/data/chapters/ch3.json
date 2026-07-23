@@ -1,6 +1,6 @@
 {
   "chapter": 3,
-  "title": "孤岛第一夜",
+  "title": "荒岛余生",
   "quotation": "我现在开始觉得，我如今的生活，虽然是简陋不堪，却也并非不可忍受。",
   "scenes": [
     {
@@ -19,62 +19,38 @@
         {
           "segments": [
             {
-              "text": "口袋里还有一把小刀——那是我平时随身携带的。还有一只烟斗和小半盒烟丝，谢天谢地，烟丝还是干的。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "eq",
-                "value": "轻"
-              }
+              "text": "口袋里有一把小刀、一只烟斗和小半盒烟丝——烟丝居然还是干的。除此之外，什么都没有了。没有鞋，没有帽子，没有武器。",
+              "condition": { "type": "flag", "target": "物资", "operator": "eq", "value": "轻" }
             }
           ]
         },
         {
           "segments": [
             {
-              "text": "口袋里有一把小刀，还有一只烟斗和小半盒烟丝。怀里还揣着两块面包干和一小皮囊淡水——是我上船时塞在怀里的，居然没丢。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "eq",
-                "value": "基"
-              }
+              "text": "口袋里有一把小刀、一只烟斗和小半盒烟丝。怀里还揣着两块面包干和一小皮囊淡水——是我上船时塞在怀里的，居然没丢。",
+              "condition": { "type": "flag", "target": "物资", "operator": "eq", "value": "基" }
             }
           ]
         },
         {
           "segments": [
             {
-              "text": "口袋里有一把小刀，一只烟斗和小半盒烟丝。怀里还揣着三块面包干、两皮囊淡水，腰上别着一把小斧头——是我上船时特意带的。靴子里还塞着一盒火绒，居然没湿。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "eq",
-                "value": "全"
-              }
+              "text": "口袋里有一把小刀、一只烟斗和小半盒烟丝。怀里揣着三块面包干、两皮囊淡水，腰上别着一把小斧头。靴子里还塞着一盒火绒，居然没湿。",
+              "condition": { "type": "flag", "target": "物资", "operator": "eq", "value": "全" }
             }
           ]
         },
         {
           "segments": [
             {
-              "text": "口袋里有一把小刀，一只烟斗，还有小半盒烟丝——烟丝居然还没湿。这大概是我身上唯一值钱的东西了。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "not_in",
-                "value": [
-                  "轻",
-                  "基",
-                  "全"
-                ]
-              }
+              "text": "口袋里有一把小刀、一只烟斗，还有小半盒烟丝。这大概是我身上唯一值钱的东西了。",
+              "condition": { "type": "flag", "target": "物资", "operator": "not_in", "value": ["轻", "基", "全"] }
             }
           ]
         },
-        "除此之外，什么都没有了。",
         "钱、衣服、货物——所有我从巴西带出来的东西，都跟着那片海沉到了底。",
-        "我跪在沙滩上，想吐，又吐不出来。"
+        "我跪在沙滩上，想吐，又吐不出来。太阳晒在后颈上，烫得发疼。",
+        "日头还在往下走。天黑之前，我总得做点什么。"
       ],
       "illustration": {
         "prompt": "A man waking up alone on a deserted tropical beach at morning, vast empty ocean stretching to the horizon, a large sailing ship wrecked on distant reefs in the background, the man small and solitary against the immense seascape, warm golden morning light, oil painting style, Caspar David Friedrich influenced, sense of isolation and the sublime",
@@ -83,309 +59,171 @@
         "position": "top",
         "src": "/illustrations/ch3_1_醒来.webp"
       },
-      "audio": {
-        "ambient": "ocean",
-        "bgm": "island"
-      },
+      "audio": { "ambient": "ocean", "bgm": "island" },
       "choices": [
         {
           "id": "醒_走",
-          "text": "站起来，先看看四周",
-          "consequences": [
-            {
-              "type": "flag",
-              "target": "打捞次数",
-              "value": 0,
-              "operation": "set"
-            }
-          ],
-          "nextScene": "ch3_2_盘点"
-        }
-      ]
-    },
-    {
-      "id": "ch3_2_盘点",
-      "chapter": 3,
-      "beat": "3.2 盘点身上",
-      "date": "1659-10-01",
-      "text": [
-        "我沿着沙滩走了一段。",
-        "岸边除了礁石就是沙子，偶尔有几块被海水冲上来的木板——是我们那条船的残骸。远处的林子里传来不知名的鸟叫，一声比一声凄厉。",
-        "我找了块背风的岩石坐下来，把身上所有的东西摊在面前，一件一件数。",
-        {
-          "segments": [
-            {
-              "text": "小刀。烟斗。烟丝。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "eq",
-                "value": "轻"
-              }
-            }
-          ]
-        },
-        {
-          "segments": [
-            {
-              "text": "小刀。烟斗。烟丝。两块面包干。一小皮囊淡水。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "eq",
-                "value": "基"
-              }
-            }
-          ]
-        },
-        {
-          "segments": [
-            {
-              "text": "小刀。烟斗。烟丝。三块面包干。两皮囊淡水。小斧头。一盒火绒。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "eq",
-                "value": "全"
-              }
-            }
-          ]
-        },
-        {
-          "segments": [
-            {
-              "text": "小刀。烟斗。烟丝。",
-              "condition": {
-                "type": "flag",
-                "target": "物资",
-                "operator": "not_in",
-                "value": [
-                  "轻",
-                  "基",
-                  "全"
-                ]
-              }
-            }
-          ]
-        },
-        "就这么多。",
-        "我盯着那堆东西看了很久。从前在伦敦的时候，我口袋里的钱都比这堆东西值钱。",
-        "但现在——这堆破烂，就是我的全部家当了。",
-        "风越来越大，乌云从西边飘过来。要下雨了。"
-      ],
-      "audio": {
-        "ambient": "ocean",
-        "bgm": "island"
-      },
-      "choices": [
-        {
-          "id": "盘_船",
-          "text": "去看看那条大船——也许还有能用的东西",
+          "text": "沿着沙滩走走，找找有没有淡水",
           "isCanon": true,
           "consequences": [
-            {
-              "type": "state",
-              "target": "勇气",
-              "value": 5,
-              "operation": "add"
-            }
-          ],
-          "nextScene": "ch3_3_大船"
-        },
-        {
-          "id": "盘_躲",
-          "text": "先找个地方躲雨，等雨停了再说",
-          "consequences": [
-            {
-              "type": "state",
-              "target": "士气",
-              "value": -5,
-              "operation": "add"
-            },
-            {
-              "type": "time",
-              "operation": "add",
-              "value": 1
-            }
+            { "type": "state", "target": "士气", "value": 5, "operation": "add" }
           ],
           "narration": {
-            "text": "我缩在一块岩石后面等雨停。雨下了整整一夜，我又冷又饿，眼睁睁看着那条大船在远处的海浪里晃。第二天早上，雨停了，但船看起来更破了一些——我心里清楚，每多等一天，能捞到的东西就少一分。",
+            "text": "我沿着沙滩往南走了大约半英里，在礁石后面找到了一条细细的溪流。水不深，但清冽甘甜。我趴下去喝了一肚子，凉意从喉咙一直淌到胃里。至少，我不会渴死。这算是今天唯一的好消息。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_3_大船"
+          "nextScene": "ch3_2_树上"
+        },
+        {
+          "id": "醒_坐",
+          "text": "先不动，坐在这儿把气喘匀了再说",
+          "consequences": [
+            { "type": "state", "target": "健康", "value": 5, "operation": "add" }
+          ],
+          "narration": {
+            "text": "我靠着那块岩石坐了很久，直到呼吸不再那么急促。身上的酸痛慢慢从尖锐变成钝痛，像退潮一样缓缓回落。太阳从头顶往西移，影子渐渐拉长。我什么也没想，只是坐着，听海浪一遍一遍地拍。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_2_树上"
         }
       ]
     },
     {
-      "id": "ch3_3_大船",
+      "id": "ch3_2_树上",
       "chapter": 3,
-      "beat": "3.3 游向大船",
-      "date": "1659-10-02",
+      "beat": "3.2 第一夜",
       "text": [
-        "退潮的时候，沙滩延伸出去很远。那条船搁浅在一片沙洲上，离岸边不过四百来码。",
-        "天气热得像蒸笼。我脱了上衣，只穿着短裤和长袜，走进水里。海水凉得刺骨，刚一进去我就打了个寒颤。",
-        "游到船边花了不到一刻钟，但要爬上船去却不容易。船高高地搁在沙洲上，甲板离水面有一人多高，没什么可攀援的地方。我绕着船游了两圈，才发现一截从桅链上垂下来的短绳——低得刚刚好够到。",
-        "我抓牢绳子，使出浑身力气往上爬，终于翻上了前甲板。",
-        "船里的情况比我预想的要好。船头低低地陷在泥沙里，船尾却高高翘起，所以住舱区几乎没进水。",
-        "静得可怕。没有说话声，没有脚步声，只有海浪拍着船身的闷响。"
+        "太阳落到林子后面去了。",
+        "天黑得极快。方才还是金红色的天边，转眼就只剩一线灰白，然后连那一线也没了。",
+        "我不敢睡在地上。",
+        "这岛上的林子里不知有什么东西——天黑以后，我听见了叫声。不是鸟叫，是一种低沉的、拖长的嗥叫，从林子深处传出来，一声接一声，像在互相应答。",
+        "我找到一棵枝叶浓密的大树——像是热带地方的什么阔叶树，枝杈又密又平。我爬上去，在离地两丈来高的地方找了个杈口坐下，又把周围的树枝折过来围在自己身上，算是个简陋的屏障。",
+        "海浪的声音整夜不停。轰——退——轰——退。单调得像丧钟。",
+        "我攥着小刀，背靠树干，眼睛睁着。",
+        "但身体比意志诚实。不知什么时候，眼皮沉了下去。",
+        "那一夜我睡得极沉，连梦都没有。"
       ],
-      "audio": {
-        "bgm": "ship"
-      },
+      "audio": { "ambient": "ocean", "bgm": "island" },
       "choices": [
         {
-          "id": "船_人",
+          "id": "树_醒",
+          "text": "天亮了",
+          "consequences": [
+            { "type": "time", "operation": "add", "value": 1 }
+          ],
+          "narration": {
+            "text": "再睁眼时，天已大亮。阳光从叶缝里漏下来，斑斑点点地落在手背上。身上的酸疼比昨天轻了些。我活动了一下僵硬的脖子，往树下看了一眼——地面上有几串脚印，不是我的。但什么东西也没有。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_3_船影"
+        }
+      ]
+    },
+    {
+      "id": "ch3_3_船影",
+      "chapter": 3,
+      "beat": "3.3 发现残船",
+      "date": "1659-10-02",
+      "text": [
+        "我从树上滑下来的时候，潮水正在退。",
+        "沙滩一寸一寸地露出来，湿漉漉的，泛着日光。我揉了揉眼睛，朝海面上望去——",
+        "船近了。",
+        "昨夜那场潮把它往岸边推了至少两百码。现在它搁在一片沙洲上，离我站的地方不过四百来码。船身歪着，桅杆断了一根，但船壳还完整。",
+        "我的心猛地跳了起来。",
+        "那上面有面包。有工具。有火药。有衣服。有绳子。有我能活下去的一切。",
+        "然后我想起了他们。",
+        "船长。大副。水手长。那个得热病死在舱里的可怜人。还有其他人——十几个人的名字我大半叫不全了。他们都在那条船上。",
+        "海水把船推给了我，却没有把任何一个人还给我。"
+      ],
+      "audio": { "ambient": "ocean", "bgm": "island" },
+      "choices": [
+        {
+          "id": "船影_即",
+          "text": "现在就游过去——浪虽然大，但等不了了",
+          "isCanon": true,
+          "consequences": [
+            { "type": "state", "target": "勇气", "value": 5, "operation": "add" },
+            { "type": "state", "target": "健康", "value": -5, "operation": "add" }
+          ],
+          "narration": {
+            "text": "我脱了上衣和鞋子，只穿着短裤和长袜，走进水里。海水凉得刺骨，浪头一个接一个地打过来，呛了我好几口水。但我咬着牙往前游，眼睛死死盯着那截断桅杆。四百码。我数着自己的划水次数，不让自己去想脚下有多深。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_4_登船"
+        },
+        {
+          "id": "船影_等",
+          "text": "等下午潮水再退一些，安全了再游",
+          "consequences": [],
+          "narration": {
+            "text": "我强迫自己坐下来等。等了整整一个上午，坐在沙滩上看着那条船，心里急得像猫抓。但我知道，在浪这么大的时候游过去，搞不好连船都摸不到就被卷走了。午后，潮水果然又退了一截，浪也小了许多。我站起来，脱了衣服，走进水里。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_4_登船"
+        }
+      ]
+    },
+    {
+      "id": "ch3_4_登船",
+      "chapter": 3,
+      "beat": "3.4 登上大船",
+      "date": "1659-10-02",
+      "text": [
+        "爬上船去不容易。船高高地搁在沙洲上，甲板离水面有一人多高，没什么可攀援的地方。我绕着船游了半圈，才发现一截从桅链上垂下来的短绳——低得刚刚好够到。",
+        "我抓牢绳子，使出浑身力气往上爬，终于翻上了前甲板。",
+        "船里的情况比我预想的要好。船头低低地陷在泥沙里，船尾却高高翘起，所以住舱区几乎没进水。",
+        "静得可怕。",
+        "没有说话声，没有脚步声，只有海浪拍着船身的闷响，和木料在应力下发出的咯吱声。空气里有一股混合的气味——海水的咸腥、焦油的苦涩、还有什么东西闷在密闭空间里太久的腐甜。",
+        "我站在倾斜的甲板上，深吸一口气。",
+        "该从哪里开始？"
+      ],
+      "audio": { "bgm": "ship" },
+      "choices": [
+        {
+          "id": "登_人",
           "text": "先去住舱区看看——也许还有人活着",
           "isCanon": true,
           "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -10,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "食物",
-              "value": 2,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "淡水",
-              "value": 1,
-              "operation": "add"
-            }
+            { "type": "state", "target": "健康", "value": -5, "operation": "add" }
           ],
           "narration": {
-            "text": "我沿着倾斜的走廊往住舱区走。空气污浊，混着海水的咸腥和什么东西腐烂的气味。每走一步，船身就咯吱一声，像随时要散架。",
+            "text": "我沿着倾斜的走廊往住舱区走。每走一步，船身就咯吱一声，像随时要散架。空气越来越浊，我不得不用袖子捂住口鼻。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_4_住舱"
+          "nextScene": "ch3_5_住舱"
         },
         {
-          "id": "船_食",
-          "text": "先找吃的——我已经快一天没吃东西了",
+          "id": "登_食",
+          "text": "先找吃的——我已经快两天没正经吃东西了",
           "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -5,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "食物",
-              "value": 5,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "淡水",
-              "value": 3,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "工具",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "打捞次数",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "第一次登船",
-              "value": "物资",
-              "operation": "set"
-            }
+            { "type": "resource", "target": "食物", "value": 3, "operation": "add" },
+            { "type": "resource", "target": "淡水", "value": 2, "operation": "add" }
           ],
           "narration": {
-            "text": "我直奔面包房。谢天谢地，饼干还是干的。我把口袋塞得满满的，一边往嘴里塞一边去储藏室翻找。找到了几桶淡水、一些腌羊肉和奶酪，还有木匠的工具箱——这些东西现在比黄金还值钱。",
+            "text": "我直奔面包房。谢天谢地，饼干还是干的。我把口袋塞得满满的，一边往嘴里塞一边去储藏室翻找。找到了几桶淡水、一些腌羊肉和奶酪。我狼吞虎咽地吃了一顿，然后抹了抹嘴，朝住舱区走去——那里还没搜过。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_4_打捞"
-        },
-        {
-          "id": "船_筏",
-          "text": "先做个木筏——东西太多，游过去太费劲",
-          "requirement": {
-            "type": "resource",
-            "target": "工具",
-            "operator": "gte",
-            "value": 1
-          },
-          "requireFailText": "没有工具",
-          "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -10,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "食物",
-              "value": 5,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "淡水",
-              "value": 3,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "工具",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "打捞次数",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "有木筏",
-              "value": true,
-              "operation": "set"
-            },
-            {
-              "type": "flag",
-              "target": "第一次登船",
-              "value": "木筏",
-              "operation": "set"
-            }
-          ],
-          "narration": {
-            "text": "我花了两个钟头做木筏——把船上的备用帆桁和大圆木推下海，用绳子牢牢捆在一起。做得很粗糙，但足够承载我能搬得动的东西。有了木筏，接下来的几天就能省不少力气。",
-            "trigger": "on_choice"
-          },
-          "nextScene": "ch3_4_打捞"
+          "nextScene": "ch3_5_住舱"
         }
       ]
     },
     {
-      "id": "ch3_4_住舱",
+      "id": "ch3_5_住舱",
       "chapter": 3,
-      "beat": "3.4 住舱区·寻找幸存者",
+      "beat": "3.5 住舱·圣经",
       "date": "1659-10-02",
       "text": [
         "住舱区的门都半开着。海风从破窗户灌进来，把桌上的纸片吹得满地都是。",
         "我一间一间看过去。",
-        "船长室的门敞着，床铺整齐，没有人。大副的房间空着。水手舱里只有几条弄脏了的毯子，和打翻了的朗姆酒瓶子。",
+        "船长室的门敞着，床铺整齐，没有人。桌上的航海图还摊着，压图角的铜镇纸绿了。大副的房间空着，门框上挂着一件外套，袖子在风里晃。水手舱里只有几条弄脏了的毯子，和打翻了的朗姆酒瓶子，酒液早就蒸干了，只留下一股刺鼻的甜。",
+        "没有人。一个也没有。",
         "最后一间——那个得热病的船员住的小舱。",
         "门虚掩着。我推门进去。",
         "他躺在床上，姿势平静，像是睡着了。一只手放在胸口，另一只手垂在床边，手指蜷曲着，好像生前攥着什么东西。",
-        "那是一本皮面的小书。封面已经被海水泡得起皱了，但书页还完整。是一本《圣经》。",
-        "他走的时候，把它握在手里。"
+        "那是一本皮面的小书。封面已经被海水泡得起皱了，但书页还完整。",
+        "是一本《圣经》。",
+        "他走的时候，把它握在手里。",
+        "舱里很安静。只有海浪拍着船底的闷响，一下，一下，像心跳。"
       ],
       "illustration": {
         "prompt": "Interior of a dim wooden ship's cabin, a single figure lying peacefully on a small bunk, a small leather-bound Bible clasped in one hand, soft light filtering through a porthole, quiet reverent atmosphere, no graphic details, oil painting style, warm amber tones, somber and respectful mood",
@@ -394,501 +232,277 @@
         "position": "inline",
         "src": "/illustrations/ch3_4_住舱.webp"
       },
-      "audio": {
-        "bgm": "ship"
-      },
+      "audio": { "bgm": "ship" },
       "choices": [
         {
           "id": "经_拿",
           "text": "掰开他的手指，把圣经拿过来",
           "consequences": [
-            {
-              "type": "state",
-              "target": "良心",
-              "value": -5,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "圣经",
-              "value": true,
-              "operation": "set"
-            },
-            {
-              "type": "flag",
-              "target": "打捞次数",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "第一次登船",
-              "value": "圣经",
-              "operation": "set"
-            }
+            { "type": "state", "target": "良心", "value": -5, "operation": "add" },
+            { "type": "flag", "target": "圣经", "value": true, "operation": "set" }
           ],
           "narration": {
-            "text": "我犹豫了一下，还是伸出手去。他的手指已经僵硬了，我费了点力气才掰开。那本圣经的封面还带着他的体温——不，那只是海风里的一点余温。我把它揣进怀里，胸口沉甸甸的。对不起，伙计。你不需要它了，但我可能需要。",
+            "text": "我犹豫了一下，还是伸出手去。他的手指已经僵硬了，我费了点力气才一根一根掰开。指骨下面有干涸的墨痕——他生前大概一直在抄写什么。那本圣经的封面还带着一点凉意，皮面被汗水和海水浸得发软。我把它揣进怀里，胸口沉甸甸的。\n\n对不起，伙计。你不需要它了。但我可能需要。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_4_打捞"
+          "nextScene": "ch3_6_造筏"
         },
         {
           "id": "经_放",
-          "text": "让他握着吧，死者为大",
+          "text": "让他握着吧。死者为大。",
           "isCanon": true,
           "consequences": [
-            {
-              "type": "state",
-              "target": "良心",
-              "value": 5,
-              "operation": "add"
-            },
-            {
-              "type": "state",
-              "target": "天意",
-              "value": 10,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "打捞次数",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "第一次登船",
-              "value": "放过",
-              "operation": "set"
-            }
+            { "type": "state", "target": "良心", "value": 5, "operation": "add" },
+            { "type": "state", "target": "天意", "value": 10, "operation": "add" }
           ],
           "narration": {
-            "text": "我站在那里看了他一会儿。他的脸很平静，像是做了一个好梦。那本圣经他握了那么久，就让他带着吧。人死了，总得有个念想陪着。我轻轻带上门，退了出去。",
+            "text": "我站在那里看了他一会儿。他的脸很平静，眉头是松开的，嘴角甚至微微翘着——像是做了一个好梦，梦见了什么让他安心的事。那本圣经他握了那么久，指节都弯成了那个形状。就让他带着吧。人死了，总得有个念想陪着。\n\n我轻轻带上门，退了出去。门轴发出一声低哑的吱呀，像是这艘船在替他说最后一声再见。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_4_打捞"
+          "nextScene": "ch3_6_造筏"
         }
       ]
     },
     {
-      "id": "ch3_4_打捞",
+      "id": "ch3_6_造筏",
       "chapter": 3,
-      "beat": "3.4 沉船打捞",
+      "beat": "3.6 造筏·第一趟",
       "date": "1659-10-03",
       "text": [
-        "我又游到大船那里。",
-        "退潮的时候，沙滩延伸出去很远。船身歪歪扭扭地搁在沙洲上，每一天都比前一天更低矮一些。海风吹过断裂的桅杆，发出呜咽似的声响。",
-        "我踩着冰凉的海水走到船边，抓住那截绳子翻上甲板。船里还能用的东西已经不多了，但每多拿一样，我在这岛上活下去的把握就多一分。",
+        "光靠游来游去，一次只能带身上塞得下的东西。我需要一条筏子。",
+        "船上不缺木料。我找到几根备用的帆桁和大圆木，又翻出一捆粗绳。先把三根圆木并排推到水里，再用绳子横着绑上两根短木做横梁。木料泡了海水，沉得很，我搬一根就得歇三口气。绳子勒在掌心里，磨出两道红印。",
+        "筏子做得很粗糙，歪歪扭扭的，但浮得住。我试着把一箱工具推上去，筏子往一边歪了歪，没翻。",
+        "够了。",
+        "第一趟我装了这些东西：三箱木匠工具、两桶火药、一支鸟枪、两支手枪、一袋子弹、一桶半饼干、三壶淡水。筏子吃水很深，我半游半推地把它弄回岸上，花了将近两个时辰。",
+        "回到岸上的时候，天已经快黑了。我把东西拖到高处，用帆布盖好，然后瘫在沙地上，一动也不想动。",
+        "手掌上的水泡在月光下泛着白。但心里是踏实的——有枪，有火药，有工具。我不再是一个赤手空拳的野人了。"
+      ],
+      "audio": { "bgm": "ship" },
+      "choices": [
         {
-          "segments": [
-            {
-              "text": "这一趟我搬了不少东西：两桶火药、一支鸟枪、两支手枪、还有满满一箱工具。回到岸上的时候，天已经快黑了。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "eq",
-                "value": 2
-              }
-            }
-          ]
+          "id": "筏_续",
+          "text": "明天继续。船上的东西还多得很。",
+          "consequences": [
+            { "type": "resource", "target": "工具", "value": 2, "operation": "add" },
+            { "type": "resource", "target": "火药", "value": 2, "operation": "add" },
+            { "type": "resource", "target": "弹药", "value": 3, "operation": "add" },
+            { "type": "resource", "target": "装备", "value": 2, "operation": "add" },
+            { "type": "resource", "target": "食物", "value": 3, "operation": "add" },
+            { "type": "resource", "target": "淡水", "value": 3, "operation": "add" },
+            { "type": "flag", "target": "有木筏", "value": true, "operation": "set" },
+            { "type": "time", "operation": "add", "value": 1 }
+          ],
+          "narration": {
+            "text": "我闭上眼睛。海浪的声音还是那样，轰——退——轰——退。但今晚听起来，不那么像丧钟了。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_7_枪与火药"
+        }
+      ]
+    },
+    {
+      "id": "ch3_7_枪与火药",
+      "chapter": 3,
+      "beat": "3.7 第二趟·火药",
+      "date": "1659-10-04",
+      "text": [
+        "第二天一早，我又游到了船上。",
+        "这一趟我直奔火药库。",
+        "火药库在船底最深处，要顺着梯子往下爬两层。里面黑得伸手不见五指，空气又闷又潮，弥漫着一股硫磺和硝石的刺鼻气味。我摸着墙壁一桶一桶地数——还有将近两百磅火药，分装在大大小小的木桶和皮袋里。",
+        "这些东西是命。没有火药，枪就是烧火棍。没有枪，我在这岛上连一只羊都打不到。",
+        "但两百磅火药堆在一起，万一受潮、万一一个火星——",
+        "我想起小时候在约克城看过的一场火灾。整条街，半个时辰烧成白地。"
+      ],
+      "audio": { "bgm": "ship" },
+      "choices": [
+        {
+          "id": "药_分",
+          "text": "分装。分成小包，藏在船上不同位置，每次只搬一点回岸",
+          "isCanon": true,
+          "consequences": [
+            { "type": "resource", "target": "火药", "value": 3, "operation": "add" },
+            { "type": "state", "target": "健康", "value": -5, "operation": "add" },
+            { "type": "flag", "target": "火药分装", "value": true, "operation": "set" },
+            { "type": "time", "operation": "add", "value": 1 }
+          ],
+          "narration": {
+            "text": "我花了大半天把火药分成十几小包，每包不过十来磅，用帆布袋裹紧，分散藏在船尾、船头和住舱区的不同角落。这样即便有一包受了潮或出了事，其余的还保得住。搬回岸上的时候，我特意把每包之间隔着沙丘和礁石。这个活儿费了我不少力气，但心里安稳。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_8_钱"
         },
         {
-          "segments": [
-            {
-              "text": "船上能拿的东西越来越少。这一趟我只搬回了一些索具、帆布和几块木板。但我还发现了一个锁着的柜子——木匠的工具箱旁边，锁得死死的。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "eq",
-                "value": 3
-              }
-            }
-          ]
-        },
+          "id": "药_堆",
+          "text": "先整桶搬回去再说，分装是以后的事",
+          "consequences": [
+            { "type": "resource", "target": "火药", "value": 4, "operation": "add" },
+            { "type": "time", "operation": "add", "value": 1 }
+          ],
+          "narration": {
+            "text": "我懒得细分，直接把两整桶火药滚上筏子，连同一袋子弹一起运回了岸。到了岸上，我把它们一股脑堆在岩石底下，用帆布一盖。快是快了，但心里总有个疙瘩——万一一道闪电劈下来，这些东西会把我和半个海滩一起送上天。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_8_钱"
+        }
+      ]
+    },
+    {
+      "id": "ch3_8_钱",
+      "chapter": 3,
+      "beat": "3.8 无用之钱",
+      "date": "1659-10-05",
+      "text": [
+        "第三天，我撬开了住舱区角落里一个锁着的柜子。",
+        "里面有几把刀叉、一把大剪子、十来把上好的刀——还有一小堆钱币。欧洲的、巴西的、金币银币，堆在一起约莫三十六英镑。",
+        "我盯着那堆钱看了很久。",
+        "「你这废物，」我自言自语，「我拿你有什么用？你连一把小刀都不值。」",
+        "但我还是找了块帆布，把它们包起来带走了。也许是习惯。也许是念想。也许有一天我会遇到人。",
+        "柜子里还蜷着一只猫和一条狗——瘦得皮包骨头，但还活着。猫冲我嘶了一声，狗摇了摇尾巴。",
+        "我把它们也带上了。"
+      ],
+      "audio": { "bgm": "ship" },
+      "choices": [
+        {
+          "id": "钱_续",
+          "text": "继续搬。船上的日子不多了。",
+          "consequences": [
+            { "type": "flag", "target": "钱币", "value": true, "operation": "set" },
+            { "type": "resource", "target": "食物", "value": 2, "operation": "add" },
+            { "type": "resource", "target": "装备", "value": 1, "operation": "add" },
+            { "type": "time", "operation": "add", "value": 1 }
+          ],
+          "narration": {
+            "text": "猫趴在我的肩头，狗跟在脚边。筏子上堆满了东西，吃水深得几乎要漫上来。我半游半推地往岸上走，海水没到胸口，咸得眼睛疼。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_9_十三天"
+        }
+      ]
+    },
+    {
+      "id": "ch3_9_十三天",
+      "chapter": 3,
+      "beat": "3.9 十三天",
+      "date": "1659-10-06",
+      "text": [
+        "从九月三十日算起，我在这条船和这片沙滩之间来回游了十三天。",
+        "每天天不亮就起来，游过去，装筏，划回来。卸货。再游过去。再装。再划回来。",
+        "衣服。帆布。绳索。蜡烛。一袋钉子。两把锯子。一把锛子。磨刀石。三件水手外套。一桶柏油。半袋米。一捆烟叶。",
+        "东西越搬越少，船也一天比一天矮。海浪在啃它，潮水在拽它，每一天它都往沙洲里陷得更深一些。桅杆从两根变成一根，又从一根变成半截。",
+        "我的手上全是茧。肩膀酸得抬不起来。每天晚上倒在沙地上就睡着，连翻身的力气都没有。",
+        "但岸上的东西越堆越高。工具、武器、食物、衣物、绳索、帆布——足够我用很久了。",
         {
           "segments": [
             {
-              "text": "我撬开了那个柜子。里面有几把刀叉、一把大剪子、十来把上好的刀——还有一小堆钱币。欧洲的、巴西的、金币银币，堆在一起约莫三十六英镑。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "eq",
-                "value": 4
-              }
-            }
-          ]
-        },
-        {
-          "segments": [
-            {
-              "text": "天边开始堆乌云。风变了方向，从岸上往海里吹。我心里清楚——这是风暴要来的前兆。但大船里还有最后一点东西没拿完。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "gte",
-                "value": 5
-              }
+              "text": "只是身体越来越撑不住。连续十几天泡在海水里，肩膀和膝盖开始隐隐作痛，像有针在里面扎。",
+              "condition": { "type": "state", "target": "健康", "operator": "lt", "value": 40 }
             }
           ]
         }
       ],
-      "audio": {
-        "bgm": "ship"
-      },
+      "audio": { "bgm": "ship" },
       "choices": [
         {
-          "id": "捞_继",
-          "text": "再捞一次，能拿多少是多少",
+          "id": "捞_够",
+          "text": "够了。该想想怎么在岸上活下去了。",
+          "isCanon": true,
           "consequences": [
-            {
-              "type": "flag",
-              "target": "打捞次数",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "time",
-              "operation": "add",
-              "value": 1
-            }
+            { "type": "resource", "target": "食物", "value": 3, "operation": "add" },
+            { "type": "resource", "target": "绳", "value": 2, "operation": "add" },
+            { "type": "resource", "target": "蜡", "value": 2, "operation": "add" },
+            { "type": "time", "operation": "add", "value": 7 }
           ],
           "narration": {
-            "text": "我又扎进水里，朝大船游去。",
+            "text": "我站在岸上，回头看了一眼那条船。它歪歪斜斜地搁在沙洲上，像一个被掏空了内脏的巨人。我欠它的够多了。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_4_继续"
+          "nextScene": "ch3_10_船碎"
         },
         {
           "id": "捞_休",
-          "text": "今天休息，整理一下东西",
+          "text": "歇一天。身体快散架了。",
           "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": 15,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "食物",
-              "value": -1,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "淡水",
-              "value": -1,
-              "operation": "add"
-            },
-            {
-              "type": "time",
-              "operation": "add",
-              "value": 1
-            }
+            { "type": "state", "target": "健康", "value": 15, "operation": "add" },
+            { "type": "resource", "target": "食物", "value": -1, "operation": "add" },
+            { "type": "resource", "target": "淡水", "value": -1, "operation": "add" },
+            { "type": "time", "operation": "add", "value": 8 }
           ],
           "narration": {
-            "text": "我回到暂时栖身的地方，把带回来的东西一件一件整理好。吃了点东西，喝了口水，躺在地上闭上眼睛。太阳晒在身上，暖烘烘的。这些天太累了，好好歇一天，明天还有的忙。",
+            "text": "我强迫自己躺了一整天。太阳晒在身上，暖烘烘的。猫蜷在我脚边打呼噜，狗趴在旁边舔爪子。我什么也没干，只是躺着，听海浪，看云。身体里的酸痛像退潮一样慢慢消退。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_4_打捞"
+          "nextScene": "ch3_10_船碎"
         },
         {
-          "id": "捞_勘",
-          "text": "不去捞了，先去岛上看看——总该知道自己在什么地方",
+          "id": "捞_撑",
+          "text": "再撑一趟。还能多拿一点。",
+          "condition": { "type": "state", "target": "健康", "operator": "lt", "value": 30 },
           "consequences": [
-            {
-              "type": "flag",
-              "target": "捞够了",
-              "value": true,
-              "operation": "set"
-            }
+            { "type": "state", "target": "健康", "value": -25, "operation": "add" }
           ],
-          "nextScene": "ch3_5_勘察"
-        },
-        {
-          "id": "捞_建",
-          "text": "够了，先找个地方把这些东西安顿好",
-          "requirement": {
-            "type": "flag",
-            "target": "打捞次数",
-            "operator": "gte",
-            "value": 2
-          },
-          "requireFailText": "还需要再多捞一些",
-          "consequences": [
-            {
-              "type": "flag",
-              "target": "捞够了",
-              "value": true,
-              "operation": "set"
-            }
-          ],
-          "nextScene": "ch3_6_围栅"
+          "death": {
+            "text": "我抓起最后一捆帆布就往船边跑。\n\n腿一软，踩空了。\n\n海水从四面八方灌过来，咸涩的水呛进鼻子和喉咙。我想喊，喊不出；想划，手不听使唤。十三天的疲惫在这一刻全部兑现，最后那点力气在刚才那一扑里用完了。\n\n身体往水下沉的时候，我最后看了一眼海面——阳光透过波浪，碎成一片一片的金色。\n\n真好看啊。\n\n如果我当时见好就收……",
+            "reviveScene": "ch3_9_十三天"
+          }
         }
       ]
     },
     {
-      "id": "ch3_4_继续",
+      "id": "ch3_10_船碎",
       "chapter": 3,
-      "beat": "3.4 继续打捞",
-      "date": "1659-10-04",
+      "beat": "3.10 风暴·船碎",
+      "date": "1659-10-14",
       "text": [
-        "我在船上四处翻找。",
-        "能搬的东西已经搬得差不多了，剩下的要么太重，要么被海水泡坏了。我站在倾斜的甲板上，眯着眼睛扫视四周——说不定还有什么被遗漏的角落。",
-        {
-          "segments": [
-            {
-              "text": "这一趟我搬了不少东西：两桶火药、一支鸟枪、两支手枪、还有满满一箱工具。回到岸上的时候，天已经快黑了。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "eq",
-                "value": 2
-              }
-            }
-          ]
-        },
-        {
-          "segments": [
-            {
-              "text": "船上能拿的东西越来越少。这一趟我只搬回了一些索具、帆布和几块木板。但我还发现了一个锁着的柜子——木匠的工具箱旁边，锁得死死的。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "eq",
-                "value": 3
-              }
-            }
-          ]
-        },
-        {
-          "segments": [
-            {
-              "text": "我撬开了那个柜子。里面有几把刀叉、一把大剪子、十来把上好的刀——还有一小堆钱币。欧洲的、巴西的、金币银币，堆在一起约莫三十六英镑。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "eq",
-                "value": 4
-              }
-            }
-          ]
-        },
-        {
-          "segments": [
-            {
-              "text": "风越来越大了。海浪拍打着船身，大船开始剧烈摇晃。我知道这一趟必须快——但甲板上还有最后一捆帆布没拿。那东西以后搭帐篷能用得上。",
-              "condition": {
-                "type": "flag",
-                "target": "打捞次数",
-                "operator": "gte",
-                "value": 5
-              }
-            }
-          ]
-        }
-      ],
-      "audio": {
-        "bgm": "ship"
-      },
-      "choices": [
-        {
-          "id": "继_回",
-          "text": "回去吧，够了",
-          "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -10,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "食物",
-              "value": 2,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "装备",
-              "value": 1,
-              "operation": "add"
-            }
-          ],
-          "nextScene": "ch3_4_打捞"
-        },
-        {
-          "id": "继_锁",
-          "text": "撬开那个锁柜再走",
-          "requirement": {
-            "type": "flag",
-            "target": "打捞次数",
-            "operator": "eq",
-            "value": 3
-          },
-          "requireFailText": "还没找到锁柜",
-          "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -15,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "钱币",
-              "value": true,
-              "operation": "set"
-            }
-          ],
-          "narration": {
-            "text": "我找了根铁撬棍，花了一刻钟才把锁撬开。看到那些钱币的时候，我苦笑了一下。三十六英镑——在伦敦够我舒舒服服过半年。但在这里？它们连一块面包都换不来。我盯着那堆钱看了很久，最后还是找了块帆布把它们包起来带走了。也许是习惯。也许是念想。",
-            "trigger": "on_choice"
-          },
-          "nextScene": "ch3_4_打捞"
-        },
-        {
-          "id": "继_风",
-          "text": "再拿最后一件就走",
-          "requirement": {
-            "type": "flag",
-            "target": "打捞次数",
-            "operator": "gte",
-            "value": 5
-          },
-          "requireFailText": "还没到风暴的时候",
-          "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -20,
-              "operation": "add"
-            },
-            {
-              "type": "resource",
-              "target": "装备",
-              "value": 1,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "大船被冲走",
-              "value": true,
-              "operation": "set"
-            },
-            {
-              "type": "time",
-              "operation": "add",
-              "value": 1
-            }
-          ],
-          "narration": {
-            "text": "我抓起那捆帆布就往船边跑。刚跳进水里，一个大浪就打了过来——我被浪卷着往岸边漂，回头看时，大船在浪里猛地一歪，然后慢慢地、慢慢地滑进了深水里。等我爬上岸再回头看，海面上只剩下一些漂浮的木屑和帆布。船没了。",
-            "trigger": "on_choice"
-          },
-          "nextScene": "ch3_4_风暴后"
-        },
-        {
-          "id": "继_死",
-          "text": "再捞一次——还能多拿一点",
-          "requirement": {
-            "type": "state",
-            "target": "健康",
-            "operator": "lt",
-            "value": 30
-          },
-          "requireFailText": "身体还撑得住",
-          "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -25,
-              "operation": "add"
-            }
-          ],
-          "nextScene": "ch3_淹死"
-        }
-      ]
-    },
-    {
-      "id": "ch3_4_风暴后",
-      "chapter": 3,
-      "beat": "3.4 风暴之后",
-      "date": "1659-10-07",
-      "text": [
-        "风暴刮了整整一夜。",
-        "第二天早上，我从临时栖身的棚子里钻出来，朝海面上望去——",
+        "那天夜里起了风暴。",
+        "风从西南方向刮过来，尖利得像刀子。雨横着打，打在脸上生疼。我缩在临时搭的棚子底下，听着外面的风声，一夜没合眼。",
+        "第二天早上，风停了。我从棚子里钻出来，朝海面上望去——",
         "船不见了。",
-        "海面上空荡荡的，只有几只海鸟在盘旋。昨天搁浅的那片沙洲上，什么都没有了。",
+        "海面上空荡荡的，只有几只海鸟在盘旋。昨天搁浅的那片沙洲上，什么都没有了。连那半截桅杆也没有了。",
         "我站了很久。",
-        "奇怪的是，我没有太难过。该拿的东西我几乎都拿了——甚至包括那三十六英镑。那条船陪了我那么久，从巴西到这里，现在它终于沉了。",
+        {
+          "segments": [
+            {
+              "text": "我伸手摸了摸怀里的圣经。封面被体温捂得温热。那个死去的船员——他大概也没想到，他最后的陪伴会跟着一个陌生人活下来。我翻开扉页，上面有一行褪色的字：「上帝与我同在。」我盯着这行字看了很久，然后合上了。",
+              "condition": { "type": "flag", "target": "圣经", "operator": "eq", "value": true }
+            }
+          ]
+        },
+        {
+          "segments": [
+            {
+              "text": "我忽然想起那个死去的船员。他手里攥着的那本圣经——现在大概已经跟着船一起沉到海底了。那些字句，那些诗篇，都被海水泡烂了。我站在岸边，两手空空，心里也空了一块。",
+              "condition": { "type": "flag", "target": "圣经", "operator": "neq", "value": true }
+            }
+          ]
+        },
+        "奇怪的是，我没有太难过。该拿的东西我几乎都拿了。那条船陪了我那么久，从巴西到这里，现在它终于沉了。",
         "也好。",
         "没有后路了。"
       ],
-      "audio": {
-        "ambient": "ocean",
-        "bgm": "island"
-      },
+      "audio": { "ambient": "ocean", "bgm": "island" },
       "choices": [
         {
-          "id": "风_勘",
-          "text": "先去岛上看看——得知道这是个什么地方",
+          "id": "碎_续",
+          "text": "转身，朝岸上走去",
           "consequences": [
-            {
-              "type": "flag",
-              "target": "捞够了",
-              "value": true,
-              "operation": "set"
-            }
+            { "type": "flag", "target": "大船被冲走", "value": true, "operation": "set" }
           ],
-          "nextScene": "ch3_5_勘察"
-        },
-        {
-          "id": "风_建",
-          "text": "先把东西安顿好——得有个地方住",
-          "consequences": [
-            {
-              "type": "flag",
-              "target": "捞够了",
-              "value": true,
-              "operation": "set"
-            }
-          ],
-          "nextScene": "ch3_6_围栅"
+          "narration": {
+            "text": "我最后看了一眼那片空荡荡的海面。风把沙粒吹起来，打在小腿上，细细地疼。然后我转过身，背对着海，朝林子的方向走去。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_11_勘察"
         }
       ]
     },
     {
-      "id": "ch3_淹死",
+      "id": "ch3_11_勘察",
       "chapter": 3,
-      "beat": "3.4b 淹死（结局）",
-      "date": "1659-10-06",
-      "text": [],
-      "audio": {
-        "bgm": "ending_sad"
-      },
-      "ending": {
-        "title": "贪婪的代价",
-        "text": "我抓起那捆帆布就往船边跑。\n\n腿一软，踩空了。\n\n海水从四面八方灌过来，咸涩的水呛进鼻子和喉咙。我想喊，喊不出；想划，手不听使唤。健康早就透支了，最后那点力气在刚才那一扑里用完了。\n\n身体往水下沉的时候，我最后看了一眼海面——阳光透过波浪，碎成一片一片的金色。\n\n真好看啊。\n\n如果我当时见好就收。如果我不多拿那最后一下。如果……\n\n但已经没有如果了。",
-        "buttonText": "合上书本"
-      },
-      "illustration": {
-        "prompt": "A man drowning in turbulent ocean waves, reaching upward toward a patch of sunlight breaking through the water surface, the ship visible in the distant background, dramatic composition, oil painting style, tragic and poetic rather than graphic, sense of fate and regret",
-        "alt": "淹死海中",
-        "size": "portrait_4_3",
-        "position": "inline",
-        "src": "/illustrations/ch3_淹死.webp"
-      }
-    },
-    {
-      "id": "ch3_5_勘察",
-      "chapter": 3,
-      "beat": "3.5 山顶勘察",
-      "date": "1659-10-08",
+      "beat": "3.11 山顶勘察",
+      "date": "1659-10-15",
       "text": [
         "第二天，我拿上一支鸟枪、一支手枪和一角筒火药，朝那座小山走去。",
-        "山路不好走。林子里长满了荆棘和藤蔓，每走一步都要用刀砍开。花了将近两个时辰，我才爬到山顶。",
+        "山路不好走。林子里长满了荆棘和藤蔓，每走一步都要用刀砍开。空气又热又湿，闷得像蒸笼。虫子在耳边嗡嗡地转，汗水顺着脊梁骨往下淌。花了将近两个时辰，我才爬到山顶。",
         "站在山顶上，我四下里望去——",
         "四面全是海。",
         "东边是海。西边是海。南边是海。北边是海。望不到头，望不到边，只有蓝色的海面和远处翻滚的云。",
@@ -898,13 +512,8 @@
         {
           "segments": [
             {
-              "text": "我站了很久。风从耳边吹过，带着咸腥味。奇怪的是，我没有太绝望。至少这地方有淡水——我昨天在沙滩尽头找到了一条小溪。至少林子里有鸟——我刚才开枪的时候惊飞了一群。至少我还活着。",
-              "condition": {
-                "type": "state",
-                "target": "天意",
-                "operator": "gte",
-                "value": 65
-              }
+              "text": "我站了很久。风从耳边吹过，带着咸腥味。奇怪的是，我没有太绝望。至少这地方有淡水——我在沙滩尽头找到了一条小溪。至少林子里有鸟——我刚才开枪的时候惊飞了一群。至少我还活着。至少我还有枪，有工具，有一整船搬回来的东西。",
+              "condition": { "type": "state", "target": "天意", "operator": "gte", "value": 65 }
             }
           ]
         },
@@ -912,12 +521,7 @@
           "segments": [
             {
               "text": "我蹲在地上，眼泪突然就掉了下来。完了。我这辈子都出不去了。没有人会来救我。没有船会经过这里。我会在这个岛上慢慢变老，然后死掉，被海鸟叼走，被虫子吃掉——没有人会知道我曾经在这里。",
-              "condition": {
-                "type": "state",
-                "target": "天意",
-                "operator": "lte",
-                "value": 35
-              }
+              "condition": { "type": "state", "target": "天意", "operator": "lte", "value": 35 }
             }
           ]
         },
@@ -930,166 +534,169 @@
         "position": "fullpage",
         "src": "/illustrations/ch3_5_勘察.webp"
       },
-      "audio": {
-        "bgm": "island"
-      },
+      "audio": { "bgm": "island" },
       "providenceHook": {
         "lowThreshold": 35,
         "highThreshold": 65,
         "lowEffects": [
-          {
-            "type": "state",
-            "target": "士气",
-            "value": -10,
-            "operation": "add"
-          }
+          { "type": "state", "target": "士气", "value": -10, "operation": "add" }
         ],
         "highEffects": [
-          {
-            "type": "state",
-            "target": "士气",
-            "value": 10,
-            "operation": "add"
-          }
+          { "type": "state", "target": "士气", "value": 10, "operation": "add" }
         ]
       },
       "choices": [
         {
-          "id": "勘_建",
-          "text": "回去吧，该找个地方安顿下来了",
+          "id": "勘_下",
+          "text": "回去吧。得找个地方安顿下来了。",
           "isCanon": true,
           "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -10,
-              "operation": "add"
-            }
+            { "type": "state", "target": "健康", "value": -5, "operation": "add" }
           ],
-          "nextScene": "ch3_6_围栅"
+          "narration": {
+            "text": "我最后看了一眼四面无际的海，然后转身往山下走。荆棘刮破了小腿，汗水蛰得生疼。但脚步是稳的。不管这岛有多大、多偏，我总得先给自己找一个能睡觉的地方。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_12_选址"
+        },
+        {
+          "id": "勘_坐",
+          "text": "再坐一会儿。让我再看看这片海。",
+          "consequences": [
+            { "type": "state", "target": "士气", "value": -5, "operation": "add" }
+          ],
+          "narration": {
+            "text": "我在一块平坦的岩石上坐下来，两条腿悬在崖边，风把衬衫吹得鼓起来。海面上什么都没有。看了很久，什么也没有。太阳慢慢往西移，影子拉得很长。我想起约克城的教堂钟声，想起父亲书房里的药酒味，想起赫尔码头上母亲塞给我的那几个先令。都是上辈子的事了。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_12_选址"
         }
       ]
     },
     {
-      "id": "ch3_6_围栅",
+      "id": "ch3_12_选址",
       "chapter": 3,
-      "beat": "3.6 建围栅",
-      "date": "1659-10-10",
+      "beat": "3.12 选择住所",
+      "date": "1659-10-16",
       "text": [
         "我花了两天时间物色住处。",
-        "最后选中了小山脚下的一块平地——背靠一堵陡峭的岩壁，左右两边都没有路，只有我脚下这片草地可以通行。岩壁上有一个凹进去的地方，像是个天然的门廊。",
-        "这个地方有几个好处：干燥，有淡水（小溪就在不远的地方），能看到海（万一有船经过），而且易守难攻——无论是人还是野兽，都只能从正面过来。",
-        "我开始干活。",
-        "先沿着岩壁画了一道半圆形的弧线，半径约十码。然后沿着这道线打木桩——木桩是我从林子里砍来的，一根根削得尖尖的，打进地里五英尺深，露出地面五英尺半。两排木桩之间堆上锚链，再用斜撑加固。",
-        "这活儿很累。我每天天不亮就起来，干到太阳落山才歇。",
+        "我给自己定了四条规矩：第一，要有淡水，离溪不能太远；第二，要有遮阴，不能整天晒在日头底下；第三，要能看见海——万一有船经过，我得能发现它；第四，要避开野兽，不管这岛上有没有。",
+        "我沿着山脚走了整整一圈，最后看中了三个地方。"
+      ],
+      "audio": { "bgm": "island" },
+      "choices": [
+        {
+          "id": "址_坡",
+          "text": "小山半腰的一块平台——视野最好，能看见整片海",
+          "isCanon": true,
+          "consequences": [
+            { "type": "state", "target": "士气", "value": 5, "operation": "add" }
+          ],
+          "narration": {
+            "text": "这块平台在半山腰，三面是陡坡，只有一条小路通上来。站在这儿，整片海尽收眼底。缺点是离溪水远了点，每天得走一趟。但我想，万一有船来，我第一眼就能看见。这比什么都重要。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_13_围栅"
+        },
+        {
+          "id": "址_溪",
+          "text": "溪水旁边的一片平地——取水最方便",
+          "consequences": [
+            { "type": "state", "target": "健康", "value": 5, "operation": "add" }
+          ],
+          "narration": {
+            "text": "溪水就在十步之外，清得能看见底下的石子。周围有几棵大树，树冠浓密，能遮住大半天的太阳。缺点是地势低，看不见海，而且离林子太近——夜里那些叫声会更清楚。但水方便。在这鬼地方，水比什么都实在。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_13_围栅"
+        },
+        {
+          "id": "址_凹",
+          "text": "山脚下一处岩壁凹进去的地方——天然屏障",
+          "consequences": [
+            { "type": "state", "target": "勇气", "value": 5, "operation": "add" }
+          ],
+          "narration": {
+            "text": "岩壁凹进去一块，像天然的门廊，三面是石壁，只有正面敞着。在这儿搭帐篷，等于白得了两面墙。而且石壁后面还有一个浅浅的洞，可以存东西。缺点是暗了些，白天也得点蜡烛。但安全。不管林子里有什么东西，它得先过正面这一关。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_13_围栅"
+        }
+      ]
+    },
+    {
+      "id": "ch3_13_围栅",
+      "chapter": 3,
+      "beat": "3.13 打桩·搭帐篷",
+      "date": "1659-10-18",
+      "text": [
+        "选定地方之后，我开始干活。",
+        "先沿着选好的弧线打木桩。木桩是我从林子里砍来的，一根根削得尖尖的，打进地里五英尺深，露出地面五英尺半。没有锤子，就用一根铁棒代替。每砸一下，虎口就震得发麻，木屑飞溅，带着松脂的辛辣气味。",
+        "两排木桩之间塞满从船上拆下来的锚链和缆索，再用斜撑加固。",
         {
           "segments": [
             {
-              "text": "有了木匠的工具箱，虽然也累，但至少有称手的工具。花了不到一周，围栅就大致成型了。",
-              "condition": {
-                "type": "resource",
-                "target": "工具",
-                "operator": "gte",
-                "value": 1
-              }
+              "text": "有了木匠的工具箱，虽然也累，但至少有称手的家伙。斧头砍、锯子截、锛子削，干了不到一周，围栅就大致成型了。",
+              "condition": { "type": "resource", "target": "工具", "operator": "gte", "value": 1 }
             }
           ]
         },
         {
           "segments": [
             {
-              "text": "没有工具，只能用斧头砍、用石头砸。每一根木桩都打得我两手是泡。花了将近十天，围栅才勉强立起来。",
-              "condition": {
-                "type": "resource",
-                "target": "工具",
-                "operator": "lt",
-                "value": 1
-              }
+              "text": "没有像样的工具，只能用那把小斧头一下一下地砍。每根木桩都打得我两手是泡，泡破了又长，长了又破。花了将近十天，围栅才勉强立起来。",
+              "condition": { "type": "resource", "target": "工具", "operator": "lt", "value": 1 }
             }
           ]
         },
         "围栅做好之后，我又用帆布和树枝在里面搭了个双层帐篷——内层小的睡觉，外层大的放东西。帐篷顶上再盖一块从船上带回来的柏油帆布，挡雨。",
+        "然后我在岩壁上凿了一个洞，把火药、食物和工具分门别类地放进去。",
         "做完这一切的时候，我站在围栅门口，看着自己亲手搭起来的这片小天地。",
         "简陋。粗糙。不怎么好看。",
         "但这是我的。",
         "我在这岛上，有一个家了。"
       ],
-      "audio": {
-        "bgm": "island"
-      },
+      "audio": { "bgm": "island" },
       "choices": [
         {
-          "id": "栅_火",
-          "text": "先把火药分装一下——这东西不能全堆在一起",
-          "requirement": {
-            "type": "resource",
-            "target": "火药",
-            "operator": "gte",
-            "value": 1
-          },
-          "requireFailText": "没有火药",
+          "id": "栅_睡",
+          "text": "今晚，睡在自己搭的帐篷里",
           "consequences": [
-            {
-              "type": "state",
-              "target": "健康",
-              "value": -5,
-              "operation": "add"
-            },
-            {
-              "type": "flag",
-              "target": "火药分装",
-              "value": true,
-              "operation": "set"
-            }
+            { "type": "flag", "target": "围栅", "value": true, "operation": "set" },
+            { "type": "state", "target": "士气", "value": 10, "operation": "add" },
+            { "type": "time", "operation": "add", "value": 10 }
           ],
           "narration": {
-            "text": "一道闪电突然划过天边，跟着就是一声霹雳。我猛地一哆嗦——天哪，我的火药！如果一个雷劈下来，那两百多磅火药会把我和这个围栅一起炸上天。我不敢再等，立刻找出所有的帆布袋，把火药分成一小包一小包，藏在岩壁的各个缝隙里。每一包之间都隔着石块和泥土。哪怕有一包出事，也不会殃及其余。这个活儿我干了整整两天。",
+            "text": "我把吊床挂在帐篷的两根支柱之间——那是从船上带回来的，大副的吊床。躺上去，晃来晃去的，像回到了海上。围栅外面传来虫鸣和海浪声，但今晚听起来不那么可怕了。我把手枕在脑后，看着帆布顶上透进来的月光，慢慢闭上了眼睛。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_7_夜晚"
-        },
-        {
-          "id": "栅_夜",
-          "text": "不管了，先好好睡一觉再说",
-          "isCanon": true,
-          "consequences": [
-            {
-              "type": "flag",
-              "target": "围栅",
-              "value": true,
-              "operation": "set"
-            },
-            {
-              "type": "time",
-              "operation": "add",
-              "value": 1
-            }
-          ],
-          "nextScene": "ch3_7_夜晚"
+          "nextScene": "ch3_14_对照"
         }
       ]
     },
     {
-      "id": "ch3_7_夜晚",
+      "id": "ch3_14_对照",
       "chapter": 3,
-      "beat": "3.7 第一个夜晚",
-      "date": "1659-10-12",
+      "beat": "3.14 第一个夜晚·幸与不幸",
+      "date": "1659-10-28",
       "text": [
         "天渐渐黑了。",
-        "我躺在吊床上——那是从船上带回来的，大副的吊床，挂在帐篷的两根支柱之间。晃来晃去的，像回到了海上。",
-        "围栅外面传来各种声音：海浪的轰鸣、林子里的虫鸣、偶尔一声不知名的鸟叫。还有风，穿过围栅缝隙时发出的呜咽声。",
         "我睡不着。",
-        "起来，点着一支蜡烛——蜡烛也是从船上带回来的，得省着用。我坐在一只倒扣的箱子上，找出纸和笔。",
+        "起来，点着一支蜡烛——蜡烛也是从船上带回来的，得省着用。烛光在帐篷里投下摇晃的影子，把堆在角落的箱子和麻袋照得像蹲着的兽。",
+        "我坐在一只倒扣的箱子上，找出纸和笔。",
         {
           "segments": [
             {
-              "text": "我翻开那本从船上带回来的《圣经》。扉页上有一行字——是那个死去的船员写的：「上帝与我同在。」我盯着这行字看了很久。然后翻到《诗篇》第二十三篇。「我虽然行过死荫的幽谷，也不怕遭害……」我轻声念了出来。",
-              "condition": {
-                "type": "flag",
-                "target": "圣经",
-                "operator": "eq",
-                "value": true
-              }
+              "text": "我翻开那本圣经。扉页上那行褪色的字在烛光下若隐若现：「上帝与我同在。」我盯着看了很久。然后翻到《诗篇》第二十三篇。「我虽然行过死荫的幽谷，也不怕遭害，因为你与我同在。」我轻声念了出来。声音在帐篷里回荡，像是念给另一个人听。",
+              "condition": { "type": "flag", "target": "圣经", "operator": "eq", "value": true }
+            }
+          ]
+        },
+        {
+          "segments": [
+            {
+              "text": "我拿起笔，又放下。总觉得缺了点什么。以前在巴西的时候，礼拜天总要去教堂的。现在没有教堂了，没有牧师了，连一本经书都没有。我闭上眼睛，试着回忆主祷文的词句，但只记得开头几个字就断了。算了。",
+              "condition": { "type": "flag", "target": "圣经", "operator": "neq", "value": true }
             }
           ]
         },
@@ -1099,32 +706,46 @@
       ],
       "illustration": {
         "prompt": "A solitary man sitting by candlelight inside a small makeshift tent on a deserted island at night, writing in a journal with intense focus, the flickering candlelight casting shadows, stacked crates and boxes around him, a small Bible open beside him, the ocean faintly visible through the tent entrance, oil painting style, warm amber candlelight against dark blue night, intimate and introspective atmosphere, Rembrandt influenced chiaroscuro",
-        "alt": "幸与不幸对照",
+        "alt": "烛光下写对照表",
         "size": "portrait_4_3",
         "position": "inline",
         "src": "/illustrations/ch3_7_夜晚.webp"
       },
-      "audio": {
-        "bgm": "island"
-      },
+      "audio": { "bgm": "island" },
       "choices": [
         {
-          "id": "夜_对",
-          "text": "继续对照下去",
-          "consequences": [],
+          "id": "照_写",
+          "text": "一条一条写下去",
+          "isCanon": true,
+          "consequences": [
+            { "type": "state", "target": "士气", "value": 10, "operation": "add" },
+            { "type": "state", "target": "天意", "value": 5, "operation": "add" }
+          ],
           "narration": {
-            "text": "借方：\n我孤身一人，没有伙伴。\n没有衣服，没有住所。\n没有船，没有离开这里的希望。\n随时可能被野兽吃掉，被野人杀害。\n\n贷方：\n但我还活着。船上的东西我几乎都搬了回来。\n这岛上没有我见过的猛兽。\n有淡水，有食物——林子里有鸟，海里有鱼。\n我有枪，有火药，有工具。\n我还有时间。\n\n我盯着这张纸看了很久。\n这样列下来之后，心情居然好了一些。\n至少，我还有理由活下去。",
+            "text": "借方：\n我孤身一人，被抛弃在一座可怕的荒岛上，没有获救的希望。\n但我还活着。我没有像同船的伙伴们那样淹死。\n\n借方：\n我与世隔绝，没有衣服穿，没有像样的住所。\n但船上的东西我几乎都搬了回来。有枪，有火药，有工具，有食物。这些东西足够我用很久。\n\n借方：\n这岛上也许有野人，有猛兽。\n但我到现在为止，只见过鸟和山羊。没有狮子，没有老虎。\n\n贷方：\n我有淡水。有遮风挡雨的地方。有火药和枪。\n我还有时间。\n\n我盯着这张纸看了很久。这样列下来之后，心情居然好了一些。至少，我还有理由活下去。",
             "trigger": "on_choice"
           },
-          "nextScene": "ch3_8_结尾"
+          "nextScene": "ch3_15_十字架"
+        },
+        {
+          "id": "照_停",
+          "text": "写不下去了。吹灭蜡烛，躺下。",
+          "consequences": [
+            { "type": "state", "target": "士气", "value": 5, "operation": "add" }
+          ],
+          "narration": {
+            "text": "我写了三四行就停了。笔尖在纸上戳出一个墨点。借方那一列太长了，贷方那一列太短了。我不想看了。吹灭蜡烛，黑暗一下子涌进来，把帐篷里的一切都吞掉了。我躺回吊床上，听着海浪声，很久才睡着。",
+            "trigger": "on_choice"
+          },
+          "nextScene": "ch3_15_十字架"
         }
       ]
     },
     {
-      "id": "ch3_8_结尾",
+      "id": "ch3_15_十字架",
       "chapter": 3,
-      "beat": "3.8 刻十字架",
-      "date": "1659-10-13",
+      "beat": "3.15 刻十字架",
+      "date": "1659-10-29",
       "chapterEnd": true,
       "text": [
         "第二天早上，我做了一件事。",
@@ -1132,7 +753,14 @@
         "在十字架的横木上，我用大写字母刻下一行字：",
         "我于一六五九年九月三十日在此上岸。",
         "然后，在木桩的侧面，我用刀刻出凹痕——每过一天刻一道，第七道刻得长一些，每月第一天再长一些。",
-        "这样，我就不会忘记日子了。",
+        {
+          "segments": [
+            {
+              "text": "刻完之后，我又在十字架的背面刻了一行小字：「上帝与我同在。」那是圣经扉页上的话。我不知道自己为什么要刻这个。也许是因为，在这座岛上，除了这句话，我没有什么别的可以刻了。",
+              "condition": { "type": "flag", "target": "圣经", "operator": "eq", "value": true }
+            }
+          ]
+        },
         "刻完最后一道痕，我退后几步，看着那个十字架。",
         "海浪从它脚边涌上来，又退下去。海风带着咸腥味，吹得我眯起眼睛。远处，那座小山静静地立在那里，像一个沉默的守望者。",
         "我不知道自己会在这个岛上待多久。",
@@ -1141,18 +769,13 @@
         "我转身朝围栅的方向走去。",
         "不管怎样，日子还得过下去。"
       ],
-      "audio": {
-        "bgm": "island"
-      },
+      "audio": { "bgm": "island" },
       "choices": [
         {
           "id": "尾_回",
-          "text": "（回到主菜单）",
+          "text": "（合上书本）",
           "consequences": [
-            {
-              "type": "event",
-              "target": "return_menu"
-            }
+            { "type": "event", "target": "return_menu" }
           ]
         }
       ]
