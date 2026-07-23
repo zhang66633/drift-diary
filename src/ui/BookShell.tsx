@@ -10,7 +10,6 @@ import { getIllustrationPaths, preloadIllustration } from '../utils/imageUtils';
 import type { Choice } from '../types/scene';
 
 // 懒加载：非关键 UI 组件按需下载
-const SaveMenu = lazy(() => import('./Menus').then(m => ({ default: m.SaveMenu })));
 const HistoryViewOverlay = lazy(() => import('./Menus').then(m => ({ default: m.HistoryViewOverlay })));
 const GameMenu = lazy(() => import('./GameMenu').then(m => ({ default: m.GameMenu })));
 const SettingsPanel = lazy(() => import('./SettingsPanel').then(m => ({ default: m.SettingsPanel })));
@@ -26,8 +25,6 @@ export function BookShell() {
   const pendingChoiceNarration = useGameStore(s => s.pendingChoiceNarration);
   const isTyping = useGameStore(s => s.isTyping);
   const chapterTitleVisible = useGameStore(s => s.chapterTitleVisible);
-  const showSaveMenu = useGameStore(s => s.showSaveMenu);
-  const showLoadMenu = useGameStore(s => s.showLoadMenu);
   const showSettingsMenu = useGameStore(s => s.showSettingsMenu);
   const showGameMenu = useGameStore(s => s.showGameMenu);
   const showMemoir = useGameStore(s => s.showMemoir);
@@ -371,10 +368,6 @@ export function BookShell() {
 
       <EndingOverlay ending={pendingEnding} illustrationSrc={imgSrc} onDismiss={dismissEnding} />
 
-      <Suspense fallback={null}>
-        {showSaveMenu && <SaveMenu mode="save" />}
-        {showLoadMenu && <SaveMenu mode="load" />}
-      </Suspense>
       <Suspense fallback={null}>
         {showSettingsMenu && <SettingsPanel onClose={closeSettingsMenu} />}
       </Suspense>

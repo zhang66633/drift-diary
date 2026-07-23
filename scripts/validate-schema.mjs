@@ -11,7 +11,7 @@ async function validateWithZod() {
   
   let hasError = false;
   
-  for (let chNum = 1; chNum <= 2; chNum++) {
+  for (let chNum = 1; chNum <= 3; chNum++) {
     const path = join(__dirname, `../src/data/chapters/ch${chNum}.json`);
     const data = JSON.parse(readFileSync(path, 'utf-8'));
     

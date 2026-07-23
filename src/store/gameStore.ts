@@ -69,6 +69,8 @@ interface GameStore {
   dismissDeath(): Promise<void>;
   dismissEnding(): void;
   toggleDebug(): void;
+  jumpToScene(sceneId: string): Promise<void>;
+  applyPreset(preset: 'medium' | 'ch2_medium' | 'ch3_medium'): void;
   openHistory(snapshot: SceneSnapshot): void;
   closeHistory(): void;
   save(slotId: string, label: string): void;
@@ -355,6 +357,7 @@ export const useGameStore = create<GameStore>((set, get) => {
     showMemoir: false,
 
     async init() {
+      if (get().initialized) return;
       if (typeof window !== 'undefined') {
         window.addEventListener('keydown', (e) => {
           if (e.ctrlKey && e.shiftKey && e.key === 'D') {
@@ -572,6 +575,62 @@ export const useGameStore = create<GameStore>((set, get) => {
     toggleDebug() {
       useSettings.getState().toggleDebug();
       set({ isDebugMode: useSettings.getState().debugMode });
+    },
+
+    applyPreset(preset) {
+      const init = createInitialState();
+      let state = { ...init.state };
+      let resources = { ...init.resources, 同伴: [] as any };
+      let skills = { ...init.skills };
+
+      if (preset === 'medium') {
+        state = { 健康: 80, 士气: 55, 勇气: 55, 天意: 55, 良心: 50 };
+        resources = {
+          钱: 20, 食物: 3, 淡水: 3, 火药: 2, 弹药: 2,
+          工具: 1, 蜡: 1, 绳: 1, 装备: 0, 墨水: 0, 同伴: [],
+        };
+        skills = { 航海: 2, 木工: 1, 种植: 0, 狩猎: 1, 语言: 1, 贸易: 1 };
+      } else if (preset === 'ch2_medium') {
+        state = { 健康: 85, 士气: 60, 勇气: 55, 天意: 50, 良心: 50 };
+        resources = {
+          钱: 50, 食物: 2, 淡水: 2, 火药: 1, 弹药: 1,
+          工具: 0, 蜡: 0, 绳: 0, 装备: 0, 墨水: 0, 同伴: [],
+        };
+        skills = { 航海: 2, 木工: 0, 种植: 0, 狩猎: 1, 语言: 0, 贸易: 1 };
+        flagMgr.setFlag('物资', '基');
+      } else if (preset === 'ch3_medium') {
+        state = { 健康: 75, 士气: 50, 勇气: 55, 天意: 55, 良心: 45 };
+        resources = {
+          钱: 0, 食物: 3, 淡水: 3, 火药: 2, 弹药: 4,
+          工具: 1, 蜡: 1, 绳: 2, 装备: 1, 墨水: 0, 同伴: [],
+        };
+        skills = { 航海: 3, 木工: 1, 种植: 0, 狩猎: 2, 语言: 1, 贸易: 1 };
+        flagMgr.setFlag('物资', '全');
+        flagMgr.setFlag('在岛上', true);
+        flagMgr.setFlag('圣经', true);
+        flagMgr.setFlag('围栅', true);
+      }
+      stateMgr.reset(state, resources, skills);
+      refreshState();
+    },
+
+    async jumpToScene(sceneId) {
+      const chapterMatch = sceneId.match(/^ch(\d+)_/);
+      const chapterNum = chapterMatch ? parseInt(chapterMatch[1]) : 1;
+
+      if (chapterNum >= 2) {
+        flagMgr.setFlag('在岛上', chapterNum >= 3);
+      }
+
+      snapshots = [];
+      await sceneMgr.ensureSceneLoaded(sceneId);
+      const ch = sceneMgr.getLoadedChapters().find(c => c.chapter === chapterNum);
+      if (ch) {
+        sceneMgr.setInitialScene(sceneId);
+        preloadChapterEndingAssets(chapterNum);
+      }
+      set({ showMainMenu: false });
+      await enterScene(sceneId);
     },
 
     openHistory(snapshot: SceneSnapshot) {

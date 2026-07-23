@@ -138,13 +138,23 @@ export class ConsequenceEngine {
     }
   }
 
-  resolveText(text: string | ConditionalText | undefined): string {
+  resolveText(text: string | ConditionalText | TextSegment | undefined): string {
     if (!text) return '';
     if (typeof text === 'string') return text;
-    return text.segments
-      .filter(seg => this.segmentSatisfied(seg))
-      .map(seg => seg.text)
-      .join('');
+    // TextSegment 格式：{ text, condition }
+    if ('text' in text && typeof text.text === 'string') {
+      const seg = text as TextSegment;
+      if (this.checkCondition(seg.condition)) return seg.text;
+      return '';
+    }
+    // ConditionalText 格式：{ segments: [...] }
+    if ('segments' in text && text.segments) {
+      return text.segments
+        .filter(seg => this.segmentSatisfied(seg))
+        .map(seg => seg.text)
+        .join('');
+    }
+    return '';
   }
 
   private segmentSatisfied(seg: TextSegment): boolean {

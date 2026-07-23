@@ -12,7 +12,7 @@ export interface Scene {
   chapter: number;
   beat: string;
   date?: string;
-  text: (string | ConditionalText)[];
+  text: (string | ConditionalText | TextSegment)[];
   quotation?: string;
   senses?: SenseTag[];
   illustration?: IllustrationSpec;

@@ -79,7 +79,10 @@ export class FlagManager {
         break;
     }
 
-    if (value === undefined) return false;
+    if (value === undefined) {
+      if (condition.operator === 'not_in' || condition.operator === 'neq') return true;
+      return false;
+    }
     return this.compare(value, condition.operator!, condition.value);
   }
 

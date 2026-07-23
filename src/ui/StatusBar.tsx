@@ -1,6 +1,7 @@
 import { useGameStore } from '../store/gameStore';
 import { Tooltip } from './Tooltip';
 import { formatChineseDate } from '../utils/helpers';
+import { DevPanel } from './DevPanel';
 
 interface StatusBarProps {
   showGameMenu?: boolean;
@@ -61,19 +62,26 @@ function Separator() {
 }
 
 export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
-  const { isDebug, state, resources, skills, flags, time, sceneId } = useGameStore(s => ({
+  const { isDebug, state, resources, time, flags } = useGameStore(s => ({
     isDebug: s.isDebugMode,
     state: s.gameState.state,
     resources: s.gameState.resources,
-    skills: s.gameState.skills,
-    flags: s.gameState.flags,
     time: s.gameState.time,
-    sceneId: s.gameState.currentSceneId,
+    flags: s.gameState.flags,
   }));
 
   // 移动端短日期，避免换行
   const dateStr = formatChineseDate(time.date);
-  const compactDate = dateStr.replace(/^(\d+)年/, ''); // 移动端省略年份："八月十五日"
+  const compactDate = dateStr.replace(/^(\d+)年/, '');
+
+  // 随身物品（flag 类道具）
+  const inventoryItems = [
+    { id: '圣经', label: '圣经', symbol: '✟' },
+    { id: '钱币', label: '钱币', symbol: '£' },
+    { id: '围栅', label: '围栅', symbol: '⊞' },
+    { id: '有木筏', label: '木筏', symbol: '⚓' },
+    { id: '火药分装', label: '火药已分', symbol: '✺' },
+  ].filter(item => flags[item.id]);
 
   return (
     <div
@@ -106,6 +114,42 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
           <Separator />
           <StatusItem symbol="‡" value={state.勇气} tooltip="勇气：面对险境的胆色" label="勇气" />
 
+          {(resources.食物 > 0 || resources.淡水 > 0) && (
+            <>
+              <Separator />
+              {resources.食物 > 0 && (
+                <StatusItem symbol="▣" value={resources.食物} tooltip={`食物：${resources.食物}份`} label="食物" />
+              )}
+              {resources.淡水 > 0 && (
+                <StatusItem symbol="💧" value={resources.淡水} tooltip={`淡水：${resources.淡水}份`} label="淡水" />
+              )}
+            </>
+          )}
+
+          {(resources.火药 > 0 || resources.弹药 > 0) && (
+            <>
+              <Separator />
+              {resources.火药 > 0 && (
+                <StatusItem symbol="✺" value={resources.火药} tooltip={`火药：${resources.火药}桶`} label="火药" />
+              )}
+              {resources.弹药 > 0 && (
+                <StatusItem symbol="•" value={resources.弹药} tooltip={`弹药：${resources.弹药}发`} label="弹药" />
+              )}
+            </>
+          )}
+
+          {(resources.工具 > 0 || resources.装备 > 0) && (
+            <>
+              <Separator />
+              {resources.工具 > 0 && (
+                <StatusItem symbol="⚒" value={resources.工具} tooltip={`工具：${resources.工具}套`} label="工具" />
+              )}
+              {resources.装备 > 0 && (
+                <StatusItem symbol="⛨" value={resources.装备} tooltip={`装备：${resources.装备}件`} label="装备" />
+              )}
+            </>
+          )}
+
           {resources.同伴.length > 0 && (
             <>
               <Separator />
@@ -122,6 +166,21 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
             <>
               <Separator />
               <StatusItem symbol="£" value={resources.钱} tooltip="钱币：身上的英镑" label="钱币" />
+            </>
+          )}
+
+          {inventoryItems.length > 0 && (
+            <>
+              <Separator />
+              {inventoryItems.map(item => (
+                <StatusItem
+                  key={item.id}
+                  symbol={item.symbol}
+                  value={item.label}
+                  tooltip={`随身物品：${item.label}`}
+                  label={item.label}
+                />
+              ))}
             </>
           )}
         </div>
@@ -191,32 +250,7 @@ export function StatusBar({ showGameMenu, onToggleMenu }: StatusBarProps) {
         )}
       </div>
 
-      {isDebug && (
-        <div className="max-w-3xl mx-auto mt-1 pt-1 border-t" style={{ borderColor: 'rgba(122, 90, 48, 0.2)' }}>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span
-              className="px-2 py-0.5 text-[0.65rem] font-bold"
-              style={{ background: '#5a4220', color: '#f4ecd8', borderRadius: '2px' }}
-            >
-              DEBUG
-            </span>
-            <span>良心:{state.良心}</span>
-            <span>天意:{state.天意}</span>
-            <span>航海:{skills.航海}</span>
-            <span style={{ fontSize: '0.65rem' }}>
-              场景:{sceneId}
-            </span>
-            {Object.keys(flags).length > 0 && (
-              <span
-                className="w-full text-[0.6rem]"
-                style={{ color: '#7a5a30', textIndent: 0, lineHeight: 1.6 }}
-              >
-                flags: {Object.entries(flags).map(([k, v]) => `${k}=${JSON.stringify(v)}`).join(', ')}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
+      {isDebug && <DevPanel />}
     </div>
   );
 }

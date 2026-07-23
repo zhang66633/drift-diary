@@ -47,7 +47,7 @@ if (fs.existsSync(envPath)) {
 
 const MODEL = 'doubao-seedream-4-5-251128';
 const CHAPTERS_DIR = path.resolve(__dirname, '../src/data/chapters');
-const CHAPTER_FILES = ['ch1.json', 'ch2.json'];
+const CHAPTER_FILES = ['ch1.json', 'ch2.json', 'ch3.json'];
 
 // Seedream 5.0 最低要求 3,686,400 像素（1920×1920）
 const SIZE_MAP: Record<string, string> = {

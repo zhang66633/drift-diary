@@ -18,9 +18,9 @@ declare global {
 export default function App() {
   const showMainMenu = useGameStore(s => s.showMainMenu);
   const showLoadMenu = useGameStore(s => s.showLoadMenu);
+  const showSaveMenu = useGameStore(s => s.showSaveMenu);
   const initialized = useGameStore(s => s.initialized);
   const init = useGameStore(s => s.init);
-  const isDebugMode = useGameStore(s => s.isDebugMode);
 
   const [resourcesReady, setResourcesReady] = useState(false);
   const [loadProgress, setLoadProgress] = useState(0);
@@ -28,10 +28,10 @@ export default function App() {
 
   useEffect(() => {
     init();
-    if (typeof window !== 'undefined' && isDebugMode) {
+    if (typeof window !== 'undefined') {
       window.__gameStore = useGameStore;
     }
-  }, [init, isDebugMode]);
+  }, [init]);
 
   const handleSkip = useCallback(() => {
     setSkipped(true);
@@ -73,6 +73,7 @@ export default function App() {
     <ErrorBoundary>
       {showMainMenu ? <MainMenu /> : <BookShell />}
       <Suspense fallback={null}>
+        {showSaveMenu && <SaveMenu mode="save" />}
         {showLoadMenu && <SaveMenu mode="load" />}
       </Suspense>
       <AudioHint />

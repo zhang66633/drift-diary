@@ -2366,7 +2366,7 @@
     {
       "id": "ch2_16_荒岛",
       "chapter": 2,
-      "beat": "2.16 荒岛（Demo 终）",
+      "beat": "2.16 荒岛",
       "date": "1659-09-30",
       "chapterEnd": true,
       "onEnter": [
@@ -2516,19 +2516,15 @@
       },
       "choices": [
         {
-          "id": "demo_end",
-          "text": "……",
+          "id": "to_ch3",
+          "text": "挣扎着爬起来……",
           "isCanon": true,
-          "consequences": [
-            {
-              "type": "event",
-              "target": "return_menu"
-            }
-          ],
+          "consequences": [],
           "narration": {
-            "text": "这只是开始。二十八年的孤岛岁月，还在等着我。\n\n—— 第一、二章 Demo 完 ——\n\n后续章节开发中……",
+            "text": "我挣扎着爬起来，放眼望去——\n\n没有人。没有船。没有房屋。\n\n天大地大，只剩下我一个人了。",
             "trigger": "on_choice"
-          }
+          },
+          "nextScene": "ch3_1_醒来"
         }
       ],
       "audio": {

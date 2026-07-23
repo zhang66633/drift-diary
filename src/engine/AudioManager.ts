@@ -70,6 +70,9 @@ export class AudioManager {
       this.bgmAudio = new Audio();
       this.bgmAudio.loop = true;
       this.bgmAudio.preload = 'auto';
+      this.bgmAudio.addEventListener('error', () => {
+        console.debug('AudioManager: BGM load error (may be aborted during switch)');
+      });
       this.bgmMediaSource = this.ctx.createMediaElementSource(this.bgmAudio);
       this.bgmSourceGain = this.ctx.createGain();
       this.bgmSourceGain.gain.value = 0;
@@ -197,6 +200,9 @@ export class AudioManager {
     const url = this.getBgmUrl(key);
     const audio = new Audio();
     audio.preload = 'auto';
+    audio.addEventListener('error', () => {
+      console.debug(`AudioManager: preload error for ${key}`);
+    });
     audio.src = url;
     audio.load();
     this.bgmPreloadCache.set(key, audio);
